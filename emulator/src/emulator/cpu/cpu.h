@@ -110,6 +110,10 @@ extern Cpu cpu_s;
 #define cpuReadReg32(reg) (cpu_s.gregs[reg])
 #define cpuWriteReg32(reg, data) {cpu_s.gregs[reg] = (uint32)(data);}
 
+// Program Flow Control
+#define cpuJumpTo(adr) {cpu_s.reg_pc = (adr);}
+#define cpuJumpBy(off) {cpu_s.reg_pc += (sint32)(off);}
+
 extern void cpuReset();
 extern void cpuStep();
 

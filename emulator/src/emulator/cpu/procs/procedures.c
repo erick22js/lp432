@@ -33,8 +33,22 @@ cpuProc cpuProcedures[256] = {
 	[0x1F] = proc1F,
 
 	// 0x20
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
+	[0x20] = proc20,
+	[0x21] = proc21,
+	[0x22] = proc22,
+	[0x23] = proc23,
+	[0x24] = proc24,
+	[0x25] = proc25,
+	[0x26] = proc26,
+	[0x27] = proc27,
+	[0x28] = proc28,
+	[0x29] = proc29,
+	[0x2A] = proc2A,
+	[0x2B] = proc2B,
+	[0x2C] = proc2C,
+	[0x2D] = proc2D,
+	[0x2E] = proc2E,
+	[0x2F] = proc2F,
 
 	// 0x30
 	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
@@ -68,8 +82,22 @@ cpuProc cpuProcedures[256] = {
 	procNull, procNull, procNull, procNull,
 
 	// 0x80
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
+	[0x80] = proc80,
+	[0x81] = proc81,
+	[0x82] = proc82,
+	[0x83] = proc83,
+	[0x84] = proc84,
+	[0x85] = proc85,
+	[0x86] = proc86,
+	[0x87] = proc87,
+	[0x88] = proc88,
+	[0x89] = proc89,
+	[0x8A] = proc8A,
+	[0x8B] = proc8B,
+	[0x8C] = proc8C,
+	[0x8D] = proc8D,
+	[0x8E] = proc8E,
+	[0x8F] = proc8F,
 
 	// 0x90
 	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,

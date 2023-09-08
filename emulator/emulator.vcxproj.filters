@@ -39,6 +39,12 @@
     <ClCompile Include="src\emulator\cpu\memory.c">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
+    <ClCompile Include="src\emulator\cpu\procs\proc8.c">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\emulator\cpu\procs\proc2.c">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\emulator\emu.h">

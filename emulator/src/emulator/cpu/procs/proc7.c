@@ -59,7 +59,7 @@ cpuInterr proc73(){
 		}
 		break;
 		case 0x5:{
-			// Instruction: mov r32:regm, mem8
+			// Instruction: mov r32:regm, mem32
 			cpuFetchMemIndex();
 			cpuReadMem32(cpu_s.mem_adr);
 			cpuWriteReg32(cpu_s.os_regm, cpu_s.data);

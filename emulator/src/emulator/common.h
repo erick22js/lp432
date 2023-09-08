@@ -44,6 +44,9 @@ typedef double float64;
 #define u16ToInt(data) ((int)((sint16)((uint16)(data))))
 #define u32ToInt(data) ((int)((sint32)((uint32)(data))))
 
+#define eval(v) (!!(v))
+#define setBit(data, bit, v) (v? (data)|bit: (data)&(~bit))
+
 
 /*
 	Basic Debug Functions
