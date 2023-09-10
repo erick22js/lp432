@@ -126,13 +126,16 @@
     <ClCompile Include="src\emulator\bus.c" />
     <ClCompile Include="src\emulator\cpu\cpu.c" />
     <ClCompile Include="src\emulator\cpu\memory.c" />
+    <ClCompile Include="src\emulator\cpu\procs\proc0.c" />
     <ClCompile Include="src\emulator\cpu\procs\proc1.c" />
     <ClCompile Include="src\emulator\cpu\procs\proc2.c" />
+    <ClCompile Include="src\emulator\cpu\procs\proc5.c" />
     <ClCompile Include="src\emulator\cpu\procs\proc6.c" />
     <ClCompile Include="src\emulator\cpu\procs\proc7.c" />
     <ClCompile Include="src\emulator\cpu\procs\proc8.c" />
     <ClCompile Include="src\emulator\cpu\procs\procB.c" />
     <ClCompile Include="src\emulator\cpu\procs\procC.c" />
+    <ClCompile Include="src\emulator\cpu\procs\procD.c" />
     <ClCompile Include="src\emulator\cpu\procs\procedures.c" />
     <ClCompile Include="src\emulator\emu.c" />
     <ClCompile Include="src\main.c" />

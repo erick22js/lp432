@@ -6,13 +6,23 @@
 */
 
 cpuInterr procNull(){cpuThrowInterruption(INTR_INVALID_OPCODE); return 0;}
-cpuInterr procNop(){return 0;}
 
 cpuProc cpuProcedures[256] = {
 	// 0x00
-	[0x00] = procNop,
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull,
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
+	[0x00] = proc00,
+	procNull, procNull, procNull,
+	[0x04] = proc04,
+	[0x05] = proc05,
+	[0x06] = proc06,
+	[0x07] = proc07,
+	[0x08] = proc08,
+	[0x09] = proc09,
+	[0x0A] = proc0A,
+	[0x0B] = proc0B,
+	[0x0C] = proc0C,
+	[0x0D] = proc0D,
+	[0x0E] = proc0E,
+	[0x0F] = proc0F,
 
 	// 0x10
 	[0x10] = proc10,
@@ -59,8 +69,22 @@ cpuProc cpuProcedures[256] = {
 	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
 
 	// 0x50
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
+	[0x50] = proc50,
+	[0x51] = proc51,
+	[0x52] = proc52,
+	[0x53] = proc53,
+	[0x54] = proc54,
+	[0x55] = proc55,
+	[0x56] = proc56,
+	[0x57] = proc57,
+	[0x58] = proc58,
+	[0x59] = proc59,
+	[0x5A] = proc5A,
+	[0x5B] = proc5B,
+	[0x5C] = proc5C,
+	[0x5D] = proc5D,
+	[0x5E] = proc5E,
+	[0x5F] = proc5F,
 
 	// 0x60
 	[0x60] = proc60,
@@ -157,8 +181,16 @@ cpuProc cpuProcedures[256] = {
 	[0xCF] = procCF,
 
 	// 0xD0
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
+	[0xD0] = procD0,
+	[0xD1] = procD1,
+	[0xD2] = procD2,
+	[0xD3] = procD3,
+	procNull, procNull, procNull,
+	[0xD7] = procD7,
+	procNull, procNull, procNull, procNull, procNull,
+	[0xDD] = procDD,
+	[0xDE] = procDE,
+	procNull,
 
 	// 0xE0
 	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,

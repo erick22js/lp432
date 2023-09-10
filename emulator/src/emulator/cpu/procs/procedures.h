@@ -290,6 +290,17 @@ cpuInterr procFF();
 
 
 /*
+	Procedures Utilities and Helpers
+*/
+
+#define procEnsureNotInProtectedMode() {\
+	if (cpu_s.reg_st&FLAG_PM){\
+		cpuThrowInterruption(INTR_PROTECTED_MODE_VIOLATION);\
+	}\
+}
+
+
+/*
 	Procedures Database
 */
 
