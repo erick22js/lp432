@@ -65,8 +65,19 @@ cpuProc cpuProcedures[256] = {
 	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
 
 	// 0x40
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
+	procNull, procNull, procNull, procNull,
+	[0x44] = proc44,
+	[0x45] = proc45,
+	[0x46] = proc46,
+	procNull,
+	[0x48] = proc48,
+	[0x49] = proc49,
+	[0x4A] = proc4A,
+	[0x4B] = proc4B,
+	[0x4C] = proc4C,
+	[0x4D] = proc4D,
+	procNull,
+	[0x4F] = proc4F,
 
 	// 0x50
 	[0x50] = proc50,
@@ -138,11 +149,29 @@ cpuProc cpuProcedures[256] = {
 	[0x8F] = proc8F,
 
 	// 0x90
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
+	[0x90] = proc90,
+	[0x91] = proc91,
+	[0x92] = proc92,
+	[0x93] = proc93,
+	[0x94] = proc94,
+	[0x95] = proc95,
+	[0x96] = proc96,
+	[0x97] = proc97,
+	procNull, procNull, procNull, procNull,
+	[0x9C] = proc9C,
+	[0x9D] = proc9D,
+	[0x9E] = proc9E,
+	[0x9F] = proc9F,
 
 	// 0xA0
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
+	[0xA0] = procA0,
+	[0xA1] = procA1,
+	[0xA2] = procA2,
+	[0xA3] = procA3,
+	[0xA4] = procA4,
+	[0xA5] = procA5,
+	[0xA6] = procA6,
+	[0xA7] = procA7,
 	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
 
 	// 0xB0
@@ -193,8 +222,22 @@ cpuProc cpuProcedures[256] = {
 	procNull,
 
 	// 0xE0
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
+	[0xE0] = procE0,
+	[0xE1] = procE1,
+	[0xE2] = procE2,
+	procNull,
+	[0xE4] = procE4,
+	[0xE5] = procE5,
+	[0xE6] = procE6,
+	procNull,
+	[0xE8] = procE8,
+	[0xE9] = procE9,
+	[0xEA] = procEA,
+	procNull,
+	[0xEC] = procEC,
+	[0xED] = procED,
+	[0xEE] = procEE,
+	procNull,
 
 	// 0xF0
 	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,

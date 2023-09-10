@@ -57,6 +57,9 @@ cpuInterr proc63(){
 			cpuWriteReg32(cpu_s.os_regm, cpu_s.data);
 		}
 		break;
+		default: {
+			cpuThrowInterruption(INTR_INVALID_OPCODE);
+		}
 	}
 	return 0;
 }
@@ -155,6 +158,9 @@ cpuInterr proc6B(){
 			cpuWriteMem32(cpu_s.data, cpuReadReg32(cpu_s.os_regm));
 		}
 		break;
+		default: {
+			cpuThrowInterruption(INTR_INVALID_OPCODE);
+		}
 	}
 	return 0;
 }

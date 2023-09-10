@@ -131,6 +131,9 @@ cpuInterr procD0(){
 			cpu_s.fregs[cpu_s.os_regm] = temp;
 		}
 		break;
+		default: {
+			cpuThrowInterruption(INTR_INVALID_OPCODE);
+		}
 	}
 	return 0;
 }
@@ -262,6 +265,9 @@ cpuInterr procD1(){
 			cpu_s.fregs[cpu_s.os_regm] = -cpu_s.fregs[cpu_s.os_regm];
 		}
 		break;
+		default: {
+			cpuThrowInterruption(INTR_INVALID_OPCODE);
+		}
 	}
 	return 0;
 }
@@ -419,6 +425,9 @@ cpuInterr procD2(){
 			cpu_s.fregs[dest] = log2l(cpu_s.fregs[cpu_s.os_regm]) * cpu_s.fregs[cpu_s.os_rego];
 		}
 		break;
+		default: {
+			cpuThrowInterruption(INTR_INVALID_OPCODE);
+		}
 	}
 	return 0;
 }
@@ -552,6 +561,9 @@ cpuInterr procD3(){
 			cpu_s.fregs[dest] = single;
 		}
 		break;
+		default: {
+			cpuThrowInterruption(INTR_INVALID_OPCODE);
+		}
 	}
 	return 0;
 }
@@ -752,6 +764,9 @@ cpuInterr procD7(){
 			}
 		}
 		break;
+		default: {
+			cpuThrowInterruption(INTR_INVALID_OPCODE);
+		}
 	}
 	return 0;
 }

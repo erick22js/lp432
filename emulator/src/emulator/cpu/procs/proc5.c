@@ -50,6 +50,9 @@ cpuInterr proc53(){
 			cpuWriteMem32(cpu_s.mem_adr, cpu_s.data);
 		}
 		break;
+		default: {
+			cpuThrowInterruption(INTR_INVALID_OPCODE);
+		}
 	}
 	return 0;
 }
@@ -100,6 +103,9 @@ cpuInterr proc57(){
 			cpuPush32(cpu_s.data);
 		}
 		break;
+		default: {
+			cpuThrowInterruption(INTR_INVALID_OPCODE);
+		}
 	}
 	return 0;
 }
