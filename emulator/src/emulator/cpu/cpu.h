@@ -122,6 +122,12 @@ typedef struct{
 	cpuInterr interrupt;
 
 	/*
+		External Interrupt State
+	*/
+	bool request_external;
+	uint16 request_port;
+
+	/*
 		State of Machine
 	*/
 	bool halted;
@@ -143,6 +149,8 @@ extern Cpu cpu_s;
 // Program Flow Control
 #define cpuJumpTo(adr) {cpu_s.reg_pc = (adr);}
 #define cpuJumpBy(off) {cpu_s.reg_pc += (sint32)(off);}
+
+extern bool cpuRequestInterrupt(uint16 port);
 
 extern void cpuReset();
 extern void cpuStep();

@@ -21,6 +21,16 @@ void cpuDebug(){
 */
 
 // Program Flow Control
+
+bool cpuRequestInterrupt(uint16 port){
+	if (!cpu_s.request_external){
+		cpu_s.request_external = true;
+		cpu_s.request_port = port;
+		return true;
+	}
+	return false;
+}
+
 void cpuReset(){
 	// Reset the preffered segments
 	cpu_s.seg_code = &cpu_s.sregs[SREG_CS];
@@ -29,11 +39,6 @@ void cpuReset(){
 }
 
 void cpuStep(){
-	// Querying for instruction opcode
-	cpuFetchOpcode();
-	// Logging debug info
-	log("%.8X: 0x%.2X\n", cpu_s.reg_pc-1, cpu_s.opcode);
-
 	// Disable prefixing for next fetch
 	if (cpu_s.prefix){
 		cpu_s.prefix = false;
@@ -42,6 +47,11 @@ void cpuStep(){
 		// Reset modifiers
 		cpu_s.seg_data = &cpu_s.sregs[SREG_DS];
 	}
+
+	// Querying for instruction opcode
+	cpuFetchOpcode();
+	// Logging debug info
+	log("%.8X: 0x%.2X\n", cpu_s.reg_pc-1, cpu_s.opcode);
 
 	// Decoding opcode into procedure
 	cpuProc proc = cpuProcedures[cpu_s.opcode];
@@ -62,61 +72,65 @@ void cpuStep(){
 				case INTR_DEBUGGER_INTERRUPTION:{
 					log("Cpu Interruption: Debugger Interruption\n");
 				}
-												break;
+				break;
 				case INTR_DENIED_CODE_ACCESS:{
 					log("Cpu Interruption: Denied Code Access\n");
 				}
-											 break;
+				break;
 				case INTR_DENIED_DATA_ACCESS:{
 					log("Cpu Interruption: Denied Data Access\n");
 				}
-											 break;
+				break;
 				case INTR_DEVICE_UNAVAILABLE:{
 					log("Cpu Interruption: Device Unavailable\n");
 				}
-											 break;
+				break;
 				case INTR_DIRECTORY_FAULT:{
 					log("Cpu Interruption: Directory Fault\n");
 				}
-										  break;
+				break;
 				case INTR_DIVISION_BY_ZERO:{
 					log("Cpu Interruption: Division by Zero\n");
 				}
-										   break;
-				case INTR_HARDWARE_INTERRUPTION:{
-					log("Cpu Interruption: Hardware Interruption\n");
-				}
-												break;
+				break;
 				case INTR_INVALID_INTERRUPTION_INDEX:{
 					log("Cpu Interruption: Invalid Interruption Index\n");
 				}
-													 break;
+				break;
 				case INTR_INVALID_OPCODE:{
 					log("Cpu Interruption: Invalid Opcode\n");
 				}
-										 break;
+				break;
 				case INTR_PAGE_FAULT:{
 					log("Cpu Interruption: Page Fault\n");
 				}
-									 break;
+				break;
 				case INTR_PROTECTED_MODE_VIOLATION:{
 					log("Cpu Interruption: Protected Mode Violation\n");
 				}
-												   break;
+				break;
 				case INTR_SEGMENT_NOT_PRESENT:{
 					log("Cpu Interruption: Segment not Available\n");
 				}
-											  break;
+				break;
 				case INTR_SOFTWARE_INTERRUPTION:{
 					log("Cpu Interruption: Software Interruption\n");
 				}
-												break;
+				break;
 				case INTR_STACK_FAULT:{
 					log("Cpu Interruption: Stack Fault\n");
 				}
-									  break;
+				break;
 			}
+			cpuInterrupt();
 			cpu_s.interrupt = INTR_NONE;
+		}
+		// Check for external available interruption
+		else if (cpu_s.request_external && cpu_s.reg_st&FLAG_IE){
+			cpu_s.interrupt = INTR_HARDWARE_INTERRUPTION;
+			log("Cpu Interruption: Hardware Interruption\n");
+			cpuInterrupt();
+			cpu_s.request_external = false;
 		}
 		log("\n");
 	}

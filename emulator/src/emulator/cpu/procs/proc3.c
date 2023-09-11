@@ -48,7 +48,8 @@ cpuInterr proc30(){
 
 cpuInterr proc31(){
 	// Instruction: iret
-	// TODO
+	procEnsureNotInProtectedMode();
+	cpuReturnInterrupt();
 	return 0;
 }
 

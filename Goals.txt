@@ -1,0 +1,21 @@
+- Implement all base instructions ** DONE
+	- Test all instructions
+
+- Implement CPU address virtual mapping by segmentation
+	- Test segmentation mapping
+
+- Implement CPU address virtual mapping by pagining
+	- Test pagining mapping
+
+- Implement CPU comunication with PCI and external interruption handling
+	- Test comunication with devices port
+	- Create display Device
+	- Create keyboard Device
+	- Create disk Device
+	- Create stdout Device
+
+- Implement all the CPU interruptions deals
+	- Test all interruptions
+
+- Create assembler
+

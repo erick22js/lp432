@@ -1,15 +1,21 @@
 #include "procedures.h"
+#include "../../pci.h"
 
 
-#define procIn(adr, size, dest) {}
-#define procOut(adr, size, src) {}
+#define procIn8(adr, dest) {if (pciReadDevice8(adr, &dest)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
+#define procIn16(adr, dest) {if (pciReadDevice16(adr, &dest)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
+#define procIn32(adr, dest) {if (pciReadDevice32(adr, &dest)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
+
+#define procOut8(adr, src) {if (pciWriteDevice8(adr, src)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
+#define procOut16(adr, src) {if (pciWriteDevice16(adr, src)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
+#define procOut32(adr, src) {if (pciWriteDevice32(adr, src)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
 
 cpuInterr procF0(){
 	// Instruction: in r8:regm, r16:rego
 	cpuFetchOS();
 	uint16 adr = cpuReadReg16(cpu_s.os_rego);
 	uint8 data = 0;
-	procIn(adr, 1, data);
+	procIn8(adr, data);
 	cpuWriteReg8(cpu_s.os_regm, data);
 	return 0;
 }
@@ -19,7 +25,7 @@ cpuInterr procF1(){
 	cpuFetchOS();
 	uint16 adr = cpuReadReg16(cpu_s.os_rego);
 	uint16 data = 0;
-	procIn(adr, 2, data);
+	procIn16(adr, data);
 	cpuWriteReg16(cpu_s.os_regm, data);
 	return 0;
 }
@@ -29,7 +35,7 @@ cpuInterr procF2(){
 	cpuFetchOS();
 	uint16 adr = cpuReadReg16(cpu_s.os_rego);
 	uint32 data = 0;
-	procIn(adr, 4, data);
+	procIn32(adr, data);
 	cpuWriteReg32(cpu_s.os_regm, data);
 	return 0;
 }
@@ -43,7 +49,7 @@ cpuInterr procF3(){
 			cpuFetchMV8();
 			uint16 adr = cpu_s.mv;
 			uint8 data = 0;
-			procIn(adr, 1, data);
+			procIn8(adr, data);
 			cpuWriteReg8(cpu_s.os_regm, data);
 		}
 		break;
@@ -52,7 +58,7 @@ cpuInterr procF3(){
 			cpuFetchMV8();
 			uint16 adr = cpu_s.mv;
 			uint16 data = 0;
-			procIn(adr, 2, data);
+			procIn16(adr, data);
 			cpuWriteReg16(cpu_s.os_regm, data);
 		}
 		break;
@@ -61,7 +67,7 @@ cpuInterr procF3(){
 			cpuFetchMV8();
 			uint16 adr = cpu_s.mv;
 			uint32 data = 0;
-			procIn(adr, 4, data);
+			procIn32(adr, data);
 			cpuWriteReg32(cpu_s.os_regm, data);
 		}
 		break;
@@ -70,7 +76,7 @@ cpuInterr procF3(){
 			cpuFetchMV16();
 			uint16 adr = cpu_s.mv;
 			uint8 data = 0;
-			procIn(adr, 1, data);
+			procIn8(adr, data);
 			cpuWriteReg8(cpu_s.os_regm, data);
 		}
 		break;
@@ -79,7 +85,7 @@ cpuInterr procF3(){
 			cpuFetchMV16();
 			uint16 adr = cpu_s.mv;
 			uint16 data = 0;
-			procIn(adr, 2, data);
+			procIn16(adr, data);
 			cpuWriteReg16(cpu_s.os_regm, data);
 		}
 		break;
@@ -88,7 +94,7 @@ cpuInterr procF3(){
 			cpuFetchMV16();
 			uint16 adr = cpu_s.mv;
 			uint32 data = 0;
-			procIn(adr, 4, data);
+			procIn32(adr, data);
 			cpuWriteReg32(cpu_s.os_regm, data);
 		}
 		break;
@@ -101,7 +107,7 @@ cpuInterr procF4(){
 	cpuFetchOS();
 	uint16 adr = cpuReadReg16(cpu_s.os_regm);
 	uint8 data = cpuReadReg8(cpu_s.os_rego);
-	procOut(adr, 1, data);
+	procOut8(adr, data);
 	return 0;
 }
 
@@ -110,7 +116,7 @@ cpuInterr procF5(){
 	cpuFetchOS();
 	uint16 adr = cpuReadReg16(cpu_s.os_regm);
 	uint16 data = cpuReadReg16(cpu_s.os_rego);
-	procOut(adr, 2, data);
+	procOut16(adr, data);
 	return 0;
 }
 
@@ -119,7 +125,7 @@ cpuInterr procF6(){
 	cpuFetchOS();
 	uint16 adr = cpuReadReg16(cpu_s.os_regm);
 	uint32 data = cpuReadReg32(cpu_s.os_rego);
-	procOut(adr, 4, data);
+	procOut32(adr, data);
 	return 0;
 }
 
@@ -132,7 +138,7 @@ cpuInterr procF7(){
 			cpuFetchMV8();
 			uint16 adr = cpu_s.mv;
 			uint8 data = cpuReadReg8(cpu_s.os_rego);
-			procOut(adr, 1, data);
+			procOut8(adr, data);
 		}
 		break;
 		case 0x1: {
@@ -140,7 +146,7 @@ cpuInterr procF7(){
 			cpuFetchMV8();
 			uint16 adr = cpu_s.mv;
 			uint16 data = cpuReadReg16(cpu_s.os_rego);
-			procOut(adr, 2, data);
+			procOut16(adr, data);
 		}
 		break;
 		case 0x2: {
@@ -148,7 +154,7 @@ cpuInterr procF7(){
 			cpuFetchMV8();
 			uint16 adr = cpu_s.mv;
 			uint32 data = cpuReadReg32(cpu_s.os_rego);
-			procOut(adr, 4, data);
+			procOut32(adr, data);
 		}
 		break;
 		case 0x3: {
@@ -156,7 +162,7 @@ cpuInterr procF7(){
 			cpuFetchMV16();
 			uint16 adr = cpu_s.mv;
 			uint8 data = cpuReadReg8(cpu_s.os_rego);
-			procOut(adr, 1, data);
+			procOut8(adr, data);
 		}
 		break;
 		case 0x4: {
@@ -164,7 +170,7 @@ cpuInterr procF7(){
 			cpuFetchMV16();
 			uint16 adr = cpu_s.mv;
 			uint16 data = cpuReadReg16(cpu_s.os_rego);
-			procOut(adr, 2, data);
+			procOut16(adr, data);
 		}
 		break;
 		case 0x5: {
@@ -172,7 +178,7 @@ cpuInterr procF7(){
 			cpuFetchMV16();
 			uint16 adr = cpu_s.mv;
 			uint32 data = cpuReadReg32(cpu_s.os_rego);
-			procOut(adr, 4, data);
+			procOut32(adr, data);
 		}
 		break;
 	}

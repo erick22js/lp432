@@ -33,5 +33,11 @@
 // Try to execute a cpu function dealing with interruptions requests
 #define cpuTryExecute(function) {if(function) return cpu_s.interrupt;}
 
+/*
+	CPU Interruption Dealing
+*/
+void cpuInterrupt();
+void cpuReturnInterrupt();
+
 
 #endif

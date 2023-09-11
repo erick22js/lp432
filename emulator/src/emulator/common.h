@@ -27,6 +27,8 @@ typedef int64_t sint64;
 typedef float float32;
 typedef double float64;
 
+struct Pci;
+
 
 /*
 	Primitive Values

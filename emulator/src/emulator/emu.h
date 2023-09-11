@@ -16,6 +16,13 @@ static Emu emu_s;
 
 
 /*
+	Internal Functions for Emulation
+*/
+
+extern void emuCycles(uint32 cycles);
+
+
+/*
 	Control Functions for Emulation
 */
 
