@@ -12,8 +12,8 @@ static uint8 mem_rom[1024*64];
 */
 
 extern void busReset();
-extern uint8 busRead(uint32 adr);
-extern void busWrite(uint32 adr, uint8 data);
+extern uint8 busRead8(uint32 adr);
+extern void busWrite8(uint32 adr, uint8 data);
 
 
 #endif

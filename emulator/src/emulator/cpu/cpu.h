@@ -41,6 +41,17 @@
 // Floating Point Registers
 #define FREG_TOTAL 16
 
+// Interruption Registers
+#define IREG_I0 0x0
+#define IREG_I1 0x1
+#define IREG_I2 0x2
+#define IREG_I3 0x3
+#define IREG_I4 0x4
+#define IREG_I5 0x5
+#define IREG_I6 0x6
+#define IREG_I7 0x7
+#define IREG_TOTAL 8
+
 // Program Flags Bit
 #define FLAG_CF 0x00000001
 #define FLAG_BF 0x00000004
@@ -54,6 +65,13 @@
 #define FLAG_IE 0x00080000
 
 typedef int cpuInterr;
+
+typedef struct{
+	uint8 selector;
+	uint8 flags;
+	uint32 base;
+	uint32 limit;
+}CpuSegment;
 
 typedef struct{
 	/*
@@ -72,20 +90,26 @@ typedef struct{
 	uint32 reg_itd; // Interruption Table Address
 
 	// Segment Registers
-	struct{
-		uint8 selector;
-		uint8 flags;
-		uint32 base;
-		uint32 limit;
-	}sregs[SREG_TOTAL];
+	CpuSegment sregs[SREG_TOTAL];
 
 	// Floating Point Registers
 	float64 fregs[FREG_TOTAL];
+
+	// Interruption Registers
+	uint32 iregs[IREG_TOTAL];
+
+	/*
+		Preferred Segments
+	*/
+	CpuSegment *seg_code;
+	CpuSegment *seg_stack;
+	CpuSegment *seg_data;
 
 	/*
 		Code Storage
 	*/
 	uint8 opcode;
+	bool prefix;
 	uint8 os_regm, os_rego, os_desc;
 	uint32 mv;
 
@@ -96,6 +120,12 @@ typedef struct{
 	uint32 code;
 	uint32 data;
 	cpuInterr interrupt;
+
+	/*
+		State of Machine
+	*/
+	bool halted;
+	bool waiting;
 }Cpu;
 extern Cpu cpu_s;
 

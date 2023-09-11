@@ -75,6 +75,12 @@
     <ClCompile Include="src\emulator\cpu\procs\procE.c">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
+    <ClCompile Include="src\emulator\cpu\procs\proc3.c">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\emulator\cpu\procs\procF.c">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\emulator\emu.h">

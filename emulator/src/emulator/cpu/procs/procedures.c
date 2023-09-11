@@ -61,8 +61,18 @@ cpuProc cpuProcedures[256] = {
 	[0x2F] = proc2F,
 
 	// 0x30
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
+	[0x30] = proc30,
+	[0x31] = proc31,
+	[0x32] = proc32,
+	procNull,
+	[0x34] = proc34,
+	[0x35] = proc35,
+	[0x36] = proc36,
+	[0x37] = proc37,
+	[0x38] = proc38,
+	[0x39] = proc39,
+	[0x3A] = proc3A,
+	procNull, procNull, procNull, procNull, procNull,
 
 	// 0x40
 	procNull, procNull, procNull, procNull,
@@ -240,6 +250,20 @@ cpuProc cpuProcedures[256] = {
 	procNull,
 
 	// 0xF0
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
+	[0xF0] = procF0,
+	[0xF1] = procF1,
+	[0xF2] = procF2,
+	[0xF3] = procF3,
+	[0xF4] = procF4,
+	[0xF5] = procF5,
+	[0xF6] = procF6,
+	[0xF7] = procF7,
+	[0xF8] = procF8,
+	[0xF9] = procF9,
+	[0xFA] = procFA,
+	[0xFB] = procFB,
+	[0xFC] = procFC,
+	[0xFD] = procFD,
+	[0xFE] = procFE,
+	[0xFF] = procFF,
 };
