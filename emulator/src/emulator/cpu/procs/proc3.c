@@ -2,12 +2,6 @@
 
 
 // Segment Control
-#define SEG_ENABLED 0x01
-#define SEG_READABLE 0x02
-#define SEG_WRITEABLE 0x04
-#define SEG_EXECUTABLE 0x08
-#define SEG_SCALE 0x40
-#define SEG_APPEND 0x80
 
 void procLoadSegment(CpuSegment *seg){
 	// Base must not be zero to be loaded
@@ -201,6 +195,22 @@ cpuInterr proc3A(){
 	cpuFetchOS();
 	procEnsureNotInProtectedMode();
 	cpuWriteReg32(cpu_s.os_regm, cpu_s.iregs[cpu_s.os_rego&0x7]);
+	return 0;
+}
+
+cpuInterr proc3C(){
+	// Instruction: mvfisp r32:regm
+	cpuFetchOS();
+	procEnsureNotInProtectedMode();
+	cpuWriteReg32(cpu_s.os_regm, cpu_s.reg_isp);
+	return 0;
+}
+
+cpuInterr proc3D(){
+	// Instruction: mvtisp r32:regm
+	cpuFetchOS();
+	procEnsureNotInProtectedMode();
+	cpu_s.reg_isp = cpuReadReg32(cpu_s.os_regm);
 	return 0;
 }
 

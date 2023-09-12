@@ -45,6 +45,7 @@ void cpuStep(){
 	}
 	else{
 		// Reset modifiers
+		cpu_s.reg_lpc = cpu_s.reg_pc;
 		cpu_s.seg_data = &cpu_s.sregs[SREG_DS];
 	}
 

@@ -72,7 +72,10 @@ cpuProc cpuProcedures[256] = {
 	[0x38] = proc38,
 	[0x39] = proc39,
 	[0x3A] = proc3A,
-	procNull, procNull, procNull, procNull, procNull,
+	procNull,
+	[0x3C] = proc3C,
+	[0x3D] = proc3D,
+	procNull, procNull,
 
 	// 0x40
 	procNull, procNull, procNull, procNull,

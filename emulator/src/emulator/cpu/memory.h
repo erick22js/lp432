@@ -9,6 +9,13 @@
 	Memory Address Translation
 */
 
+#define SEG_ENABLED 0x01
+#define SEG_READABLE 0x02
+#define SEG_WRITEABLE 0x04
+#define SEG_EXECUTABLE 0x08
+#define SEG_SCALE 0x40
+#define SEG_APPEND 0x80
+
 /*
 	Memory Access and Code Fetching
 */

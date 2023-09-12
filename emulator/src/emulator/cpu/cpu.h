@@ -82,12 +82,14 @@ typedef struct{
 	
 	// Master Registers
 	uint32 reg_pc; // Program Counter
+	uint32 reg_lpc; // Program Counter
 	uint32 reg_st; // Program State
 
 	// Control Registers
 	uint32 reg_std; // Segment Table Address
 	uint32 reg_ptd; // Pagining Table Address
 	uint32 reg_itd; // Interruption Table Address
+	uint32 reg_isp; // Interruption Stack Pointer
 
 	// Segment Registers
 	CpuSegment sregs[SREG_TOTAL];

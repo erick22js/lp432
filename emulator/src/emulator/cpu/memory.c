@@ -6,44 +6,67 @@
 	Memory Address Translation
 */
 
+#define cpuTrAdr(adr, seg_reg, seg_flag, seg_intr) {\
+	if (cpu_s.reg_st&FLAG_SE){\
+		if (seg_reg->flags&SEG_ENABLED){\
+			adr += seg_reg->base;\
+			if (seg_reg->flags&seg_flag && (adr<seg_reg->limit)){}\
+			else{\
+				cpuThrowInterruption(seg_intr);\
+			}\
+		}\
+		else{\
+			cpuThrowInterruption(INTR_SEGMENT_NOT_PRESENT);\
+		}\
+	}\
+	if (cpu_s.reg_st&FLAG_PE){\
+		/* TODO */\
+	}\
+}
+#define cpuTrAdrCode(adr) cpuTrAdr(adr, cpu_s.seg_stack, SEG_EXECUTABLE, INTR_DENIED_CODE_ACCESS)
+#define cpuTrAdrReadStack(adr) cpuTrAdr(adr, cpu_s.seg_stack, SEG_READABLE, INTR_DENIED_DATA_ACCESS)
+#define cpuTrAdrWriteStack(adr) cpuTrAdr(adr, cpu_s.seg_stack, SEG_WRITEABLE, INTR_DENIED_DATA_ACCESS)
+#define cpuTrAdrReadData(adr) cpuTrAdr(adr, cpu_s.seg_data, SEG_READABLE, INTR_DENIED_DATA_ACCESS)
+#define cpuTrAdrWriteData(adr) cpuTrAdr(adr, cpu_s.seg_data, SEG_WRITEABLE, INTR_DENIED_DATA_ACCESS)
+
 /*
 	Memory Access and Code Fetching
 */
 
 // Memory Data Access by Address
 cpuInterr _cpuReadMem8(uint32 adr){
-	// TODO: Address translation
+	cpuTrAdrReadData(adr);
 	cpu_s.data = busRead8(adr);
 	return 0;
 }
 
 cpuInterr _cpuWriteMem8(uint32 adr, uint8 data){
-	// TODO: Address translation
+	cpuTrAdrWriteData(adr);
 	busWrite8(adr, data);
 	return 0;
 }
 
 cpuInterr _cpuReadMem16(uint32 adr){
-	// TODO: Address translation
+	cpuTrAdrReadData(adr);
 	cpu_s.data = busRead8(adr)|(busRead8(adr+1)<<8);
 	return 0;
 }
 
 cpuInterr _cpuWriteMem16(uint32 adr, uint16 data){
-	// TODO: Address translation
+	cpuTrAdrWriteData(adr);
 	busWrite8(adr, (data)&0xFF);
 	busWrite8(adr+1, (data>>8)&0xFF);
 	return 0;
 }
 
 cpuInterr _cpuReadMem32(uint32 adr){
-	// TODO: Address translation
+	cpuTrAdrReadData(adr);
 	cpu_s.data = busRead8(adr)|(busRead8(adr+1)<<8)|(busRead8(adr+2)<<16)|(busRead8(adr+3)<<24);
 	return 0;
 }
 
 cpuInterr _cpuWriteMem32(uint32 adr, uint32 data){
-	// TODO: Address translation
+	cpuTrAdrWriteData(adr);
 	busWrite8(adr, (data)&0xFF);
 	busWrite8(adr+1, (data>>8)&0xFF);
 	busWrite8(adr+2, (data>>16)&0xFF);
@@ -54,7 +77,7 @@ cpuInterr _cpuWriteMem32(uint32 adr, uint32 data){
 // Memory Stack Access
 cpuInterr _cpuPop8(){
 	uint32 adr = cpu_s.gregs[GREG_ESP];
-	// TODO: Address translation
+	cpuTrAdrReadStack(adr);
 	uint8 data = busRead8(adr);
 	cpu_s.gregs[GREG_ESP]++;
 	cpu_s.data = data;
@@ -64,14 +87,14 @@ cpuInterr _cpuPop8(){
 cpuInterr _cpuPush8(uint8 data){
 	cpu_s.gregs[GREG_ESP]--;
 	uint32 adr = cpu_s.gregs[GREG_ESP];
-	// TODO: Address translation
+	cpuTrAdrWriteStack(adr);
 	busWrite8(adr, data);
 	return 0;
 }
 
 cpuInterr _cpuPop16(){
 	uint32 adr = cpu_s.gregs[GREG_ESP];
-	// TODO: Address translation
+	cpuTrAdrReadStack(adr);
 	uint16 data = busRead8(adr)|(busRead8(adr+1)<<8);
 	cpu_s.gregs[GREG_ESP] += 2;
 	cpu_s.data = data;
@@ -81,7 +104,7 @@ cpuInterr _cpuPop16(){
 cpuInterr _cpuPush16(uint16 data){
 	cpu_s.gregs[GREG_ESP] -= 2;
 	uint32 adr = cpu_s.gregs[GREG_ESP];
-	// TODO: Address translation
+	cpuTrAdrWriteStack(adr);
 	busWrite8(adr, (data)&0xFF);
 	busWrite8(adr+1, (data>>8)&0xFF);
 	return 0;
@@ -89,7 +112,7 @@ cpuInterr _cpuPush16(uint16 data){
 
 cpuInterr _cpuPop32(){
 	uint32 adr = cpu_s.gregs[GREG_ESP];
-	// TODO: Address translation
+	cpuTrAdrReadStack(adr);
 	uint32 data = busRead8(adr)|(busRead8(adr+1)<<8)|(busRead8(adr+2)<<16)|(busRead8(adr+3)<<24);
 	cpu_s.gregs[GREG_ESP] += 4;
 	cpu_s.data = data;
@@ -99,7 +122,7 @@ cpuInterr _cpuPop32(){
 cpuInterr _cpuPush32(uint32 data){
 	cpu_s.gregs[GREG_ESP] -= 4;
 	uint32 adr = cpu_s.gregs[GREG_ESP];
-	// TODO: Address translation
+	cpuTrAdrWriteStack(adr);
 	busWrite8(adr, (data)&0xFF);
 	busWrite8(adr+1, (data>>8)&0xFF);
 	busWrite8(adr+2, (data>>16)&0xFF);
@@ -110,27 +133,27 @@ cpuInterr _cpuPush32(uint32 data){
 // Memory Code Access
 cpuInterr _cpuFetch8(){
 	uint32 adr = cpu_s.reg_pc;
-	// TODO: Address translation
-	uint8 code = busRead8(adr);
 	cpu_s.reg_pc++;
+	cpuTrAdrCode(adr);
+	uint8 code = busRead8(adr);
 	cpu_s.code = code;
 	return 0;
 }
 
 cpuInterr _cpuFetch16(){
 	uint32 adr = cpu_s.reg_pc;
-	// TODO: Address translation
-	uint16 code = busRead8(adr)|(busRead8(adr+1)<<8);
 	cpu_s.reg_pc += 2;
+	cpuTrAdrCode(adr);
+	uint16 code = busRead8(adr)|(busRead8(adr+1)<<8);
 	cpu_s.code = code;
 	return 0;
 }
 
 cpuInterr _cpuFetch32(){
 	uint32 adr = cpu_s.reg_pc;
-	// TODO: Address translation
-	uint32 code = busRead8(adr)|(busRead8(adr+1)<<8)|(busRead8(adr+2)<<16)|(busRead8(adr+3)<<24);
 	cpu_s.reg_pc += 4;
+	cpuTrAdrCode(adr);
+	uint32 code = busRead8(adr)|(busRead8(adr+1)<<8)|(busRead8(adr+2)<<16)|(busRead8(adr+3)<<24);
 	cpu_s.code = code;
 	return 0;
 }
