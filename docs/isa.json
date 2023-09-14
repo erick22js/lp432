@@ -151,6 +151,17 @@
 			}
 		]
 	},
+	"debug": {
+		"description": "Do a Debug Interruption",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x02",
+				"args": []
+			}
+		]
+	},
 	"nop": {
 		"description": "Don't do any operation",
 		"cycles": 1,
@@ -158,6 +169,17 @@
 		"encode": [
 			{
 				"opcode": "0x00",
+				"args": []
+			}
+		]
+	},
+	"pnop": {
+		"description": "Don't do any operation, but interrupt if program is in Protected Mode",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x01",
 				"args": []
 			}
 		]

@@ -9,7 +9,7 @@
 
 - Implement Cycles emulation ** DONE
 
-- Implement CPU comunication with PCI and external interruption handling
+- Implement CPU comunication with PCI and external interruption handling ** DONE
 	- Test comunication with devices port
 	- Create display Device
 	- Create keyboard Device

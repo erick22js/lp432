@@ -131,6 +131,111 @@ cpuInterr proc93(){
 			cpuWriteReg32(cpu_s.os_regm, res);
 		}
 		break;
+		case 0x6:{
+			// Instruction: mul r16:regm, imm8:MV
+			cpuFetchMV8();
+			uint32 v1 = cpuReadReg16(cpu_s.os_regm);
+			uint32 v2 = cpu_s.code;
+			uint32 res = 0;
+			procMul16(v1, v2, res);
+			cpuWriteReg16(cpu_s.os_regm, res);
+		}
+		break;
+		case 0x7:{
+			// Instruction: mul r32:regm, imm8:MV
+			cpuFetchMV8();
+			uint32 v1 = cpuReadReg32(cpu_s.os_regm);
+			uint32 v2 = cpu_s.code;
+			uint32 res = 0;
+			procMul32(v1, v2, res);
+			cpuWriteReg32(cpu_s.os_regm, res);
+		}
+		break;
+		case 0x8:{
+			// Instruction: mul r32:regm, imm16:MV
+			cpuFetchMV16();
+			uint32 v1 = cpuReadReg32(cpu_s.os_regm);
+			uint32 v2 = cpu_s.code;
+			uint32 res = 0;
+			procMul32(v1, v2, res);
+			cpuWriteReg32(cpu_s.os_regm, res);
+		}
+		break;
+		case 0x9:{
+			// Instruction: mul r16:regm, mem8
+			cpuFetchMemIndex();
+			cpuReadMem8(cpu_s.mem_adr);
+			uint32 v1 = cpuReadReg16(cpu_s.os_regm);
+			uint32 v2 = cpu_s.data;
+			uint32 res = 0;
+			procMul16(v1, v2, res);
+			cpuWriteReg16(cpu_s.os_regm, res);
+		}
+		break;
+		case 0xA:{
+			// Instruction: mul r32:regm, mem8
+			cpuFetchMemIndex();
+			cpuReadMem8(cpu_s.mem_adr);
+			uint32 v1 = cpuReadReg32(cpu_s.os_regm);
+			uint32 v2 = cpu_s.data;
+			uint32 res = 0;
+			procMul32(v1, v2, res);
+			cpuWriteReg32(cpu_s.os_regm, res);
+		}
+		break;
+		case 0xB:{
+			// Instruction: mul r32:regm, mem16
+			cpuFetchMemIndex();
+			cpuReadMem16(cpu_s.mem_adr);
+			uint32 v1 = cpuReadReg32(cpu_s.os_regm);
+			uint32 v2 = cpu_s.data;
+			uint32 res = 0;
+			procMul32(v1, v2, res);
+			cpuWriteReg32(cpu_s.os_regm, res);
+		}
+		break;
+		case 0xC:{
+			// Instruction: mul r32:regm, imms8:MV
+			cpuFetchMV8();
+			uint32 v1 = cpuReadReg32(cpu_s.os_regm);
+			uint32 v2 = (sint32)u8ToInt(cpu_s.code);
+			uint32 res = 0;
+			procMul32(v1, v2, res);
+			cpuWriteReg32(cpu_s.os_regm, res);
+		}
+		break;
+		case 0xD:{
+			// Instruction: mul r32:regm, imms16:MV
+			cpuFetchMV16();
+			uint32 v1 = cpuReadReg32(cpu_s.os_regm);
+			uint32 v2 = (sint32)u16ToInt(cpu_s.code);
+			uint32 res = 0;
+			procMul32(v1, v2, res);
+			cpuWriteReg32(cpu_s.os_regm, res);
+		}
+		break;
+		case 0xE:{
+			// Instruction: mul r32:regm, mems8
+			cpuFetchMemIndex();
+			cpuReadMem8(cpu_s.mem_adr);
+			uint32 v1 = cpuReadReg32(cpu_s.os_regm);
+			uint32 v2 = (sint32)u8ToInt(cpu_s.data);
+			uint32 res = 0;
+			procMul32(v1, v2, res);
+			cpuWriteReg32(cpu_s.os_regm, res);
+		}
+		break;
+		case 0xF:{
+			// Instruction: mul r32:regm, mems16
+			cpuFetchMemIndex();
+			cpuReadMem16(cpu_s.mem_adr);
+			uint32 v1 = cpuReadReg32(cpu_s.os_regm);
+			uint32 v2 = (sint32)u16ToInt(cpu_s.data);
+			uint32 res = 0;
+			procMul32(v1, v2, res);
+			cpuWriteReg32(cpu_s.os_regm, res);
+		}
+		break;
 		default: {
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
@@ -291,6 +396,111 @@ cpuInterr proc9F(){
 			cpuReadMem32(cpu_s.mem_adr);
 			uint32 v1 = cpuReadReg32(cpu_s.os_regm);
 			uint32 v2 = cpu_s.data;
+			uint32 res = 0;
+			procDiv32(v1, v2, res);
+			cpuWriteReg32(cpu_s.os_regm, res);
+		}
+		break;
+		case 0x6:{
+			// Instruction: div r16:regm, imm8:MV
+			cpuFetchMV8();
+			uint32 v1 = cpuReadReg16(cpu_s.os_regm);
+			uint32 v2 = cpu_s.code;
+			uint32 res = 0;
+			procDiv16(v1, v2, res);
+			cpuWriteReg16(cpu_s.os_regm, res);
+		}
+		break;
+		case 0x7:{
+			// Instruction: div r32:regm, imm8:MV
+			cpuFetchMV8();
+			uint32 v1 = cpuReadReg32(cpu_s.os_regm);
+			uint32 v2 = cpu_s.code;
+			uint32 res = 0;
+			procDiv32(v1, v2, res);
+			cpuWriteReg32(cpu_s.os_regm, res);
+		}
+		break;
+		case 0x8:{
+			// Instruction: div r32:regm, imm16:MV
+			cpuFetchMV16();
+			uint32 v1 = cpuReadReg32(cpu_s.os_regm);
+			uint32 v2 = cpu_s.code;
+			uint32 res = 0;
+			procDiv32(v1, v2, res);
+			cpuWriteReg32(cpu_s.os_regm, res);
+		}
+		break;
+		case 0x9:{
+			// Instruction: div r16:regm, mem8
+			cpuFetchMemIndex();
+			cpuReadMem8(cpu_s.mem_adr);
+			uint32 v1 = cpuReadReg16(cpu_s.os_regm);
+			uint32 v2 = cpu_s.data;
+			uint32 res = 0;
+			procDiv16(v1, v2, res);
+			cpuWriteReg16(cpu_s.os_regm, res);
+		}
+		break;
+		case 0xA:{
+			// Instruction: div r32:regm, mem8
+			cpuFetchMemIndex();
+			cpuReadMem8(cpu_s.mem_adr);
+			uint32 v1 = cpuReadReg32(cpu_s.os_regm);
+			uint32 v2 = cpu_s.data;
+			uint32 res = 0;
+			procDiv32(v1, v2, res);
+			cpuWriteReg32(cpu_s.os_regm, res);
+		}
+		break;
+		case 0xB:{
+			// Instruction: div r32:regm, mem16
+			cpuFetchMemIndex();
+			cpuReadMem16(cpu_s.mem_adr);
+			uint32 v1 = cpuReadReg32(cpu_s.os_regm);
+			uint32 v2 = cpu_s.data;
+			uint32 res = 0;
+			procDiv32(v1, v2, res);
+			cpuWriteReg32(cpu_s.os_regm, res);
+		}
+		break;
+		case 0xC:{
+			// Instruction: div r32:regm, imms8:MV
+			cpuFetchMV8();
+			uint32 v1 = cpuReadReg32(cpu_s.os_regm);
+			uint32 v2 = (sint32)u8ToInt(cpu_s.code);
+			uint32 res = 0;
+			procDiv32(v1, v2, res);
+			cpuWriteReg32(cpu_s.os_regm, res);
+		}
+		break;
+		case 0xD:{
+			// Instruction: div r32:regm, imms16:MV
+			cpuFetchMV16();
+			uint32 v1 = cpuReadReg32(cpu_s.os_regm);
+			uint32 v2 = (sint32)u16ToInt(cpu_s.code);
+			uint32 res = 0;
+			procDiv32(v1, v2, res);
+			cpuWriteReg32(cpu_s.os_regm, res);
+		}
+		break;
+		case 0xE:{
+			// Instruction: div r32:regm, mems8
+			cpuFetchMemIndex();
+			cpuReadMem8(cpu_s.mem_adr);
+			uint32 v1 = cpuReadReg32(cpu_s.os_regm);
+			uint32 v2 = (sint32)u8ToInt(cpu_s.data);
+			uint32 res = 0;
+			procDiv32(v1, v2, res);
+			cpuWriteReg32(cpu_s.os_regm, res);
+		}
+		break;
+		case 0xF:{
+			// Instruction: div r32:regm, mems16
+			cpuFetchMemIndex();
+			cpuReadMem16(cpu_s.mem_adr);
+			uint32 v1 = cpuReadReg32(cpu_s.os_regm);
+			uint32 v2 = (sint32)u16ToInt(cpu_s.data);
 			uint32 res = 0;
 			procDiv32(v1, v2, res);
 			cpuWriteReg32(cpu_s.os_regm, res);

@@ -169,16 +169,16 @@ cpuInterr proc22(){
 }
 
 cpuInterr proc23(){
-	// Instruction: ja imm32:MV
-	cpuFetch32();
-	cpuJumpTo(cpu_s.code);
+	// Instruction: ja r32:regm
+	cpuFetchOS();
+	cpuJumpTo(cpuReadReg32(cpu_s.os_regm));
 	return 0;
 }
 
 cpuInterr proc24(){
-	// Instruction: ja r32:regm
-	cpuFetchOS();
-	cpuJumpTo(cpuReadReg32(cpu_s.os_regm));
+	// Instruction: ja imm32:MV
+	cpuFetch32();
+	cpuJumpTo(cpu_s.code);
 	return 0;
 }
 
@@ -242,18 +242,18 @@ cpuInterr proc2A(){
 }
 
 cpuInterr proc2B(){
-	// Instruction: ba imm32:MV
-	cpuFetch32();
-	cpuPush32(cpu_s.reg_pc);
-	cpuJumpTo(cpu_s.code);
-	return 0;
-}
-
-cpuInterr proc2C(){
 	// Instruction: ba r32:regm
 	cpuFetchOS();
 	cpuPush32(cpu_s.reg_pc);
 	cpuJumpTo(cpuReadReg32(cpu_s.os_regm));
+	return 0;
+}
+
+cpuInterr proc2C(){
+	// Instruction: ba imm32:MV
+	cpuFetch32();
+	cpuPush32(cpu_s.reg_pc);
+	cpuJumpTo(cpu_s.code);
 	return 0;
 }
 

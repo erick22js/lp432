@@ -65,6 +65,45 @@ cpuInterr proc73(){
 			cpuWriteReg32(cpu_s.os_regm, cpu_s.data);
 		}
 		break;
+		case 0x6:{
+			// Instruction: mov r16:regm, imm8:MV
+			cpuFetchMV8();
+			cpuWriteReg16(cpu_s.os_regm, cpu_s.code);
+		}
+		break;
+		case 0x7:{
+			// Instruction: mov r32:regm, imm8:MV
+			cpuFetchMV8();
+			cpuWriteReg32(cpu_s.os_regm, cpu_s.code);
+		}
+		break;
+		case 0x8:{
+			// Instruction: mov r32:regm, imm16:MV
+			cpuFetchMV16();
+			cpuWriteReg32(cpu_s.os_regm, cpu_s.code);
+		}
+		break;
+		case 0x9:{
+			// Instruction: mov r16:regm, mem8
+			cpuFetchMemIndex();
+			cpuReadMem8(cpu_s.mem_adr);
+			cpuWriteReg16(cpu_s.os_regm, cpu_s.data);
+		}
+		break;
+		case 0xA:{
+			// Instruction: mov r32:regm, mem8
+			cpuFetchMemIndex();
+			cpuReadMem8(cpu_s.mem_adr);
+			cpuWriteReg32(cpu_s.os_regm, cpu_s.data);
+		}
+		break;
+		case 0xB:{
+			// Instruction: mov r32:regm, mem16
+			cpuFetchMemIndex();
+			cpuReadMem16(cpu_s.mem_adr);
+			cpuWriteReg32(cpu_s.os_regm, cpu_s.data);
+		}
+		break;
 		default: {
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
