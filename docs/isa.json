@@ -1,0 +1,317 @@
+{
+	"adc": {
+		"description": "Adds src value with carry to dest",
+		"cycles": 1,
+		"flags": {"CF":2, "VF":2, "ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0x80",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0x81",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0x82",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0x83",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x83",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x83",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0x83",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x83",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0x83",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem32", "mem"]
+				]
+			}
+		]
+	},
+	"add": {
+		"description": "Adds src value to dest",
+		"cycles": 1,
+		"flags": {"CF":2, "VF":2, "ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0x84",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0x85",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0x86",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0x87",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x87",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x87",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0x87",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x87",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0x87",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem32", "mem"]
+				]
+			}
+		]
+	},
+	"nop": {
+		"description": "Don't do any operation",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x00",
+				"args": []
+			}
+		]
+	},
+	"sbb": {
+		"description": "Subtracts src value with borrow from dest",
+		"cycles": 1,
+		"flags": {"BF":2, "VF":2, "ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0x88",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0x89",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0x8A",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0x8B",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x8B",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x8B",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0x8B",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x8B",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0x8B",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem32", "mem"]
+				]
+			}
+		]
+	},
+	"sub": {
+		"description": "Subtracts src value from dest",
+		"cycles": 1,
+		"flags": {"BF":2, "VF":2, "ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0x8C",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0x8D",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0x8E",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0x8F",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x8F",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x8F",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0x8F",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x8F",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0x8F",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem32", "mem"]
+				]
+			}
+		]
+	}
+}

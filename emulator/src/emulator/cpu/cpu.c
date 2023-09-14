@@ -94,10 +94,6 @@ void cpuStep(){
 					log("Cpu Interruption: Division by Zero\n");
 				}
 				break;
-				case INTR_INVALID_INTERRUPTION_INDEX:{
-					log("Cpu Interruption: Invalid Interruption Index\n");
-				}
-				break;
 				case INTR_INVALID_OPCODE:{
 					log("Cpu Interruption: Invalid Opcode\n");
 				}
@@ -116,10 +112,6 @@ void cpuStep(){
 				break;
 				case INTR_SOFTWARE_INTERRUPTION:{
 					log("Cpu Interruption: Software Interruption\n");
-				}
-				break;
-				case INTR_STACK_FAULT:{
-					log("Cpu Interruption: Stack Fault\n");
 				}
 				break;
 			}

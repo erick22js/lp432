@@ -7,7 +7,7 @@ void procLoadSegment(CpuSegment *seg){
 	// Base must not be zero to be loaded
 	if (seg->base){
 		// Retrieve the segments count in base pointer
-		uint32 count = busRead8(cpu_s.reg_std);
+		uint32 count = cpuReadBus8(cpu_s.reg_std);
 
 		// Disable segment in case not available
 		if (seg->selector >= count){
@@ -17,9 +17,9 @@ void procLoadSegment(CpuSegment *seg){
 
 		// Load segment structure from memory
 		uint32 adr = cpu_s.reg_std + (seg->selector * 8);
-		seg->flags = busRead8(adr);
-		seg->base = (busRead8(adr+2)) | (busRead8(adr+4) << 8) | (busRead8(adr+5) << 16);
-		seg->limit = (busRead8(adr+3)) | (busRead8(adr+6) << 8) | (busRead8(adr+7) << 16);
+		seg->flags = cpuReadBus8(adr);
+		seg->base = cpuReadBus8(adr+2) | (cpuReadBus16(adr+4) << 8);
+		seg->limit = cpuReadBus8(adr+3) | (cpuReadBus16(adr+6) << 8);
 
 		// Setup loaded segment base and limit
 		seg->base = seg->base << 8;

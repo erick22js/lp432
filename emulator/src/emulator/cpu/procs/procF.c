@@ -195,7 +195,12 @@ cpuInterr procF8(){
 cpuInterr procF9(){
 	// Instruction: wait
 	procEnsureNotInProtectedMode();
-	cpu_s.waiting = true;
+	if (pci_s.count_connected){
+		cpu_s.waiting = true;
+	}
+	else{
+		cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);
+	}
 	return 0;
 }
 

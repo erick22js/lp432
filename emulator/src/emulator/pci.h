@@ -15,6 +15,7 @@ typedef struct{
 	//	Set of Devices
 	//
 	Device *(devices[PCI_MAX_DEVICES]);
+	uint32 count_connected;
 	uint32 port_i;
 }Pci;
 extern Pci pci_s;

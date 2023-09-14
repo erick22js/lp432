@@ -1,11 +1,13 @@
 - Implement all base instructions ** DONE
 	- Test all instructions
 
-- Implement CPU address virtual mapping by segmentation
+- Implement CPU address virtual mapping by segmentation ** DONE
 	- Test segmentation mapping
 
-- Implement CPU address virtual mapping by pagining
+- Implement CPU address virtual mapping by pagining ** DONE
 	- Test pagining mapping
+
+- Implement Cycles emulation ** DONE
 
 - Implement CPU comunication with PCI and external interruption handling
 	- Test comunication with devices port
@@ -14,8 +16,11 @@
 	- Create disk Device
 	- Create stdout Device
 
-- Implement all the CPU interruptions deals
+- Implement all the CPU interruptions deals ** DONE
+	- Pass values through each interruption request
 	- Test all interruptions
+
+- Create interpreter for debug control
 
 - Create assembler
 

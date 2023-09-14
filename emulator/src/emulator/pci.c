@@ -132,6 +132,7 @@ bool pciRequestCpuInterruption(Device *device){
 bool pciPlugDevice(Device *device){
 	while (pci_s.port_i < PCI_MAX_DEVICES){
 		if (pci_s.devices[pci_s.port_i] == null){
+			pci_s.count_connected++;
 			pci_s.devices[pci_s.port_i] = device;
 			device->port = pci_s.port_i;
 			pci_s.port_i++;
@@ -143,6 +144,7 @@ bool pciPlugDevice(Device *device){
 }
 
 extern void pciReset(){
+	pci_s.count_connected = 0;
 	pci_s.port_i = 1;
 	for (int i = 0; i<PCI_MAX_DEVICES; i++){
 		pci_s.devices[i] = null;

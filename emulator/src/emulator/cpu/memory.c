@@ -1,4 +1,5 @@
 #include "memory.h"
+#include "../emu.h"
 
 
 
@@ -6,13 +7,16 @@
 	Memory Address Translation
 */
 
-#define cpuTrAdr(adr, seg_reg, seg_flag, seg_intr) {\
+#define cpuTrAdr(adr, seg_reg, seg_flag, acs_intr, pag_flag) {\
 	if (cpu_s.reg_st&FLAG_SE){\
 		if (seg_reg->flags&SEG_ENABLED){\
+			if (seg_reg->flags&SEG_PROTECTED && eval(cpu_s.reg_st&FLAG_PM)){\
+				cpuThrowInterruption(INTR_PROTECTED_MODE_VIOLATION);\
+			}\
 			adr += seg_reg->base;\
-			if (seg_reg->flags&seg_flag && (adr<seg_reg->limit)){}\
+			if (seg_reg->flags&seg_flag && (adr<seg_reg->limit) && (adr>seg_reg->base)){}\
 			else{\
-				cpuThrowInterruption(seg_intr);\
+				cpuThrowInterruption(acs_intr);\
 			}\
 		}\
 		else{\
@@ -20,14 +24,36 @@
 		}\
 	}\
 	if (cpu_s.reg_st&FLAG_PE){\
-		/* TODO */\
+		uint32 ptr = cpu_s.reg_ptd + ((adr>>22)&0x3FF)*4;\
+		uint32 dir = cpuReadBus32(ptr);\
+		if (dir){\
+			ptr = dir + ((adr>>12)&0x3FF)*4;\
+			uint32 pag = cpuReadBus32(ptr);\
+			if (pag&PAG_ENABLED){\
+				if (pag&PAG_PROTECTED && eval(cpu_s.reg_st&FLAG_PM)){\
+					cpuThrowInterruption(INTR_PROTECTED_MODE_VIOLATION);\
+				}\
+				if (pag&pag_flag){\
+					adr = (pag&0xFFFFF000) | (adr&0xFFF);\
+				}\
+				else{\
+					cpuThrowInterruption(acs_intr);\
+				}\
+			}\
+			else{\
+				cpuThrowInterruption(INTR_PAGE_FAULT);\
+			}\
+		}\
+		else{\
+			cpuThrowInterruption(INTR_DIRECTORY_FAULT);\
+		}\
 	}\
 }
-#define cpuTrAdrCode(adr) cpuTrAdr(adr, cpu_s.seg_stack, SEG_EXECUTABLE, INTR_DENIED_CODE_ACCESS)
-#define cpuTrAdrReadStack(adr) cpuTrAdr(adr, cpu_s.seg_stack, SEG_READABLE, INTR_DENIED_DATA_ACCESS)
-#define cpuTrAdrWriteStack(adr) cpuTrAdr(adr, cpu_s.seg_stack, SEG_WRITEABLE, INTR_DENIED_DATA_ACCESS)
-#define cpuTrAdrReadData(adr) cpuTrAdr(adr, cpu_s.seg_data, SEG_READABLE, INTR_DENIED_DATA_ACCESS)
-#define cpuTrAdrWriteData(adr) cpuTrAdr(adr, cpu_s.seg_data, SEG_WRITEABLE, INTR_DENIED_DATA_ACCESS)
+#define cpuTrAdrCode(adr) {if (!(cpu_s.reg_st&0x0F000000)){cpuTrAdr(adr, cpu_s.seg_stack, SEG_EXECUTABLE, INTR_DENIED_CODE_ACCESS, PAG_EXECUTABLE)}}
+#define cpuTrAdrReadStack(adr) cpuTrAdr(adr, cpu_s.seg_stack, SEG_READABLE, INTR_DENIED_DATA_ACCESS, PAG_READABLE)
+#define cpuTrAdrWriteStack(adr) cpuTrAdr(adr, cpu_s.seg_stack, SEG_WRITEABLE, INTR_DENIED_DATA_ACCESS, PAG_WRITEABLE)
+#define cpuTrAdrReadData(adr) cpuTrAdr(adr, cpu_s.seg_data, SEG_READABLE, INTR_DENIED_DATA_ACCESS, PAG_READABLE)
+#define cpuTrAdrWriteData(adr) cpuTrAdr(adr, cpu_s.seg_data, SEG_WRITEABLE, INTR_DENIED_DATA_ACCESS, PAG_WRITEABLE)
 
 /*
 	Memory Access and Code Fetching
@@ -36,41 +62,43 @@
 // Memory Data Access by Address
 cpuInterr _cpuReadMem8(uint32 adr){
 	cpuTrAdrReadData(adr);
-	cpu_s.data = busRead8(adr);
+	cpu_s.data = cpuReadBus8(adr);
+	emuCycles(1);
 	return 0;
 }
 
 cpuInterr _cpuWriteMem8(uint32 adr, uint8 data){
 	cpuTrAdrWriteData(adr);
-	busWrite8(adr, data);
+	cpuWriteBus8(adr, data);
+	emuCycles(1);
 	return 0;
 }
 
 cpuInterr _cpuReadMem16(uint32 adr){
 	cpuTrAdrReadData(adr);
-	cpu_s.data = busRead8(adr)|(busRead8(adr+1)<<8);
+	cpu_s.data = cpuReadBus16(adr);
+	emuCycles(1 + ((adr&0x3)==0x3?1:0));
 	return 0;
 }
 
 cpuInterr _cpuWriteMem16(uint32 adr, uint16 data){
 	cpuTrAdrWriteData(adr);
-	busWrite8(adr, (data)&0xFF);
-	busWrite8(adr+1, (data>>8)&0xFF);
+	cpuWriteBus16(adr, data);
+	emuCycles(1 + ((adr&0x3)==0x3?1:0));
 	return 0;
 }
 
 cpuInterr _cpuReadMem32(uint32 adr){
 	cpuTrAdrReadData(adr);
-	cpu_s.data = busRead8(adr)|(busRead8(adr+1)<<8)|(busRead8(adr+2)<<16)|(busRead8(adr+3)<<24);
+	cpu_s.data = cpuReadBus32(adr);
+	emuCycles(1 + (adr&0x3?1:0));
 	return 0;
 }
 
 cpuInterr _cpuWriteMem32(uint32 adr, uint32 data){
 	cpuTrAdrWriteData(adr);
-	busWrite8(adr, (data)&0xFF);
-	busWrite8(adr+1, (data>>8)&0xFF);
-	busWrite8(adr+2, (data>>16)&0xFF);
-	busWrite8(adr+3, (data>>24)&0xFF);
+	cpuWriteBus32(adr, data);
+	emuCycles(1 + (adr&0x3?1:0));
 	return 0;
 }
 
@@ -78,9 +106,10 @@ cpuInterr _cpuWriteMem32(uint32 adr, uint32 data){
 cpuInterr _cpuPop8(){
 	uint32 adr = cpu_s.gregs[GREG_ESP];
 	cpuTrAdrReadStack(adr);
-	uint8 data = busRead8(adr);
+	uint8 data = cpuReadBus8(adr);
 	cpu_s.gregs[GREG_ESP]++;
 	cpu_s.data = data;
+	emuCycles(1);
 	return 0;
 }
 
@@ -88,16 +117,18 @@ cpuInterr _cpuPush8(uint8 data){
 	cpu_s.gregs[GREG_ESP]--;
 	uint32 adr = cpu_s.gregs[GREG_ESP];
 	cpuTrAdrWriteStack(adr);
-	busWrite8(adr, data);
+	cpuWriteBus8(adr, data);
+	emuCycles(1);
 	return 0;
 }
 
 cpuInterr _cpuPop16(){
 	uint32 adr = cpu_s.gregs[GREG_ESP];
 	cpuTrAdrReadStack(adr);
-	uint16 data = busRead8(adr)|(busRead8(adr+1)<<8);
+	uint16 data = cpuReadBus16(adr);
 	cpu_s.gregs[GREG_ESP] += 2;
 	cpu_s.data = data;
+	emuCycles(1 + ((adr&0x3)==0x3?1:0));
 	return 0;
 }
 
@@ -105,17 +136,18 @@ cpuInterr _cpuPush16(uint16 data){
 	cpu_s.gregs[GREG_ESP] -= 2;
 	uint32 adr = cpu_s.gregs[GREG_ESP];
 	cpuTrAdrWriteStack(adr);
-	busWrite8(adr, (data)&0xFF);
-	busWrite8(adr+1, (data>>8)&0xFF);
+	cpuWriteBus16(adr, data);
+	emuCycles(1 + ((adr&0x3)==0x3?1:0));
 	return 0;
 }
 
 cpuInterr _cpuPop32(){
 	uint32 adr = cpu_s.gregs[GREG_ESP];
 	cpuTrAdrReadStack(adr);
-	uint32 data = busRead8(adr)|(busRead8(adr+1)<<8)|(busRead8(adr+2)<<16)|(busRead8(adr+3)<<24);
+	uint32 data = cpuReadBus32(adr);
 	cpu_s.gregs[GREG_ESP] += 4;
 	cpu_s.data = data;
+	emuCycles(1 + (adr&0x3?1:0));
 	return 0;
 }
 
@@ -123,10 +155,8 @@ cpuInterr _cpuPush32(uint32 data){
 	cpu_s.gregs[GREG_ESP] -= 4;
 	uint32 adr = cpu_s.gregs[GREG_ESP];
 	cpuTrAdrWriteStack(adr);
-	busWrite8(adr, (data)&0xFF);
-	busWrite8(adr+1, (data>>8)&0xFF);
-	busWrite8(adr+2, (data>>16)&0xFF);
-	busWrite8(adr+3, (data>>24)&0xFF);
+	cpuWriteBus32(adr, data);
+	emuCycles(1 + (adr&0x3?1:0));
 	return 0;
 }
 
@@ -135,8 +165,9 @@ cpuInterr _cpuFetch8(){
 	uint32 adr = cpu_s.reg_pc;
 	cpu_s.reg_pc++;
 	cpuTrAdrCode(adr);
-	uint8 code = busRead8(adr);
+	uint8 code = cpuReadBus8(adr);
 	cpu_s.code = code;
+	emuCycles(1);
 	return 0;
 }
 
@@ -144,8 +175,9 @@ cpuInterr _cpuFetch16(){
 	uint32 adr = cpu_s.reg_pc;
 	cpu_s.reg_pc += 2;
 	cpuTrAdrCode(adr);
-	uint16 code = busRead8(adr)|(busRead8(adr+1)<<8);
+	uint16 code = cpuReadBus16(adr);
 	cpu_s.code = code;
+	emuCycles(1 + ((adr&0x3)==0x3?1:0));
 	return 0;
 }
 
@@ -153,8 +185,9 @@ cpuInterr _cpuFetch32(){
 	uint32 adr = cpu_s.reg_pc;
 	cpu_s.reg_pc += 4;
 	cpuTrAdrCode(adr);
-	uint32 code = busRead8(adr)|(busRead8(adr+1)<<8)|(busRead8(adr+2)<<16)|(busRead8(adr+3)<<24);
+	uint32 code = cpuReadBus32(adr);
 	cpu_s.code = code;
+	emuCycles(1 + (adr&0x3?1:0));
 	return 0;
 }
 

@@ -10,7 +10,9 @@ cpuInterr procNull(){cpuThrowInterruption(INTR_INVALID_OPCODE); return 0;}
 cpuProc cpuProcedures[256] = {
 	// 0x00
 	[0x00] = proc00,
-	procNull, procNull, procNull,
+	[0x01] = proc01,
+	[0x02] = proc02,
+	procNull,
 	[0x04] = proc04,
 	[0x05] = proc05,
 	[0x06] = proc06,

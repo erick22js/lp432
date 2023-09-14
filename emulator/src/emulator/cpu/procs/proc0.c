@@ -6,6 +6,18 @@ cpuInterr proc00(){
 	return 0;
 }
 
+cpuInterr proc01(){
+	// Instruction: pnop
+	procEnsureNotInProtectedMode();
+	return 0;
+}
+
+cpuInterr proc02(){
+	// Instruction: debug
+	cpuThrowInterruption(INTR_DEBUGGER_INTERRUPTION);
+	return 0;
+}
+
 cpuInterr proc04(){
 	// Instruction: jaes imm32
 	procEnsureNotInProtectedMode();
