@@ -1,4 +1,5 @@
 #include "lexer.h"
+#include "text.h"
 
 /*
 	Storage Lexers
@@ -17,8 +18,17 @@ Lexer *lexerOpenString(const char* src){
 	if (lexers_top < MAX_LEXERS){
 		Lexer *lexer = &lexers[lexers_top];
 		lexer->type = LEXER_TYPE_STRING;
-		lexer->src = src;
+		/*
 		lexer->src_len = strlen(src);
+		lexer->src = (char*)mem_alloc(lexer->src_len+2);
+		char* lsrc = textCopy(lexer->src, src);
+		lsrc[lexer->src_len] = ' ';
+		lsrc[lexer->src_len+1] = 0;
+		*/
+		lexer->src = src;
+		lexer->src_len = strlen(src)+1;
+
+		lexer->seek = 0;
 		lexers_top++;
 		cur_lexer = lexer;
 		return lexer;
@@ -32,6 +42,7 @@ Lexer *lexerOpenFile(const char* path){
 		if (fopen_s(&lexer->file, path, "r")){
 			return null;
 		}
+		lexer->src = null;
 		lexers_top++;
 		cur_lexer = lexer;
 		return lexer;
@@ -45,6 +56,9 @@ bool lexerClose(){
 	if (lexers_top > 0){
 		if (cur_lexer->type == LEXER_TYPE_FILE){
 			fclose(cur_lexer->file);
+		}
+		else{
+			//mem_free(cur_lexer->src);
 		}
 		lexers_top--;
 		cur_lexer = &lexers[lexers_top];
@@ -64,6 +78,9 @@ uint32 lexerGet(){
 		if (cur_lexer->seek < cur_lexer->src_len){
 			chr = cur_lexer->src[cur_lexer->seek];
 		}
+		if (chr == 0){
+			chr = EOF;
+		}
 		cur_lexer->seek++;
 		return chr;
 	}
@@ -78,6 +95,9 @@ bool lexerEnded(){
 	else{
 		return cur_lexer->seek >= cur_lexer->src_len;
 	}
+}
+bool hasRemainLexers(){
+	return lexers_top != 0;
 }
 uint32 lexerTell(){
 	if (!cur_lexer){

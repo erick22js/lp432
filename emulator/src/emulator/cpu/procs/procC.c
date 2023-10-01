@@ -1,47 +1,47 @@
 #include "procedures.h"
 
 
-#define procLsh(v1, v2, res, sign) {\
+#define procLsh(v1, v2, res, sign, type) {\
 	res = v1 << v2;\
-	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, res==0);/* Zero Flag Affecting */\
+	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, ((type)res)==0);/* Zero Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_NF, res&sign);/* Negative Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_OF, res&1);/* Odd Flag Affecting */\
 }
-#define procLsh8(v1, v2, res) procLsh(v1, v2, res, 0x80)
-#define procLsh16(v1, v2, res) procLsh(v1, v2, res, 0x8000)
-#define procLsh32(v1, v2, res) procLsh(v1, v2, res, 0x80000000)
+#define procLsh8(v1, v2, res) procLsh(v1, v2, res, 0x80, uint8)
+#define procLsh16(v1, v2, res) procLsh(v1, v2, res, 0x8000, uint16)
+#define procLsh32(v1, v2, res) procLsh(v1, v2, res, 0x80000000, uint32)
 
-#define procRsh(v1, v2, res, sign) {\
+#define procRsh(v1, v2, res, sign, type) {\
 	res = v1 >> v2;\
-	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, res==0);/* Zero Flag Affecting */\
+	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, ((type)res)==0);/* Zero Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_NF, res&sign);/* Negative Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_OF, res&1);/* Odd Flag Affecting */\
 }
-#define procRsh8(v1, v2, res) procRsh(v1, v2, res, 0x80)
-#define procRsh16(v1, v2, res) procRsh(v1, v2, res, 0x8000)
-#define procRsh32(v1, v2, res) procRsh(v1, v2, res, 0x80000000)
+#define procRsh8(v1, v2, res) procRsh(v1, v2, res, 0x80, uint8)
+#define procRsh16(v1, v2, res) procRsh(v1, v2, res, 0x8000, uint16)
+#define procRsh32(v1, v2, res) procRsh(v1, v2, res, 0x80000000, uint32)
 
-#define procLrot(v1, v2, res, sign, size, mask) {\
+#define procLrot(v1, v2, res, sign, size, mask, type) {\
 	v2 &= mask;\
 	res = (v1 << v2) | (v1 >> (size-v2));\
-	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, res==0);/* Zero Flag Affecting */\
+	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, ((type)res)==0);/* Zero Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_NF, res&sign);/* Negative Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_OF, res&1);/* Odd Flag Affecting */\
 }
-#define procLrot8(v1, v2, res) procLrot(v1, v2, res, 0x80, 8, 0x07)
-#define procLrot16(v1, v2, res) procLrot(v1, v2, res, 0x8000, 16, 0x0F)
-#define procLrot32(v1, v2, res) procLrot(v1, v2, res, 0x80000000, 32, 0x1F)
+#define procLrot8(v1, v2, res) procLrot(v1, v2, res, 0x80, 8, 0x07, uint8)
+#define procLrot16(v1, v2, res) procLrot(v1, v2, res, 0x8000, 16, 0x0F, uint16)
+#define procLrot32(v1, v2, res) procLrot(v1, v2, res, 0x80000000, 32, 0x1F, uint32)
 
-#define procRrot(v1, v2, res, sign, size, mask) {\
+#define procRrot(v1, v2, res, sign, size, mask, type) {\
 	v2 &= mask;\
 	res = (v1 >> v2) | (v1 << (size-v2));\
-	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, res==0);/* Zero Flag Affecting */\
+	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, ((type)res)==0);/* Zero Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_NF, res&sign);/* Negative Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_OF, res&1);/* Odd Flag Affecting */\
 }
-#define procRrot8(v1, v2, res) procRrot(v1, v2, res, 0x80, 8, 0x07)
-#define procRrot16(v1, v2, res) procRrot(v1, v2, res, 0x8000, 16, 0x0F)
-#define procRrot32(v1, v2, res) procRrot(v1, v2, res, 0x80000000, 32, 0x1F)
+#define procRrot8(v1, v2, res) procRrot(v1, v2, res, 0x80, 8, 0x07, uint8)
+#define procRrot16(v1, v2, res) procRrot(v1, v2, res, 0x8000, 16, 0x0F, uint16)
+#define procRrot32(v1, v2, res) procRrot(v1, v2, res, 0x80000000, 32, 0x1F, uint32)
 
 cpuInterr procC0(){
 	// Instruction: lsh r8:regm, r8:rego

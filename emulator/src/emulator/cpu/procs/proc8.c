@@ -5,7 +5,7 @@
 	res = v1 + v2 + (cpu_s.reg_st&FLAG_CF && wcarry? 1: 0);\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_CF, ((type)res)<((type)v1));/* Carry Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_VF, ((v1&sign)==(v2&sign) && (v1&sign)!=(res&sign)));/* Overflow Flag Affecting */\
-	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, res==0);/* Zero Flag Affecting */\
+	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, ((type)res)==0);/* Zero Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_NF, res&sign);/* Negative Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_OF, res&1);/* Odd Flag Affecting */\
 }
@@ -17,7 +17,7 @@
 	res = v1 - v2 - (cpu_s.reg_st&FLAG_BF && wborrow? 1: 0);\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_BF, ((type)res)>((type)v1));/* Borrow Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_VF, ((v1&sign)!=(v2&sign) && (v2&sign)==(res&sign)));/* Overflow Flag Affecting */\
-	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, res==0);/* Zero Flag Affecting */\
+	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, ((type)res)==0);/* Zero Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_NF, res&sign);/* Negative Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_OF, res&1);/* Odd Flag Affecting */\
 }

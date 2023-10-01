@@ -124,15 +124,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\assembler\assembler.c" />
-    <ClCompile Include="src\assembler\Lexer.c" />
+    <ClCompile Include="src\assembler\base.c" />
+    <ClCompile Include="src\assembler\lexer.c" />
+    <ClCompile Include="src\assembler\parser.c" />
+    <ClCompile Include="src\assembler\text.c" />
+    <ClCompile Include="src\assembler\tokener.c" />
     <ClCompile Include="src\main.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\assembler\assembler.h" />
     <ClInclude Include="src\assembler\common.h" />
     <ClInclude Include="src\assembler\error.h" />
+    <ClInclude Include="src\assembler\base.h" />
     <ClInclude Include="src\assembler\lexer.h" />
-    <ClInclude Include="src\assembler\processor.h" />
+    <ClInclude Include="src\assembler\parser.h" />
+    <ClInclude Include="src\assembler\text.h" />
+    <ClInclude Include="src\assembler\tokener.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

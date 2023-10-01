@@ -1,47 +1,47 @@
 #include "procedures.h"
 
 
-#define procInc(v, sign) {\
+#define procInc(v, sign, type) {\
 	v++;\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_VF, v==sign);/* Overflow Affecting */\
-	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, v==0);/* Zero Flag Affecting */\
+	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, ((type)v)==0);/* Zero Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_NF, v&sign);/* Negative Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_OF, v&1);/* Odd Flag Affecting */\
 }
-#define procInc8(v) procInc(v, 0x80)
-#define procInc16(v) procInc(v, 0x8000)
-#define procInc32(v) procInc(v, 0x80000000)
+#define procInc8(v) procInc(v, 0x80, uint8)
+#define procInc16(v) procInc(v, 0x8000, uint16)
+#define procInc32(v) procInc(v, 0x80000000, uint32)
 
-#define procDec(v, sign) {\
+#define procDec(v, sign, type) {\
 	v--;\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_VF, v==(sign-1));/* Overflow Affecting */\
-	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, v==0);/* Zero Flag Affecting */\
+	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, ((type)v)==0);/* Zero Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_NF, v&sign);/* Negative Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_OF, v&1);/* Odd Flag Affecting */\
 }
-#define procDec8(v) procDec(v, 0x80)
-#define procDec16(v) procDec(v, 0x8000)
-#define procDec32(v) procDec(v, 0x80000000)
+#define procDec8(v) procDec(v, 0x80, uint8)
+#define procDec16(v) procDec(v, 0x8000, uint16)
+#define procDec32(v) procDec(v, 0x80000000, uint32)
 
-#define procNeg(v, sign) {\
+#define procNeg(v, sign, type) {\
 	v = -v;\
-	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, v==0);/* Zero Flag Affecting */\
+	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, ((type)v)==0);/* Zero Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_NF, v&sign);/* Negative Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_OF, v&1);/* Odd Flag Affecting */\
 }
-#define procNeg8(v) procNeg(v, 0x80)
-#define procNeg16(v) procNeg(v, 0x8000)
-#define procNeg32(v) procNeg(v, 0x80000000)
+#define procNeg8(v) procNeg(v, 0x80, uint8)
+#define procNeg16(v) procNeg(v, 0x8000, uint16)
+#define procNeg32(v) procNeg(v, 0x80000000, uint32)
 
-#define procNot(v, sign) {\
+#define procNot(v, sign, type) {\
 	v = ~v;\
-	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, v==0);/* Zero Flag Affecting */\
+	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_ZF, ((type)v)==0);/* Zero Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_NF, v&sign);/* Negative Flag Affecting */\
 	cpu_s.reg_st = setBit(cpu_s.reg_st, FLAG_OF, v&1);/* Odd Flag Affecting */\
 }
-#define procNot8(v) procNot(v, 0x80)
-#define procNot16(v) procNot(v, 0x8000)
-#define procNot32(v) procNot(v, 0x80000000)
+#define procNot8(v) procNot(v, 0x80, uint8)
+#define procNot16(v) procNot(v, 0x8000, uint16)
+#define procNot32(v) procNot(v, 0x80000000, uint32)
 
 cpuInterr procE0(){
 	// Instruction: inc r8:regm
@@ -124,6 +124,13 @@ cpuInterr procEA(){
 	return 0;
 }
 
+cpuInterr procEB(){
+	// Prefix: CS
+	cpu_s.prefix = true;
+	cpu_s.seg_data = &cpu_s.sregs[SREG_CS];
+	return 0;
+}
+
 cpuInterr procEC(){
 	// Instruction: not r8:regm
 	cpuFetchOS();
@@ -148,6 +155,13 @@ cpuInterr procEE(){
 	uint32 v = cpuReadReg32(cpu_s.os_regm);
 	procNot32(v);
 	cpuWriteReg32(cpu_s.os_regm, v);
+	return 0;
+}
+
+cpuInterr procEF(){
+	// Prefix: SS
+	cpu_s.prefix = true;
+	cpu_s.seg_data = &cpu_s.sregs[SREG_SS];
 	return 0;
 }
 

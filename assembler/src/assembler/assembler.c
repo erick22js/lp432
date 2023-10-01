@@ -1,24 +1,37 @@
 #include "assembler.h"
-#include "processor.h"
+#include "parser.h"
 
+
+/*
+	Internal Functions
+*/
+
+int asmAssembly(Lexer*(*opener)(const char*), const char* src, uint8** bin, uint32* bin_size) {
+	lexerOpenString(src);
+	int err = parserParse(true, bin, bin_size);
+	if (err){
+		log("\n\n\nCompilation FAILED!!!\n\n");
+		return err;
+	}
+
+	lexerOpenString(src);
+	err = parserParse(false, bin, bin_size);
+	if (err){
+		log("\n\n\nCompilation FAILED!!!\n\n");
+		return err;
+	}
+	
+	log("\n\n\nCompilation SUCCESS!!!\n\n");
+	return ERROR_NONE;
+}
 
 /*
 	API Functions
 */
 int asmAssemblyString(const char* src, uint8** bin, uint32* bin_size){
-	*bin = malloc(1);
-	*bin_size = 1;
-
-	lexerOpenString(src);
-	while (!lexerEnded()){
-		log("%c", lexerGet());
-	}
-	lexerClose();
-
-	return ERROR_NONE;
+	return asmAssembly(lexerOpenString, src, bin, bin_size);
 }
 int asmAssemblyFile(const char* path, uint8** bin, uint32* bin_size){
-
-	return ERROR_NONE;
+	return asmAssembly(lexerOpenFile, path, bin, bin_size);
 }
 

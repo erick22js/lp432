@@ -1,0 +1,14 @@
+
+; Instruction
+; Structure:
+;	- mnemonic "inc"
+;	- arguments "inc eax"
+;		- arg0 "eax"
+;			data_types
+;			-> r8, r16, r32, fpr, ir, imm8, imm16, imm32, imm,
+;			-> imms8, imms16, imms32, imms, mem8, mem16, mem32,
+;			-> mems8, mems16, mems32
+;			data_encodes
+;			-> regm, rego, desc, regm1, rego1, desc1, regm2, rego2, desc2,
+;			-> mv8, mv16, mv32
+inc eax

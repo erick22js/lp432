@@ -3,7 +3,7 @@
 
 
 int main(int args, char** argv) {
-	const char* code = "mov eax, 175";
+	const char* code = "adc gl, bl\nadc eax, 950";
 
 	uint8* bin = null;
 	uint32 bin_size = 0;
@@ -14,7 +14,7 @@ int main(int args, char** argv) {
 	log("\nOutput Binary\n");
 	for (int l = 0; l<bin_size; l += 16){
 		for (int r = 0; (l+r)<bin_size && r<16; r++){
-			log(" %.2X", bin[l+r]);
+			log("%s%.2X", (r!=0?" ":""), bin[l+r]);
 		}
 		log("\n");
 	}

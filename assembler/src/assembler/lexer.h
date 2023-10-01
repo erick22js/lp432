@@ -37,6 +37,8 @@ extern bool lexerClose();
 extern uint32 lexerGet();
 // Verify if the current lexer is ended
 extern bool lexerEnded();
+// Verify if has remaining lexers
+extern bool hasRemainLexers();
 // Tell the current address in lexer stream
 extern uint32 lexerTell();
 // Sets the current address in lexer stream

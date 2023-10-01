@@ -172,7 +172,10 @@ cpuProc cpuProcedures[256] = {
 	[0x95] = proc95,
 	[0x96] = proc96,
 	[0x97] = proc97,
-	procNull, procNull, procNull, procNull,
+	[0x98] = proc98,
+	[0x99] = proc99,
+	[0x9A] = proc9A,
+	[0x9B] = proc9B,
 	[0x9C] = proc9C,
 	[0x9D] = proc9D,
 	[0x9E] = proc9E,
@@ -187,7 +190,11 @@ cpuProc cpuProcedures[256] = {
 	[0xA5] = procA5,
 	[0xA6] = procA6,
 	[0xA7] = procA7,
-	procNull, procNull, procNull, procNull, procNull, procNull, procNull, procNull,
+	[0xA8] = procA8,
+	[0xA9] = procA9,
+	[0xAA] = procAA,
+	[0xAB] = procAB,
+	procNull, procNull, procNull, procNull,
 
 	// 0xB0
 	[0xB0] = procB0,
@@ -248,11 +255,11 @@ cpuProc cpuProcedures[256] = {
 	[0xE8] = procE8,
 	[0xE9] = procE9,
 	[0xEA] = procEA,
-	procNull,
+	[0xEB] = procEB,
 	[0xEC] = procEC,
 	[0xED] = procED,
 	[0xEE] = procEE,
-	procNull,
+	[0xEF] = procEF,
 
 	// 0xF0
 	[0xF0] = procF0,

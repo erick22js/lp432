@@ -1,4 +1,5 @@
 - Implement all base instructions ** DONE
+	- Signed Division and Modulation ** DONE
 	- Test all instructions
 
 - Implement CPU address virtual mapping by segmentation ** DONE

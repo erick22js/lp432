@@ -2,6 +2,8 @@
 #include "../../pci.h"
 
 
+#define ioAdr8To16(adr) ((adr&0x3)|((adr&0xFC)<<8))
+
 #define procIn8(adr, dest) {if (pciReadDevice8(adr, &dest)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
 #define procIn16(adr, dest) {if (pciReadDevice16(adr, &dest)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
 #define procIn32(adr, dest) {if (pciReadDevice32(adr, &dest)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
@@ -47,7 +49,7 @@ cpuInterr procF3(){
 		case 0x0: {
 			// Instruction: in r8:regm, imm8:MV
 			cpuFetchMV8();
-			uint16 adr = cpu_s.mv;
+			uint16 adr = ioAdr8To16(cpu_s.mv);
 			uint8 data = 0;
 			procIn8(adr, data);
 			cpuWriteReg8(cpu_s.os_regm, data);
@@ -56,7 +58,7 @@ cpuInterr procF3(){
 		case 0x1: {
 			// Instruction: in r16:regm, imm8:MV
 			cpuFetchMV8();
-			uint16 adr = cpu_s.mv;
+			uint16 adr = ioAdr8To16(cpu_s.mv);
 			uint16 data = 0;
 			procIn16(adr, data);
 			cpuWriteReg16(cpu_s.os_regm, data);
@@ -65,7 +67,7 @@ cpuInterr procF3(){
 		case 0x2: {
 			// Instruction: in r32:regm, imm8:MV
 			cpuFetchMV8();
-			uint16 adr = cpu_s.mv;
+			uint16 adr = ioAdr8To16(cpu_s.mv);
 			uint32 data = 0;
 			procIn32(adr, data);
 			cpuWriteReg32(cpu_s.os_regm, data);
@@ -136,7 +138,7 @@ cpuInterr procF7(){
 		case 0x0: {
 			// Instruction: out imm8:MV, r8:rego
 			cpuFetchMV8();
-			uint16 adr = cpu_s.mv;
+			uint16 adr = ioAdr8To16(cpu_s.mv);
 			uint8 data = cpuReadReg8(cpu_s.os_rego);
 			procOut8(adr, data);
 		}
@@ -144,7 +146,7 @@ cpuInterr procF7(){
 		case 0x1: {
 			// Instruction: out imm8:MV, r16:rego
 			cpuFetchMV8();
-			uint16 adr = cpu_s.mv;
+			uint16 adr = ioAdr8To16(cpu_s.mv);
 			uint16 data = cpuReadReg16(cpu_s.os_rego);
 			procOut16(adr, data);
 		}
@@ -152,7 +154,7 @@ cpuInterr procF7(){
 		case 0x2: {
 			// Instruction: out imm8:MV, r16:rego
 			cpuFetchMV8();
-			uint16 adr = cpu_s.mv;
+			uint16 adr = ioAdr8To16(cpu_s.mv);
 			uint32 data = cpuReadReg32(cpu_s.os_rego);
 			procOut32(adr, data);
 		}
@@ -212,30 +214,35 @@ cpuInterr procFA(){
 }
 
 cpuInterr procFB(){
+	// Prefix: AS
 	cpu_s.prefix = true;
 	cpu_s.seg_data = &cpu_s.sregs[SREG_AS];
 	return 0;
 }
 
 cpuInterr procFC(){
+	// Prefix: BS
 	cpu_s.prefix = true;
 	cpu_s.seg_data = &cpu_s.sregs[SREG_BS];
 	return 0;
 }
 
 cpuInterr procFD(){
+	// Prefix: ES
 	cpu_s.prefix = true;
 	cpu_s.seg_data = &cpu_s.sregs[SREG_ES];
 	return 0;
 }
 
 cpuInterr procFE(){
+	// Prefix: FS
 	cpu_s.prefix = true;
 	cpu_s.seg_data = &cpu_s.sregs[SREG_FS];
 	return 0;
 }
 
 cpuInterr procFF(){
+	// Prefix: GS
 	cpu_s.prefix = true;
 	cpu_s.seg_data = &cpu_s.sregs[SREG_GS];
 	return 0;
