@@ -15,8 +15,8 @@ typedef enum{
 	TYPE_FPR, TYPE_IR,
 	TYPE_IMM8, TYPE_IMM16, TYPE_IMM32, TYPE_IMM,
 	TYPE_IMMS8, TYPE_IMMS16, TYPE_IMMS32, TYPE_IMMS,
-	TYPE_MEM8, TYPE_MEM16, TYPE_MEM32,
-	TYPE_MEMS8, TYPE_MEMS16, TYPE_MEMS32,
+	TYPE_MEM8, TYPE_MEM16, TYPE_MEM32, TYPE_MEM,
+	TYPE_MEMS8, TYPE_MEMS16, TYPE_MEMS32, TYPE_MEMS,
 }DataType;
 
 // Encoding mode of Data
@@ -63,6 +63,16 @@ extern const int regs_length;
 
 extern Reg *findRegByName(const char* name);
 
+
+// Constant Expression values Struct
+typedef struct{
+	DataType type;
+	union {
+		uint8 code; // For Registers
+		uint32 integer; // For Immediate Values
+		float32 real; // For Immediate Values
+	}value;
+}Value;
 
 // Instruction Argument Struct
 typedef struct{

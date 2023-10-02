@@ -17,6 +17,11 @@ typedef struct{
 extern Parser parser;
 
 /*
+	Expression parsing Functions
+*/
+extern int parserExpression(Value* out);
+
+/*
 	Parser High Layer Functions
 */
 extern int parserParse(bool second, uint8** bin, uint32* bin_size);

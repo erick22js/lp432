@@ -2,6 +2,7 @@
 #define ASM_TOKENER_H
 #include "lexer.h"
 #include "error.h"
+#include "base.h"
 #include "text.h"
 
 
@@ -41,8 +42,8 @@ typedef enum{
 typedef struct{
 	TokenType kind;
 	union{
-		sint64 integer;
-		float64 real;
+		sint32 integer;
+		float32 real;
 		const char* string;
 	}value;
 }Token;

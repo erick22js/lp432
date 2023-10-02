@@ -197,6 +197,357 @@ int encodeInstruction(Enc *encode, Arg* args, uint8 cond_desc) {
 	return 0;
 }
 
+
+/*
+	Expression parsing Functions
+*/
+
+int parserExpUnary(Value *out){
+	createSeek();
+	Token tk = {0};
+	tryCatchAndThrow(
+		tkrFetchToken(&tk)
+	);
+
+	// Only constant values are currently supported
+	if (tk.kind == TOKEN_INTEGER){
+		out->type = TYPE_IMM;
+		out->value.integer = tk.value.integer;
+	}
+	else if (tk.kind == TOKEN_IDENTIFIER){
+		// TODO
+		throwError(ERROR_UNKNOWN);
+	}
+	else if (tkIsSymbol(tk, '+')){
+		Value in;
+		tryCatchAndThrow(
+			parserExpUnary(&in)
+		);
+		out->type = in.type;
+		out->value = in.value;
+	}
+	else if (tkIsSymbol(tk, '-')){
+		Value in;
+		tryCatchAndThrow(
+			parserExpUnary(&in)
+		);
+		out->type = in.type;
+		out->value.integer = -((sint32)in.value.integer);
+	}
+	else if (tkIsSymbol(tk, '~')){
+		Value in;
+		tryCatchAndThrow(
+			parserExpUnary(&in)
+		);
+		out->type = in.type;
+		out->value.integer = ~in.value.integer;
+	}
+	else if (tkIsSymbol(tk, '!')){
+		Value in;
+		tryCatchAndThrow(
+			parserExpUnary(&in)
+		);
+		out->type = in.type;
+		out->value.integer = !in.value.integer;
+	}
+	else if (tkIsSymbol(tk, '(')){
+		tryCatchAndThrow(
+			parserExpression(out)
+		);
+		tryCatchAndThrow(
+			tkrFetchToken(&tk)
+		);
+		if (!tkIsSymbol(tk, ')')){
+			// TODO: Error => Expected closing paren
+			throwError(ERROR_UNKNOWN);
+		}
+	}
+	// Unexpected token, expected expression
+	else {
+		throwError(ERROR_UNKNOWN);
+	}
+
+	saveSeek();
+	tryCatchAndThrow(
+		tkrFetchToken(&tk)
+	);
+	if (tkIsSymbol(tk, ':')){
+		tryCatchAndThrow(
+			tkrFetchToken(&tk)
+		);
+		DataName *data_type;
+		if ((tk.kind == TOKEN_IDENTIFIER) && (data_type = findDataByName(tk.value.string))){
+			switch (data_type->type_imm){
+				case TYPE_IMM8: { out->value.integer = (uint8)out->value.integer; } break;
+				case TYPE_IMM16: { out->value.integer = (uint16)out->value.integer; } break;
+				case TYPE_IMM32: { out->value.integer = (uint32)out->value.integer; } break;
+				case TYPE_IMMS8: { out->value.integer = (sint32)((sint8)out->value.integer); } break;
+				case TYPE_IMMS16: { out->value.integer = (sint32)((sint16)out->value.integer); } break;
+				case TYPE_IMMS32: { out->value.integer = (sint32)((sint32)out->value.integer); } break;
+			}
+			out->type = data_type->type_imm;
+		}
+		else {
+			// TODO: Error => Expected Data type name
+			throwError(ERROR_UNKNOWN);
+		}
+	}
+	else {
+		restoreSeek();
+	}
+
+	return 0;
+}
+
+int parserExpMul(Value *out) {
+	Value opr1;
+	tryCatchAndThrow(
+		parserExpUnary(&opr1)
+	);
+	createSeek();
+
+	Token tk = {0};
+	tryCatchAndThrow(
+		tkrFetchToken(&tk)
+	);
+	while (tkIsSymbol(tk, '*') || tkIsSymbol(tk, '/') || tkIsSymbol(tk, '%')){
+		Value opr2;
+		tryCatchAndThrow(
+			parserExpUnary(&opr2)
+		);
+		saveSeek();
+		if (tkIsSymbol(tk, '*')){
+			opr1.value.integer *= opr2.value.integer;
+		}
+		else if (tkIsSymbol(tk, '/')){
+			if (opr2.value.integer == 0){
+				// TODO: Error => Second operand is zero
+				throwError(ERROR_UNKNOWN);
+			}
+			opr1.value.integer /= opr2.value.integer;
+		}
+		else {
+			if (opr2.value.integer == 0){
+				// TODO: Error => Second operand is zero
+				throwError(ERROR_UNKNOWN);
+			}
+			opr1.value.integer %= opr2.value.integer;
+		}
+
+		tryCatchAndThrow(
+			tkrFetchToken(&tk)
+		);
+	}
+	restoreSeek();
+
+	out->type = opr1.type;
+	out->value = opr1.value;
+	return 0;
+}
+
+int parserExpAdd(Value *out) {
+	Value opr1;
+	tryCatchAndThrow(
+		parserExpMul(&opr1)
+	);
+	createSeek();
+
+	Token tk = {0};
+	tryCatchAndThrow(
+		tkrFetchToken(&tk)
+	);
+	while (tkIsSymbol(tk, '+') || tkIsSymbol(tk, '-')){
+		Value opr2;
+		tryCatchAndThrow(
+			parserExpMul(&opr2)
+		);
+		saveSeek();
+		if (tkIsSymbol(tk, '+')){
+			opr1.value.integer += opr2.value.integer;
+		}
+		else {
+			opr1.value.integer -= opr2.value.integer;
+		}
+
+		tryCatchAndThrow(
+			tkrFetchToken(&tk)
+		);
+	}
+	restoreSeek();
+
+	out->type = opr1.type;
+	out->value = opr1.value;
+	return 0;
+}
+
+int parserExpShift(Value *out) {
+	Value opr1;
+	tryCatchAndThrow(
+		parserExpAdd(&opr1)
+	);
+	createSeek();
+
+	Token tk = {0};
+	tryCatchAndThrow(
+		tkrFetchToken(&tk)
+	);
+	while (tkIsSymbol(tk, '>') || tkIsSymbol(tk, '<')){
+		Value opr2;
+		tryCatchAndThrow(
+			parserExpAdd(&opr2)
+		);
+		saveSeek();
+		if (tkIsSymbol(tk, '>')){
+			opr1.value.integer >>= opr2.value.integer;
+		}
+		else {
+			opr1.value.integer <<= opr2.value.integer;
+		}
+
+		tryCatchAndThrow(
+			tkrFetchToken(&tk)
+		);
+	}
+	restoreSeek();
+
+	out->type = opr1.type;
+	out->value = opr1.value;
+	return 0;
+}
+
+int parserExpEqual(Value *out) {
+	Value opr1;
+	tryCatchAndThrow(
+		parserExpShift(&opr1)
+	);
+	createSeek();
+
+	Token tk = {0};
+	tryCatchAndThrow(
+		tkrFetchToken(&tk)
+	);
+	while (tkIsSymbol(tk, '=')||tkIsSymbol(tk, '!')){
+		Value opr2;
+		tryCatchAndThrow(
+			parserExpShift(&opr2)
+		);
+		saveSeek();
+		if (tkIsSymbol(tk, '=')){
+			opr1.value.integer = opr1.value.integer==opr2.value.integer;
+		}
+		else {
+			opr1.value.integer = opr1.value.integer!=opr2.value.integer;
+		}
+
+		tryCatchAndThrow(
+			tkrFetchToken(&tk)
+		);
+	}
+	restoreSeek();
+
+	out->type = opr1.type;
+	out->value = opr1.value;
+	return 0;
+}
+
+int parserExpAnd(Value *out) {
+	Value opr1;
+	tryCatchAndThrow(
+		parserExpEqual(&opr1)
+	);
+	createSeek();
+
+	Token tk = {0};
+	tryCatchAndThrow(
+		tkrFetchToken(&tk)
+	);
+	while (tkIsSymbol(tk, '&')){
+		Value opr2;
+		tryCatchAndThrow(
+			parserExpEqual(&opr2)
+		);
+		saveSeek();
+		opr1.value.integer &= opr2.value.integer;
+
+		tryCatchAndThrow(
+			tkrFetchToken(&tk)
+		);
+	}
+	restoreSeek();
+
+	out->type = opr1.type;
+	out->value = opr1.value;
+	return 0;
+}
+
+int parserExpOr(Value *out) {
+	Value opr1;
+	tryCatchAndThrow(
+		parserExpAnd(&opr1)
+	);
+	createSeek();
+
+	Token tk = {0};
+	tryCatchAndThrow(
+		tkrFetchToken(&tk)
+	);
+	while (tkIsSymbol(tk, '|')){
+		Value opr2;
+		tryCatchAndThrow(
+			parserExpAnd(&opr2)
+		);
+		saveSeek();
+		opr1.value.integer |= opr2.value.integer;
+
+		tryCatchAndThrow(
+			tkrFetchToken(&tk)
+		);
+	}
+	restoreSeek();
+
+	out->type = opr1.type;
+	out->value = opr1.value;
+	return 0;
+}
+
+int parserExpXor(Value *out) {
+	Value opr1;
+	tryCatchAndThrow(
+		parserExpOr(&opr1)
+	);
+	createSeek();
+
+	Token tk = {0};
+	tryCatchAndThrow(
+		tkrFetchToken(&tk)
+	);
+	while (tkIsSymbol(tk, '^')){
+		Value opr2;
+		tryCatchAndThrow(
+			parserExpOr(&opr2)
+		);
+		saveSeek();
+		opr1.value.integer ^= opr2.value.integer;
+
+		tryCatchAndThrow(
+			tkrFetchToken(&tk)
+		);
+	}
+	restoreSeek();
+
+	out->type = opr1.type;
+	out->value = opr1.value;
+	return 0;
+}
+
+int parserExpression(Value* out){
+	tryCatchAndThrow(
+		parserExpXor(out)
+	);
+	return 0;
+}
+
+
 /*
 	Parser Hidden Layer Functions
 */
@@ -225,10 +576,173 @@ int parserFetchArgs(Arg* args, int* count){
 			args[*count].type = reg->type;
 			args[*count].value.code = reg->code;
 		}
+		// The arcument is a memory access reference
+		else if (tkIsSymbol(tk, '[')){
+			saveSeek();
+			tryCatchAndThrow(
+				tkrFetchToken(&tk)
+			);
+			args[*count].type = TYPE_MEM;
+
+			// Addressing with register index
+			Reg *regi = null;
+			if (tk.kind == TOKEN_IDENTIFIER && (regi = findRegByName(tk.value.string))){
+				saveSeek();
+				tryCatchAndThrow(
+					tkrFetchToken(&tk)
+				);
+				args[*count].value.mem.regi = regi->code;
+
+				// Addressing Mode => POINTER
+				if (tkIsSymbol(tk, ']')){
+					restoreSeek();
+					args[*count].value.mem.adrm = ADRM_PTR;
+				}
+				else if (tkIsSymbol(tk, '-')){
+					Value in;
+					tryCatchAndThrow(
+						parserExpression(&in)
+					);
+					args[*count].value.mem.adrm =
+						in.value.integer<0x100 || in.type==TYPE_IMM8 || in.type==TYPE_IMMS8? ADRM_IDX8:
+						in.value.integer<0x10000 || in.type==TYPE_IMM16 || in.type==TYPE_IMMS16? ADRM_IDX16:
+						ADRM_IDX32;
+					args[*count].value.mem.nv = -(sint32)in.value.integer;
+				}
+				else if (tkIsSymbol(tk, '+')){
+					saveSeek();
+					tryCatchAndThrow(
+						tkrFetchToken(&tk)
+					);
+
+					// Indexed by Registers
+					Reg *reg1 = null;
+					if (tk.kind == TOKEN_IDENTIFIER && (reg1 = findRegByName(tk.value.string))){
+						saveSeek();
+						tryCatchAndThrow(
+							tkrFetchToken(&tk)
+						);
+						args[*count].value.mem.reg1 = regi->code;
+
+						// Adressing Mode => INDEXED IMPLICIT
+						if (tkIsSymbol(tk, ']')){
+							restoreSeek();
+							args[*count].value.mem.adrm = ADRM_IDXI;
+						}
+						// Adressing Mode => INDEXED IMPLICIT (WITH IMMEDIATE)
+						else if (tkIsSymbol(tk, '+')){
+							Value in;
+							tryCatchAndThrow(
+								parserExpression(&in)
+							);
+							args[*count].value.mem.adrm =
+								in.value.integer<0x100 || in.type==TYPE_IMM8 || in.type==TYPE_IMMS8? ADRM_IDXI8:
+								in.value.integer<0x10000 || in.type==TYPE_IMM16 || in.type==TYPE_IMMS16? ADRM_IDXI16:
+								ADRM_IDXI32;
+							args[*count].value.mem.nv = in.value.integer;
+						}
+						else if (tkIsSymbol(tk, '*')){
+							saveSeek();
+							tryCatchAndThrow(
+								tkrFetchToken(&tk)
+							);
+							
+							// Addressing by Register
+							Reg *reg2 = null;
+							if (tk.kind == TOKEN_IDENTIFIER && (reg2 = findRegByName(tk.value.string))){
+								saveSeek();
+								tryCatchAndThrow(
+									tkrFetchToken(&tk)
+								);
+								args[*count].value.mem.reg2 = reg2->code;
+
+								// Adressing Mode => DYNAMIC
+								if (tkIsSymbol(tk, ']')){
+									restoreSeek();
+									args[*count].value.mem.adrm = ADRM_DYN;
+								}
+								// Adressing Mode => DYNAMIC INDEXED
+								else {
+									restoreSeek();
+									Value in;
+									tryCatchAndThrow(
+										parserExpression(&in)
+									);
+									args[*count].value.mem.adrm = ADRM_DYNI;
+									args[*count].value.mem.nv = in.value.integer;
+								}
+							}
+							// Adressing Mode => STRUCT
+							else {
+								Value in;
+								tryCatchAndThrow(
+									parserExpression(&in)
+								);
+								args[*count].value.mem.adrm =
+									in.value.integer<0x100 || in.type==TYPE_IMM8 || in.type==TYPE_IMMS8? ADRM_STC8:
+									in.value.integer<0x10000 || in.type==TYPE_IMM16 || in.type==TYPE_IMMS16? ADRM_STC16:
+									ADRM_STC32;
+								args[*count].value.mem.nv = in.value.integer;
+							}
+						}
+						// Unexpected Error
+						else {
+							// TODO: Error
+							throwError(ERROR_UNKNOWN);
+						}
+					}
+					// Adressing Mode => INDEXED
+					else {
+						restoreSeek();
+						Value in;
+						tryCatchAndThrow(
+							parserExpression(&in)
+						);
+						args[*count].value.mem.adrm =
+							in.value.integer<0x100 || in.type==TYPE_IMM8 || in.type==TYPE_IMMS8? ADRM_IDX8:
+							in.value.integer<0x10000 || in.type==TYPE_IMM16 || in.type==TYPE_IMMS16? ADRM_IDX16:
+							ADRM_IDX32;
+						args[*count].value.mem.nv = in.value.integer;
+					}
+				}
+				// Unexpected Error
+				else {
+					// TODO: Error
+					throwError(ERROR_UNKNOWN);
+				}
+			}
+			// Addressing Mode => ABSOLUTE
+			else {
+				restoreSeek();
+				Value in;
+				tryCatchAndThrow(
+					parserExpression(&in)
+				);
+				args[*count].value.mem.adrm =
+					in.value.integer<0x100 || in.type==TYPE_IMM8 || in.type==TYPE_IMMS8? ADRM_ABS8:
+					in.value.integer<0x10000 || in.type==TYPE_IMM16 || in.type==TYPE_IMMS16? ADRM_ABS16:
+					ADRM_ABS32;
+				args[*count].value.mem.nv = in.value.integer;
+			}
+
+			// The last token must be a closin bracket
+			tryCatchAndThrow(
+				tkrFetchToken(&tk)
+			);
+			if (!tkIsSymbol(tk, ']')){
+				// TODO: Error
+				throwError(ERROR_UNKNOWN);
+			}
+		}
 		// The argument is a immediate literal
 		else {
-			args[*count].type = TYPE_IMM;
-			args[*count].value.integer = tk.value.integer;
+			restoreSeek();
+			Value in;
+			tryCatchAndThrow(
+				parserExpression(&in)
+			);
+			args[*count].type = in.type;
+			args[*count].value.integer = in.value.integer;
 		}
 		saveSeek();
 		(*count)++;

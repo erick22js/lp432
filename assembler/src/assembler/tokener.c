@@ -65,7 +65,7 @@ int tkrFetchToken(Token *tk) {
 	}
 	// Detect if precursor is a number
 	else if (charIsNumeric(initial)){
-		uint64 value = 0;
+		uint32 value = 0;
 		uint32 chr = initial;
 		while (charIsNumeric(chr)){
 			value = (value*10) + (chr-'0');
@@ -126,7 +126,7 @@ int tkrFetchToken(Token *tk) {
 void tkrPrint(Token *tk){
 	switch (tk->kind){
 		case TOKEN_INTEGER:{
-			log("TOKEN_INTEGER: %lli\n", tk->value.integer);
+			log("TOKEN_INTEGER: %d\n", tk->value.integer);
 		}
 		break;
 		case TOKEN_REAL:{
