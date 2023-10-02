@@ -7,14 +7,14 @@
 */
 
 int asmAssembly(Lexer*(*opener)(const char*), const char* src, uint8** bin, uint32* bin_size) {
-	lexerOpenString(src);
+	opener(src);
 	int err = parserParse(true, bin, bin_size);
 	if (err){
 		log("\n\n\nCompilation FAILED!!!\n\n");
 		return err;
 	}
 
-	lexerOpenString(src);
+	opener(src);
 	err = parserParse(false, bin, bin_size);
 	if (err){
 		log("\n\n\nCompilation FAILED!!!\n\n");

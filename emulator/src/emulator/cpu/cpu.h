@@ -150,7 +150,7 @@ extern Cpu cpu_s;
 
 // Program Flow Control
 #define cpuJumpTo(adr) {cpu_s.reg_pc = (adr);}
-#define cpuJumpBy(off) {cpu_s.reg_pc += (sint32)(off);}
+#define cpuJumpBy(off) {cpu_s.reg_pc = cpu_s.reg_lpc + (sint32)(off);}
 
 extern bool cpuRequestInterrupt(uint16 port);
 

@@ -3,12 +3,13 @@
 
 
 int main(int args, char** argv) {
-	const char* code = "adc gl, bl\nadc eax, 9:Half";
-
+	//const char* code = "";
+	
 	uint8* bin = null;
 	uint32 bin_size = 0;
 
-	asmAssemblyString(code, &bin, &bin_size);
+	asmAssemblyFile("tests/main.asm", &bin, &bin_size);
+	//asmAssemblyString(code, &bin, &bin_size);
 
 	// Dump hex code to preview
 	log("\nOutput Binary\n");

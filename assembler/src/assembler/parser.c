@@ -1,5 +1,6 @@
 #include "parser.h"
 #include "base.h"
+#include "symbols.h"
 
 
 /*
@@ -215,8 +216,42 @@ int parserExpUnary(Value *out){
 		out->value.integer = tk.value.integer;
 	}
 	else if (tk.kind == TOKEN_IDENTIFIER){
-		// TODO
-		throwError(ERROR_UNKNOWN);
+		Value *val = findSymbol(tk.value.string);
+		if (val){
+			*out = *val;
+		}
+		else{
+			// TODO: Error => Symbol not found!
+			throwError(ERROR_UNKNOWN);
+		}
+	}
+	else if (tkIsSymbol(tk, '@') || tkIsSymbol(tk, '$')){
+		saveSeek();
+		uint32 address = tkIsSymbol(tk, '@')? parser.pc: parser.bc;
+		tryCatchAndThrow(
+			tkrFetchToken(&tk)
+		);
+
+		if (tk.kind == TOKEN_INTEGER){
+			out->type = TYPE_IMM;
+			out->value.integer = tk.value.integer - address;
+		}
+		else if (tk.kind == TOKEN_IDENTIFIER){
+			Value *val = findSymbol(tk.value.string);
+			if (val){
+				*out = *val;
+				out->value.integer -= address;
+			}
+			else{
+				// TODO: Error => Symbol not found!
+				throwError(ERROR_UNKNOWN);
+			}
+		}
+		else {
+			restoreSeek();
+			out->type = TYPE_IMM;
+			out->value.integer = address;
+		}
 	}
 	else if (tkIsSymbol(tk, '+')){
 		Value in;
@@ -858,7 +893,7 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 					// The parser must detect no any character left in line
 					int offset = tkrConsumeLine();
 					if (offset != (-1)){
-						// TODO: Error
+						// TODO: Error => Expected end of line
 						throwError(ERROR_UNKNOWN);
 						log("ERROR: Has something more left in line!\n");
 					}
@@ -873,17 +908,57 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 					log("NOT MATCHED!\n");
 				}
 			}
-
-			// Otherwise, is not a expected token
+			// Otherwise, must be a label declaration
 			else {
-				tkrPrint(&tk);
-				// TODO: Unexpected token
-				throwError(ERROR_UNKNOWN);
+				const char* name = tk.value.string;
+				tryCatchAndThrow(
+					tkrFetchToken(&tk)
+				);
+				if (!tkIsSymbol(tk, ':')){
+					// TODO: Error => Expected solon sign
+					throwError(ERROR_UNKNOWN);
+				}
+
+				if (parser.phase_one){
+					if (findSymbol(name)){
+						// TODO: Error => Already declarated symbol with name
+						throwError(ERROR_UNKNOWN);
+					}
+				}
+				
+				Value v = {.type = TYPE_IMM, .value = {.integer = parser.pc}};
+				storeSymLabel(name, v);
+				log("Label with name \"%s\" with address 0x%X declarated!\n", name, parser.pc);
 				continue;
 			}
 		}
+		else if (tkIsSymbol(tk, '.')){
+			tryCatchAndThrow(
+				tkrFetchToken(&tk)
+			);
+			if (tk.kind != TOKEN_IDENTIFIER){
+				// TODO: Error => Expected processor command
+				throwError(ERROR_UNKNOWN);
+			}
+			const char* cmd = tk.value.string;
+
+			if (strcmp(cmd, "adr")==0){
+				Value val;
+				parserExpression(&val);
+				parser.pc = parser.bc = val.value.integer;
+			}
+
+			// The parser must detect no any character left in line
+			int offset = tkrConsumeLine();
+			if (offset != (-1)){
+				// TODO: Error => Expected end of line
+				throwError(ERROR_UNKNOWN);
+				log("ERROR: Has something more left in line!\n");
+			}
+		}
 		else {
-			tkrPrint(&tk);
+			// TODO: Error => Unexpected token
+			throwError(ERROR_UNKNOWN);
 		}
 	}
 
@@ -891,7 +966,7 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 	//	End parse phase
 	//
 	if (first){
-		parser.bin = malloc(parser.bin_size);
+		parser.bin = calloc(parser.bin_size, 1);
 	}
 	else{
 		*bin = parser.bin;
