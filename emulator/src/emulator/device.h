@@ -4,8 +4,6 @@
 #include "common.h"
 
 
-struct Device;
-typedef struct Device Device;
 struct Device{
 	//
 	//	Device Internal Properties

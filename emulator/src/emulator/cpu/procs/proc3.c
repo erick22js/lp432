@@ -3,11 +3,11 @@
 
 // Segment Control
 
-void procLoadSegment(CpuSegment *seg){
+void procLoadSegment(Cpu *cpu_s, CpuSegment *seg){
 	// Base must not be zero to be loaded
 	if (seg->base){
 		// Retrieve the segments count in base pointer
-		uint32 count = cpuReadBus8(cpu_s.reg_std);
+		uint32 count = cpuReadBus8(cpu_s->reg_std);
 
 		// Disable segment in case not available
 		if (seg->selector >= count){
@@ -16,7 +16,7 @@ void procLoadSegment(CpuSegment *seg){
 		}
 
 		// Load segment structure from memory
-		uint32 adr = cpu_s.reg_std + (seg->selector * 8);
+		uint32 adr = cpu_s->reg_std + (seg->selector * 8);
 		seg->flags = cpuReadBus8(adr);
 		seg->base = cpuReadBus8(adr+2) | (cpuReadBus16(adr+4) << 8);
 		seg->limit = cpuReadBus8(adr+3) | (cpuReadBus16(adr+6) << 8);
@@ -32,27 +32,27 @@ void procLoadSegment(CpuSegment *seg){
 	}
 }
 
-cpuInterr proc30(){
+cpuInterr proc30(Cpu *cpu_s){
 	// Instruction: ret
 	cpuPop32();
-	uint32 return_adr = cpu_s.data;
+	uint32 return_adr = cpu_s->data;
 	cpuJumpTo(return_adr);
 	return 0;
 }
 
-cpuInterr proc31(){
+cpuInterr proc31(Cpu *cpu_s){
 	// Instruction: iret
 	procEnsureNotInProtectedMode();
-	cpuReturnInterrupt();
+	cpuReturnInterrupt(cpu_s);
 	return 0;
 }
 
-cpuInterr proc32(){
+cpuInterr proc32(Cpu *cpu_s){
 	// Instruction: int
 	cpuThrowInterruption(INTR_SOFTWARE_INTERRUPTION);
 }
 
-cpuInterr proc34(){
+cpuInterr proc34(Cpu *cpu_s){
 	// Instruction: enter
 	cpuPush32(cpuReadReg32(GREG_EFP));
 	uint32 last_stack = cpuReadReg32(GREG_ESP);
@@ -61,95 +61,95 @@ cpuInterr proc34(){
 	return 0;
 }
 
-cpuInterr proc35(){
+cpuInterr proc35(Cpu *cpu_s){
 	// Instruction: enter imm16
 	cpuFetchMV16();
 	cpuPush32(cpuReadReg32(GREG_EFP));
 	uint32 last_stack = cpuReadReg32(GREG_ESP);
-	uint32 scope_size = cpu_s.mv;
+	uint32 scope_size = cpu_s->mv;
 	cpuWriteReg32(GREG_ESP, last_stack+scope_size);
 	cpuPush32(last_stack);
 	return 0;
 }
 
-cpuInterr proc36(){
+cpuInterr proc36(Cpu *cpu_s){
 	// Instruction: enter r16:regm
 	cpuFetchOS();
 	cpuPush32(cpuReadReg32(GREG_EFP));
 	uint32 last_stack = cpuReadReg32(GREG_ESP);
-	uint32 scope_size = cpuReadReg16(cpu_s.os_regm);
+	uint32 scope_size = cpuReadReg16(cpu_s->os_regm);
 	cpuWriteReg32(GREG_ESP, last_stack+scope_size);
 	cpuPush32(last_stack);
 	return 0;
 }
 
-cpuInterr proc37(){
+cpuInterr proc37(Cpu *cpu_s){
 	// Instruction: leave
 	cpuPop32();
-	cpuWriteReg32(GREG_ESP, cpu_s.data);
+	cpuWriteReg32(GREG_ESP, cpu_s->data);
 	cpuPop32();
-	cpuWriteReg32(GREG_EFP, cpu_s.data);
+	cpuWriteReg32(GREG_EFP, cpu_s->data);
 	return 0;
 }
 
-cpuInterr proc38(){
+cpuInterr proc38(Cpu *cpu_s){
 	cpuFetchOS();
 
-	switch (cpu_s.os_desc){
+	switch (cpu_s->os_desc){
 		case 0x0:{
 			// Instruction: mvtcs r8:regm
-			uint8 data = cpuReadReg8(cpu_s.os_regm);
-			cpu_s.sregs[SREG_CS].selector = data;
-			procLoadSegment(&cpu_s.sregs[SREG_CS]);
+			uint8 data = cpuReadReg8(cpu_s->os_regm);
+			cpu_s->sregs[SREG_CS].selector = data;
+			procLoadSegment(cpu_s, &cpu_s->sregs[SREG_CS]);
 		}
 		break;
 		case 0x1:{
 			// Instruction: mvtss r8:regm
-			uint8 data = cpuReadReg8(cpu_s.os_regm);
-			cpu_s.sregs[SREG_SS].selector = data;
-			procLoadSegment(&cpu_s.sregs[SREG_SS]);
+			uint8 data = cpuReadReg8(cpu_s->os_regm);
+			cpu_s->sregs[SREG_SS].selector = data;
+			procLoadSegment(cpu_s, &cpu_s->sregs[SREG_SS]);
 		}
 		break;
 		case 0x2:{
 			// Instruction: mvtds r8:regm
-			uint8 data = cpuReadReg8(cpu_s.os_regm);
-			cpu_s.sregs[SREG_DS].selector = data;
-			procLoadSegment(&cpu_s.sregs[SREG_DS]);
+			uint8 data = cpuReadReg8(cpu_s->os_regm);
+			cpu_s->sregs[SREG_DS].selector = data;
+			procLoadSegment(cpu_s, &cpu_s->sregs[SREG_DS]);
 		}
 		break;
 		case 0x3:{
 			// Instruction: mvtas r8:regm
-			uint8 data = cpuReadReg8(cpu_s.os_regm);
-			cpu_s.sregs[SREG_AS].selector = data;
-			procLoadSegment(&cpu_s.sregs[SREG_AS]);
+			uint8 data = cpuReadReg8(cpu_s->os_regm);
+			cpu_s->sregs[SREG_AS].selector = data;
+			procLoadSegment(cpu_s, &cpu_s->sregs[SREG_AS]);
 		}
 		break;
 		case 0x4:{
 			// Instruction: mvtbs r8:regm
-			uint8 data = cpuReadReg8(cpu_s.os_regm);
-			cpu_s.sregs[SREG_BS].selector = data;
-			procLoadSegment(&cpu_s.sregs[SREG_BS]);
+			uint8 data = cpuReadReg8(cpu_s->os_regm);
+			cpu_s->sregs[SREG_BS].selector = data;
+			procLoadSegment(cpu_s, &cpu_s->sregs[SREG_BS]);
 		}
 		break;
 		case 0x5:{
 			// Instruction: mvtes r8:regm
-			uint8 data = cpuReadReg8(cpu_s.os_regm);
-			cpu_s.sregs[SREG_ES].selector = data;
-			procLoadSegment(&cpu_s.sregs[SREG_ES]);
+			uint8 data = cpuReadReg8(cpu_s->os_regm);
+			cpu_s->sregs[SREG_ES].selector = data;
+			procLoadSegment(cpu_s, &cpu_s->sregs[SREG_ES]);
 		}
 		break;
 		case 0x6:{
 			// Instruction: mvtfs r8:regm
-			uint8 data = cpuReadReg8(cpu_s.os_regm);
-			cpu_s.sregs[SREG_FS].selector = data;
-			procLoadSegment(&cpu_s.sregs[SREG_FS]);
+			uint8 data = cpuReadReg8(cpu_s->os_regm);
+			cpu_s->sregs[SREG_FS].selector = data;
+			procLoadSegment(cpu_s, &cpu_s->sregs[SREG_FS]);
 		}
 		break;
 		case 0x7:{
 			// Instruction: mvtgs r8:regm
-			uint8 data = cpuReadReg8(cpu_s.os_regm);
-			cpu_s.sregs[SREG_GS].selector = data;
-			procLoadSegment(&cpu_s.sregs[SREG_GS]);
+			uint8 data = cpuReadReg8(cpu_s->os_regm);
+			cpu_s->sregs[SREG_GS].selector = data;
+			procLoadSegment(cpu_s, &cpu_s->sregs[SREG_GS]);
 		}
 		break;
 		default: {
@@ -159,29 +159,29 @@ cpuInterr proc38(){
 	return 0;
 }
 
-cpuInterr proc39(){
+cpuInterr proc39(Cpu *cpu_s){
 	cpuFetchOS();
 	procEnsureNotInProtectedMode();
 
-	switch (cpu_s.os_desc){
+	switch (cpu_s->os_desc){
 		case 0x0:{
 			// Instruction: mvtstd r32:regm
-			uint32 data = cpuReadReg32(cpu_s.os_regm);
-			cpu_s.reg_std = data;
+			uint32 data = cpuReadReg32(cpu_s->os_regm);
+			cpu_s->reg_std = data;
 			for (int i = 0; i<SREG_TOTAL; i++){
-				procLoadSegment(&cpu_s.sregs[i]);
+				procLoadSegment(cpu_s, &cpu_s->sregs[i]);
 			}
 		}
 		break;
 		case 0x1:{
 			// Instruction: mvtptd r32:regm
-			uint32 data = cpuReadReg32(cpu_s.os_regm);
-			cpu_s.reg_ptd = data;
+			uint32 data = cpuReadReg32(cpu_s->os_regm);
+			cpu_s->reg_ptd = data;
 		}
 		case 0x2:{
 			// Instruction: mvtitd r32:regm
-			uint32 data = cpuReadReg32(cpu_s.os_regm);
-			cpu_s.reg_itd = data;
+			uint32 data = cpuReadReg32(cpu_s->os_regm);
+			cpu_s->reg_itd = data;
 		}
 		default: {
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
@@ -190,27 +190,27 @@ cpuInterr proc39(){
 	return 0;
 }
 
-cpuInterr proc3A(){
+cpuInterr proc3A(Cpu *cpu_s){
 	// Instruction: mvfir r32:regm, ir32:rego
 	cpuFetchOS();
 	procEnsureNotInProtectedMode();
-	cpuWriteReg32(cpu_s.os_regm, cpu_s.iregs[cpu_s.os_rego&0x7]);
+	cpuWriteReg32(cpu_s->os_regm, cpu_s->iregs[cpu_s->os_rego&0x7]);
 	return 0;
 }
 
-cpuInterr proc3C(){
+cpuInterr proc3C(Cpu *cpu_s){
 	// Instruction: mvfisp r32:regm
 	cpuFetchOS();
 	procEnsureNotInProtectedMode();
-	cpuWriteReg32(cpu_s.os_regm, cpu_s.reg_isp);
+	cpuWriteReg32(cpu_s->os_regm, cpu_s->reg_isp);
 	return 0;
 }
 
-cpuInterr proc3D(){
+cpuInterr proc3D(Cpu *cpu_s){
 	// Instruction: mvtisp r32:regm
 	cpuFetchOS();
 	procEnsureNotInProtectedMode();
-	cpu_s.reg_isp = cpuReadReg32(cpu_s.os_regm);
+	cpu_s->reg_isp = cpuReadReg32(cpu_s->os_regm);
 	return 0;
 }
 

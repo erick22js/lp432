@@ -5,7 +5,7 @@
 	Procedures Storage
 */
 
-cpuInterr procNull(){cpuThrowInterruption(INTR_INVALID_OPCODE); return 0;}
+cpuInterr procNull(Cpu *cpu_s){cpuThrowInterruption(INTR_INVALID_OPCODE); return 0;}
 
 cpuProc cpuProcedures[256] = {
 	// 0x00

@@ -27,15 +27,15 @@
 	Util Functions
 */
 // Throw a interruption to cpu deal with
-#define cpuThrowInterruption(intrr) {cpu_s.interrupt = intrr; return intrr;}
+#define cpuThrowInterruption(intrr) {cpu_s->interrupt = intrr; return intrr;}
 // Try to execute a cpu function dealing with interruptions requests
-#define cpuTryExecute(function) {if(function) return cpu_s.interrupt;}
+#define cpuTryExecute(function) {if(function) return cpu_s->interrupt;}
 
 /*
 	CPU Interruption Dealing
 */
-void cpuInterrupt();
-void cpuReturnInterrupt();
+void cpuInterrupt(Cpu *cpu_s);
+void cpuReturnInterrupt(Cpu *cpu_s);
 
 
 #endif

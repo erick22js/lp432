@@ -1,5 +1,6 @@
 #include "lexer.h"
 #include "text.h"
+#include "path.h"
 
 /*
 	Storage Lexers
@@ -27,6 +28,7 @@ Lexer *lexerOpenString(const char* src){
 		*/
 		lexer->src = src;
 		lexer->src_len = strlen(src)+1;
+		getFullPath(lexer->path, './');
 
 		lexer->seek = 0;
 		lexers_top++;
@@ -42,6 +44,7 @@ Lexer *lexerOpenFile(const char* path){
 		if (fopen_s(&lexer->file, path, "r")){
 			return null;
 		}
+		getFullPath(lexer->path, path);
 		lexer->src = null;
 		lexers_top++;
 		cur_lexer = lexer;
@@ -61,10 +64,13 @@ bool lexerClose(){
 			//mem_free(cur_lexer->src);
 		}
 		lexers_top--;
-		cur_lexer = &lexers[lexers_top];
+		cur_lexer = &lexers[lexers_top-1];
 		return true;
 	}
 	return false;
+}
+Lexer *lexerCurrent() {
+	return cur_lexer;
 }
 uint32 lexerGet(){
 	if (!cur_lexer){
@@ -126,6 +132,9 @@ void lexerSeekCur(int offset){
 		return;
 	}
 	if (cur_lexer->type == LEXER_TYPE_FILE){
+		if (feof(cur_lexer->file)){
+			return;
+		}
 		fseek(cur_lexer->file, offset, SEEK_CUR);
 	}
 	else{

@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <math.h>
+#include <assert.h>
 
 
 /*
@@ -56,6 +57,22 @@ struct Pci;
 */
 
 #define log(...) {printf(__VA_ARGS__);}
+
+
+/*
+	Components Struct Declaration
+*/
+
+struct Emu;
+typedef struct Emu Emu;
+struct Cpu;
+typedef struct Cpu Cpu;
+struct Bus;
+typedef struct Bus Bus;
+struct Device;
+typedef struct Device Device;
+struct Pci;
+typedef struct Pci Pci;
 
 
 

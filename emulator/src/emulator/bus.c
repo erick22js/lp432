@@ -1,24 +1,14 @@
 #include "bus.h"
 
 
-
 /*
-	Functions for Access to BUS
+	Functions for Handling BUS
 */
 
-void busReset(){
-	memset(mem_ram, 0, sizeof(mem_ram));
+void busSetup(Bus *bus, void (*funcReset)(), uint8(*funcRead)(uint32 adr), void(*funcWrite)(uint32 adr, uint8 data)) {
+	bus->state = 'SET1';
+	bus->reset = funcReset;
+	bus->read = funcRead;
+	bus->write = funcWrite;
 }
 
-uint8 busRead8(uint32 adr){
-	if (adr < sizeof(mem_ram)){
-		return mem_ram[adr];
-	}
-	return 0;
-}
-
-void busWrite8(uint32 adr, uint8 data){
-	if (adr < sizeof(mem_ram)){
-		mem_ram[adr] = data;
-	}
-}

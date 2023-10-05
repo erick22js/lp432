@@ -14,7 +14,7 @@
 	Error Handling
 */
 
-#define throwError(error) {log("@@@ ERROR Throwed at \"%s\" in line %d with code 0x%X!\n", __FILE__, __LINE__, error); return error;}
+#define throwError(error) {log("@@@ ERROR Throwed at \"%s\" in line %d, in src file \"%s\" with code 0x%X!\n", __FILE__, __LINE__, lexerCurrent()->path, error); return error;}
 #define tryCatchAndThrow(code) {int err_code = code; if (err_code) {log("%% ERROR CATCHED at \"%s\" in line %d with code 0x%X and Throwed!\n", __FILE__, __LINE__, err_code); return err_code;}}
 
 

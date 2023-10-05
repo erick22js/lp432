@@ -73,7 +73,7 @@ typedef struct{
 	uint32 limit;
 }CpuSegment;
 
-typedef struct{
+struct Cpu{
 	/*
 		Registers
 	*/
@@ -134,28 +134,36 @@ typedef struct{
 	*/
 	bool halted;
 	bool waiting;
-}Cpu;
-extern Cpu cpu_s;
+
+	/*
+		Out Conections
+	*/
+	Emu *emu;
+	Pci *pci;
+	uint8 (*busRead)(uint32 adr);
+	void (*busWrite)(uint32 adr, uint8 data);
+};
+//extern Cpu cpu_s;
 
 /*
 	Control Functions for CPU
 */
 // General Purpose Registers Access
-#define cpuReadReg8(reg) ((uint8)(cpu_s.gregs[reg]&0xFF))
-#define cpuWriteReg8(reg, data) {cpu_s.gregs[reg] = (cpu_s.gregs[reg]&0xFFFFFF00)|((data)&0xFF);}
-#define cpuReadReg16(reg) ((uint16)(cpu_s.gregs[reg]&0xFFFF))
-#define cpuWriteReg16(reg, data) {cpu_s.gregs[reg] = (cpu_s.gregs[reg]&0xFFFF0000)|((data)&0xFFFF);}
-#define cpuReadReg32(reg) (cpu_s.gregs[reg])
-#define cpuWriteReg32(reg, data) {cpu_s.gregs[reg] = (uint32)(data);}
+#define cpuReadReg8(reg) ((uint8)(cpu_s->gregs[reg]&0xFF))
+#define cpuWriteReg8(reg, data) {cpu_s->gregs[reg] = (cpu_s->gregs[reg]&0xFFFFFF00)|((data)&0xFF);}
+#define cpuReadReg16(reg) ((uint16)(cpu_s->gregs[reg]&0xFFFF))
+#define cpuWriteReg16(reg, data) {cpu_s->gregs[reg] = (cpu_s->gregs[reg]&0xFFFF0000)|((data)&0xFFFF);}
+#define cpuReadReg32(reg) (cpu_s->gregs[reg])
+#define cpuWriteReg32(reg, data) {cpu_s->gregs[reg] = (uint32)(data);}
 
 // Program Flow Control
-#define cpuJumpTo(adr) {cpu_s.reg_pc = (adr);}
-#define cpuJumpBy(off) {cpu_s.reg_pc = cpu_s.reg_lpc + (sint32)(off);}
+#define cpuJumpTo(adr) {cpu_s->reg_pc = (adr);}
+#define cpuJumpBy(off) {cpu_s->reg_pc = cpu_s->reg_lpc + (sint32)(off);}
 
-extern bool cpuRequestInterrupt(uint16 port);
+extern bool cpuRequestInterrupt(Cpu *cpu_s, uint16 port);
 
-extern void cpuReset();
-extern void cpuStep();
+extern void cpuReset(Cpu *cpu_s);
+extern void cpuStep(Cpu *cpu_s);
 
 
 #endif

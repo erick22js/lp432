@@ -17,7 +17,7 @@ typedef struct{
 	uint32 src_len;
 
 	// File properties
-	const char* path;
+	char path[512];
 	FILE *file;
 
 	// Common properties
@@ -33,6 +33,8 @@ extern Lexer *lexerOpenString(const char* src);
 extern Lexer *lexerOpenFile(const char* path);
 // Closes the last open lexer
 extern bool lexerClose();
+// Retrieve the current lexer
+extern Lexer *lexerCurrent();
 // Fetch the next character on lexer
 extern uint32 lexerGet();
 // Verify if the current lexer is ended

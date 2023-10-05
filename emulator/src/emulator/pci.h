@@ -10,38 +10,39 @@
 
 #define PCI_MAX_DEVICES 16
 
-typedef struct{
+struct Pci{
 	//
 	//	Set of Devices
 	//
+	Cpu *cpu_s; // The main connected CPU
 	Device *(devices[PCI_MAX_DEVICES]);
 	uint32 count_connected;
 	uint32 port_i;
-}Pci;
-extern Pci pci_s;
+};
+//extern Pci pci_s;
 
 
 /*
 	Internal Control Functions for PCI
 */
 
-extern bool pciReadDevice8(uint16 reg, uint8 *data);
-extern bool pciReadDevice16(uint16 reg, uint16 *data);
-extern bool pciReadDevice32(uint16 reg, uint32 *data);
-extern bool pciWriteDevice8(uint16 reg, uint8 data);
-extern bool pciWriteDevice16(uint16 reg, uint16 data);
-extern bool pciWriteDevice32(uint16 reg, uint32 data);
+extern bool pciReadDevice8(Pci *pci, uint16 reg, uint8 *data);
+extern bool pciReadDevice16(Pci *pci, uint16 reg, uint16 *data);
+extern bool pciReadDevice32(Pci *pci, uint16 reg, uint32 *data);
+extern bool pciWriteDevice8(Pci *pci, uint16 reg, uint8 data);
+extern bool pciWriteDevice16(Pci *pci, uint16 reg, uint16 data);
+extern bool pciWriteDevice32(Pci *pci, uint16 reg, uint32 data);
 
-extern bool pciRequestCpuInterruption(Device *device);
+extern bool pciRequestCpuInterruption(Pci *pci, Device *device);
 
 
 /*
 	Control Functions
 */
-extern bool pciPlugDevice(Device *device);
+extern bool pciPlugDevice(Pci *pci, Device *device);
 
-extern void pciReset();
-extern void pciStep(uint32 cycles);
+extern void pciReset(Pci *pci);
+extern void pciStep(Pci *pci, uint32 cycles);
 
 
 #endif

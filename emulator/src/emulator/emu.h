@@ -9,26 +9,32 @@
 	Emulation Properties State
 */
 
-typedef struct{
+struct Emu{
 	bool running;
-}Emu;
-static Emu emu_s;
+
+	/* Conected Devices */
+	Cpu *cpu_s; // Main CPU of emulator
+	Pci *pci; // Main PCI
+	Bus *bus; // Main BUS connected
+};
+//static Emu emu_s;
 
 
 /*
 	Internal Functions for Emulation
 */
 
-extern void emuCycles(uint32 cycles);
+extern void emuCycles(Emu *emu, uint32 cycles);
 
 
 /*
 	Control Functions for Emulation
 */
 
-extern void emuReset();
-extern void emuStep();
-extern void emuRun();
+extern void emuSetup(Emu *emu, Cpu *cpu_s, Pci *pci, Bus *bus);
+extern void emuReset(Emu *emu);
+extern void emuStep(Emu *emu);
+extern void emuRun(Emu *emu);
 
 
 #endif

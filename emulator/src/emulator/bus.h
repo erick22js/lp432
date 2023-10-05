@@ -4,16 +4,23 @@
 #include "common.h"
 
 
-static uint8 mem_ram[1024*1024*8];
-static uint8 mem_rom[1024*64];
-
 /*
-	Functions for Access to BUS
+	BUS Properties State Struct
 */
 
-extern void busReset();
-extern uint8 busRead8(uint32 adr);
-extern void busWrite8(uint32 adr, uint8 data);
+struct Bus{
+	uint32 state;
+	void (*reset)();
+	uint8 (*read)(uint32 adr);
+	void (*write)(uint32 adr, uint8 data);
+};
+
+
+/*
+	Functions for Handling BUS
+*/
+
+extern void busSetup(Bus *bus, void (*funcReset)(), uint8(*funcRead)(uint32 adr), void(*funcWrite)(uint32 adr, uint8 data));
 
 
 #endif

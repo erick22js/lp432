@@ -18,7 +18,7 @@
 	Characters Related
 */
 
-#define charIsBreakLine(chr) (chr=='\n')
+#define charIsBreakLine(chr) (chr=='\n' || chr==EOF)
 #define charIsBlank(chr) (chr<=' ' && !charIsBreakLine(chr))
 #define charIsNumeric(chr) (chr>='0' && chr<='9')
 #define charIsLetter(chr) ((chr>='a' && chr<='z')||(chr>='A' && chr<='Z')||(chr=='_'))

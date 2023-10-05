@@ -7,14 +7,14 @@
 	Emulation Properties State
 */
 
-extern Emu emu_s;
+//extern Emu emu_s;
 
 
 /*
 	Internal Functions for Emulation
 */
 
-void emuCycles(uint32 cycles){
+void emuCycles(Emu *emu, uint32 cycles){
 	// TODO
 }
 
@@ -23,21 +23,40 @@ void emuCycles(uint32 cycles){
 	Control Functions for Emulation
 */
 
-void emuReset(){
-	busReset();
-	pciReset();
-	cpuReset();
+void emuSetup(Emu *emu, Cpu *cpu_s, Pci *pci, Bus *bus) {
+	// BUS must be initialized before been used
+	assert(bus->state=='SET1');
+
+	// Connect emu to components
+	emu->bus = bus;
+	emu->cpu_s = cpu_s;
+	emu->pci = pci;
+
+	// Connect cpu to components
+	cpu_s->busRead = bus->read;
+	cpu_s->busWrite = bus->write;
+	cpu_s->pci = pci;
+	cpu_s->emu = emu;
+
+	// Connect pci to main cpu
+	pci->cpu_s = cpu_s;
 }
 
-void emuStep(){
-	cpuStep();
-	pciStep(0);
+void emuReset(Emu *emu){
+	emu->bus->reset();
+	pciReset(emu->pci);
+	cpuReset(emu->cpu_s);
 }
 
-void emuRun(){
+void emuStep(Emu *emu){
+	cpuStep(emu->cpu_s);
+	pciStep(emu->pci, 0);
+}
+
+void emuRun(Emu *emu){
 	for (int i=0; i<4; i++){
-		cpuStep();
-		pciStep(0);
+		cpuStep(emu->cpu_s);
+		pciStep(emu->pci, 0);
 	}
 }
 

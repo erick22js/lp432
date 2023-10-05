@@ -6,7 +6,7 @@
 	State Properties of PCI
 */
 
-Pci pci_s;
+//Pci pci_s;
 
 
 /*
@@ -16,15 +16,15 @@ Pci pci_s;
 #define IOA_TO_PORT_SHIFT 5
 #define IOA_TO_REG_MASK 0x1F
 
-bool pciReadDevice8(uint16 reg, uint8 *data){
+bool pciReadDevice8(Pci *pci, uint16 reg, uint8 *data){
 	uint16 port = reg>>IOA_TO_PORT_SHIFT;
 	reg &= IOA_TO_REG_MASK;
 
-	if (port>=PCI_MAX_DEVICES || pci_s.devices[port]==null){
+	if (port>=PCI_MAX_DEVICES || pci->devices[port]==null){
 		return false;
 	}
 
-	Device *dev = pci_s.devices[port];
+	Device *dev = pci->devices[port];
 	if (dev->read){
 		data[0] = dev->read((uint8)reg);
 	}
@@ -32,15 +32,15 @@ bool pciReadDevice8(uint16 reg, uint8 *data){
 	return true;
 }
 
-bool pciReadDevice16(uint16 reg, uint16 *data){
+bool pciReadDevice16(Pci *pci, uint16 reg, uint16 *data){
 	uint16 port = reg>>IOA_TO_PORT_SHIFT;
 	reg &= IOA_TO_REG_MASK;
 
-	if (port>=PCI_MAX_DEVICES || pci_s.devices[port]==null){
+	if (port>=PCI_MAX_DEVICES || pci->devices[port]==null){
 		return false;
 	}
 
-	Device *dev = pci_s.devices[port];
+	Device *dev = pci->devices[port];
 	if (dev->read){
 		((uint8*)data)[0] = dev->read((uint8)reg);
 		((uint8*)data)[1] = dev->read((uint8)reg+1);
@@ -49,15 +49,15 @@ bool pciReadDevice16(uint16 reg, uint16 *data){
 	return true;
 }
 
-bool pciReadDevice32(uint16 reg, uint32 *data){
+bool pciReadDevice32(Pci *pci, uint16 reg, uint32 *data){
 	uint16 port = reg>>IOA_TO_PORT_SHIFT;
 	reg &= IOA_TO_REG_MASK;
 
-	if (port>=PCI_MAX_DEVICES || pci_s.devices[port]==null){
+	if (port>=PCI_MAX_DEVICES || pci->devices[port]==null){
 		return false;
 	}
 
-	Device *dev = pci_s.devices[port];
+	Device *dev = pci->devices[port];
 	if (dev->read){
 		((uint8*)data)[0] = dev->read((uint8)reg);
 		((uint8*)data)[1] = dev->read((uint8)reg+1);
@@ -68,15 +68,15 @@ bool pciReadDevice32(uint16 reg, uint32 *data){
 	return true;
 }
 
-bool pciWriteDevice8(uint16 reg, uint8 data){
+bool pciWriteDevice8(Pci *pci, uint16 reg, uint8 data){
 	uint16 port = reg>>IOA_TO_PORT_SHIFT;
 	reg &= IOA_TO_REG_MASK;
 
-	if (port>=PCI_MAX_DEVICES || pci_s.devices[port]==null){
+	if (port>=PCI_MAX_DEVICES || pci->devices[port]==null){
 		return false;
 	}
 
-	Device *dev = pci_s.devices[port];
+	Device *dev = pci->devices[port];
 	if (dev->read){
 		dev->write((uint8)reg, data);
 	}
@@ -84,15 +84,15 @@ bool pciWriteDevice8(uint16 reg, uint8 data){
 	return true;
 }
 
-bool pciWriteDevice16(uint16 reg, uint16 data){
+bool pciWriteDevice16(Pci *pci, uint16 reg, uint16 data){
 	uint16 port = reg>>IOA_TO_PORT_SHIFT;
 	reg &= IOA_TO_REG_MASK;
 
-	if (port>=PCI_MAX_DEVICES || pci_s.devices[port]==null){
+	if (port>=PCI_MAX_DEVICES || pci->devices[port]==null){
 		return false;
 	}
 
-	Device *dev = pci_s.devices[port];
+	Device *dev = pci->devices[port];
 	if (dev->read){
 		dev->write((uint8)reg, (data)&0xFF);
 		dev->write((uint8)reg+1, (data>>8)&0xFF);
@@ -101,15 +101,15 @@ bool pciWriteDevice16(uint16 reg, uint16 data){
 	return true;
 }
 
-bool pciWriteDevice32(uint16 reg, uint32 data){
+bool pciWriteDevice32(Pci *pci, uint16 reg, uint32 data){
 	uint16 port = reg>>IOA_TO_PORT_SHIFT;
 	reg &= IOA_TO_REG_MASK;
 
-	if (port>=PCI_MAX_DEVICES || pci_s.devices[port]==null){
+	if (port>=PCI_MAX_DEVICES || pci->devices[port]==null){
 		return false;
 	}
 
-	Device *dev = pci_s.devices[port];
+	Device *dev = pci->devices[port];
 	if (dev->read){
 		dev->write((uint8)reg, (data)&0xFF);
 		dev->write((uint8)reg+1, (data>>8)&0xFF);
@@ -120,8 +120,8 @@ bool pciWriteDevice32(uint16 reg, uint32 data){
 	return true;
 }
 
-bool pciRequestCpuInterruption(Device *device){
-	return cpuRequestInterrupt(device->port);
+bool pciRequestCpuInterruption(Pci *pci, Device *device){
+	return cpuRequestInterrupt(pci->cpu_s, device->port);
 }
 
 
@@ -129,32 +129,32 @@ bool pciRequestCpuInterruption(Device *device){
 /*
 	Control Functions
 */
-bool pciPlugDevice(Device *device){
-	while (pci_s.port_i < PCI_MAX_DEVICES){
-		if (pci_s.devices[pci_s.port_i] == null){
-			pci_s.count_connected++;
-			pci_s.devices[pci_s.port_i] = device;
-			device->port = pci_s.port_i;
-			pci_s.port_i++;
+bool pciPlugDevice(Pci *pci, Device *device){
+	while (pci->port_i < PCI_MAX_DEVICES){
+		if (pci->devices[pci->port_i] == null){
+			pci->count_connected++;
+			pci->devices[pci->port_i] = device;
+			device->port = pci->port_i;
+			pci->port_i++;
 			return true;
 		}
-		pci_s.port_i++;
+		pci->port_i++;
 	}
 	return false;
 }
 
-extern void pciReset(){
-	pci_s.count_connected = 0;
-	pci_s.port_i = 1;
+extern void pciReset(Pci *pci){
+	pci->count_connected = 0;
+	pci->port_i = 1;
 	for (int i = 0; i<PCI_MAX_DEVICES; i++){
-		pci_s.devices[i] = null;
+		pci->devices[i] = null;
 	}
 }
 
-extern void pciStep(uint32 cycles){
+extern void pciStep(Pci *pci, uint32 cycles){
 	for (int i = 0; i<PCI_MAX_DEVICES; i++){
-		if (pci_s.devices[i] && pci_s.devices[i]->active && pci_s.devices[i]->step){
-			pci_s.devices[i]->step(pci_s.devices[i], cycles);
+		if (pci->devices[i] && pci->devices[i]->active && pci->devices[i]->step){
+			pci->devices[i]->step(pci->devices[i], cycles);
 		}
 	}
 }

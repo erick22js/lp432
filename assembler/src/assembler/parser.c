@@ -1,6 +1,10 @@
+//#include <windows.h>
+//#include <Shlwapi.h>
+
 #include "parser.h"
 #include "base.h"
 #include "symbols.h"
+#include "path.h"
 
 
 /*
@@ -946,6 +950,39 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 				Value val;
 				parserExpression(&val);
 				parser.pc = parser.bc = val.value.integer;
+			}
+			else if (strcmp(cmd, "include")==0){
+				tryCatchAndThrow(
+					tkrFetchToken(&tk)
+				);
+
+				if (tk.kind != TOKEN_STRING){
+					// TODO: Error => Expected a path string
+					throwError(ERROR_UNKNOWN);
+				}
+
+				char path[512];
+				combinePath(path, lexerCurrent()->path, "..");
+				combinePath(path, path, tk.value.string);
+				
+				// The parser must detect no any character left in line
+				int offset = tkrConsumeLine();
+				if (offset != (-1)){
+					// TODO: Error => Expected end of line
+					throwError(ERROR_UNKNOWN);
+					log("ERROR: Has something more left in line!\n");
+				}
+				
+				if (!lexerOpenFile(path)) {
+					// TODO: Error => Can't open file in path
+					log("ERROR: File in path \"%s\" couldn't be opened!\n", path);
+					throwError(ERROR_UNKNOWN);
+				}
+				continue;
+			}
+			else {
+				// TODO: Error => Invalid processor name
+				throwError(ERROR_UNKNOWN);
 			}
 
 			// The parser must detect no any character left in line

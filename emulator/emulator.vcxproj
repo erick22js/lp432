@@ -160,6 +160,7 @@
     <ClInclude Include="src\emulator\emu.h" />
     <ClInclude Include="src\emulator\emulator.h" />
     <ClInclude Include="src\emulator\pci.h" />
+    <ClInclude Include="src\setup.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
