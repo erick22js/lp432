@@ -64,6 +64,12 @@ extern const int regs_length;
 extern Reg *findRegByName(const char* name);
 
 
+// Instruction jump conditions
+extern const char* jpconds[];
+
+extern uint8 findJpCondByName(const char* name);
+
+
 // Constant Expression values Struct
 typedef struct{
 	DataType type;
@@ -106,11 +112,12 @@ typedef struct{
 
 // Instruction Struct
 #define NO_DESC 0xFF
-#define DESC_COND 0xFE
+#define COND_DESC 0xF0
+#define CONDO_DESC 0xF1
 typedef struct{
 	const char* mne; // The instruction mnemonic
 	const int encodes_length;
-	Enc encodes[16];
+	Enc encodes[24];
 }Ist;
 extern Ist isa[];
 extern const int isa_length;

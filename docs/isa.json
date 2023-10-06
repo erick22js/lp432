@@ -311,6 +311,145 @@
 			}
 		]
 	},
+	"ba": {
+		"Description": "Saves current address to stack and branches to a absolute address",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x2B",
+				"args": [
+					["offset", "r32", "regm"]
+				]
+			},
+			{
+				"opcode": "0x2C",
+				"args": [
+					["offset", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0x2D",
+				"desc": "cond",
+				"args": [
+					["offset", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0x2E",
+				"desc": "condo",
+				"args": [
+					["comparator", "r32", "regm"],
+					["offset", "imm32", "mv32"]
+				]
+			}
+		]
+	},
+	"br": {
+		"Description": "Saves current address to stack and branches by a relative offset",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x28",
+				"args": [
+					["offset", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x29",
+				"desc": "cond",
+				"args": [
+					["offset", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x2A",
+				"desc": "condo",
+				"args": [
+					["comparator", "r32", "regm"],
+					["offset", "imm16", "mv16"]
+				]
+			}
+		]
+	},
+	"clrb": {
+		"description": "Disables flag Borrow",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x13",
+				"args": []
+			}
+		]
+	},
+	"clrc": {
+		"description": "Disables flag Carry",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x11",
+				"args": []
+			}
+		]
+	},
+	"clri": {
+		"description": "Disables external interruptions",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x0F",
+				"args": []
+			}
+		]
+	},
+	"clrn": {
+		"description": "Disables flag Negative",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x17",
+				"args": []
+			}
+		]
+	},
+	"clro": {
+		"description": "Disables flag Odd",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x1B",
+				"args": []
+			}
+		]
+	},
+	"clrv": {
+		"description": "Disables flag Overflow",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x15",
+				"args": []
+			}
+		]
+	},
+	"clrz": {
+		"description": "Disables flag Zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x19",
+				"args": []
+			}
+		]
+	},
 	"debug": {
 		"description": "Do a Debug Interruption",
 		"cycles": 1,
@@ -319,6 +458,163 @@
 			{
 				"opcode": "0x02",
 				"args": []
+			}
+		]
+	},
+	"ja": {
+		"Description": "Jumps to a absolute address",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x23",
+				"args": [
+					["offset", "r32", "regm"]
+				]
+			},
+			{
+				"opcode": "0x24",
+				"args": [
+					["offset", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0x25",
+				"desc": "cond",
+				"args": [
+					["offset", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0x26",
+				"desc": "condo",
+				"args": [
+					["comparator", "r32", "regm"],
+					["offset", "imm32", "mv32"]
+				]
+			}
+		]
+	},
+	"jr": {
+		"Description": "Jumps by a relative offset",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x20",
+				"args": [
+					["offset", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x21",
+				"desc": "cond",
+				"args": [
+					["offset", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x22",
+				"desc": "condo",
+				"args": [
+					["comparator", "r32", "regm"],
+					["offset", "imm16", "mv16"]
+				]
+			}
+		]
+	},
+	"jadp": {
+		"description": "Jumps to a absolute address and disable pagining",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x0A",
+				"args": [
+					["address", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0x0B",
+				"args": [
+					["address", "r32", "regm"]
+				]
+			}
+		]
+	},
+	"jads": {
+		"description": "Jumps to a absolute address and disable segmentation",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x06",
+				"args": [
+					["address", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0x07",
+				"args": [
+					["address", "r32", "regm"]
+				]
+			}
+		]
+	},
+	"jaep": {
+		"description": "Jumps to a absolute address and enable pagining",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x08",
+				"args": [
+					["address", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0x09",
+				"args": [
+					["address", "r32", "regm"]
+				]
+			}
+		]
+	},
+	"jaes": {
+		"description": "Jumps to a absolute address and enable segmentation",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x04",
+				"args": [
+					["address", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0x05",
+				"args": [
+					["address", "r32", "regm"]
+				]
+			}
+		]
+	},
+	"jasp": {
+		"description": "Jumps to a absolute address and enable security protection",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x0C",
+				"args": [
+					["address", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0x0D",
+				"args": [
+					["address", "r32", "regm"]
+				]
 			}
 		]
 	},
@@ -500,6 +796,83 @@
 			}
 		]
 	},
+	"setb": {
+		"description": "Enables flag Borrow",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x12",
+				"args": []
+			}
+		]
+	},
+	"setc": {
+		"description": "Enables flag Carry",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x10",
+				"args": []
+			}
+		]
+	},
+	"seti": {
+		"description": "Enables external interruptions",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x0E",
+				"args": []
+			}
+		]
+	},
+	"setn": {
+		"description": "Enables flag Negative",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x16",
+				"args": []
+			}
+		]
+	},
+	"seto": {
+		"description": "Enables flag Odd",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x1A",
+				"args": []
+			}
+		]
+	},
+	"setv": {
+		"description": "Enables flag Overflow",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x14",
+				"args": []
+			}
+		]
+	},
+	"setz": {
+		"description": "Enables flag Zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x18",
+				"args": []
+			}
+		]
+	},
 	"sub": {
 		"description": "Subtracts src value from dest",
 		"cycles": 1,
@@ -652,6 +1025,76 @@
 				"args": [
 					["dest", "r32", "regm"],
 					["src", "mems16", "mv16"]
+				]
+			}
+		]
+	},
+	"togc": {
+		"description": "Toggles flag Carry",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x1C",
+				"args": []
+			}
+		]
+	},
+	"togn": {
+		"description": "Toggles flag Negative",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x1D",
+				"args": []
+			}
+		]
+	},
+	"togo": {
+		"description": "Toggles flag Odd",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x1F",
+				"args": []
+			}
+		]
+	},
+	"togz": {
+		"description": "Toggles flag Zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x1E",
+				"args": []
+			}
+		]
+	},
+	"xbch": {
+		"Description": "Saves current program address and exchanges register value by program address",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x2F",
+				"args": [
+					["operand", "r32", "regm"]
+				]
+			}
+		]
+	},
+	"xjmp": {
+		"Description": "Exchanges register value by program address",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x27",
+				"args": [
+					["operand", "r32", "regm"]
 				]
 			}
 		]

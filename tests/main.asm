@@ -3,3 +3,4 @@
 teste:
 	adc gl, bl
 	adc eax, @+teste
+ja.eqz eax, teste

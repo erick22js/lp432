@@ -121,9 +121,9 @@ int encodeInstruction(Enc *encode, Arg* args, uint8 cond_desc) {
 
 	// Outputs the given result
 	out8(encode->opcode);
-	if (has_os1){
+	if (has_os1 || encode->desc == COND_DESC || encode->desc == CONDO_DESC){
 		// Descriptor will be the conditional code
-		if (encode->desc == DESC_COND){
+		if (encode->desc == COND_DESC || encode->desc == CONDO_DESC){
 			out8((os1&0x0F) | ((cond_desc&0xF)<<4));
 		}
 		// Descriptor will be the specified by encode instruction
@@ -854,6 +854,27 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 				Enc *matched_encode = null;
 				log("Instruction:\n");
 				tkrPrint(&tk);
+				uint8 cond_desc = 0xFF;
+
+				createSeek();
+				tryCatchAndThrow(
+					tkrFetchToken(&tk)
+				);
+				if (tkIsSymbol(tk, '.')){
+					tryCatchAndThrow(
+						tkrFetchToken(&tk)
+					);
+					if (tk.kind != TOKEN_IDENTIFIER || (cond_desc = findJpCondByName(tk.value.string))==0xFF){
+						// TODO: Error => Expected a condition specifier
+						log("ERROR: Expected a condition specifier!\n");
+						throwError(ERROR_UNKNOWN);
+					}
+				}
+				else {
+					restoreSeek();
+				}
+
+
 				Arg args[4];
 				int args_count = 0;
 				tryCatchAndThrow(
@@ -865,6 +886,22 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 				bool matched_some_varyation = false;
 				for (int ei = 0; ei<instruction->encodes_length; ei++){
 					Enc *encode = &instruction->encodes[ei];
+
+					// If the instruction requires a jump condition specifier, check if was given any one
+					if (encode->desc==COND_DESC){
+						if (cond_desc==0xFF || (cond_desc&0x10)){
+							continue;
+						}
+					}
+					else if (encode->desc == CONDO_DESC){
+						if (cond_desc==0xFF || !(cond_desc&0x10)){
+							continue;
+						}
+					}
+					// Otherwise, must not give
+					else if (cond_desc!=0xFF){
+						continue;
+					}
 
 					// The number of parameters and the arguments must match
 					if (encode->params_length != args_count){
@@ -892,7 +929,6 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 					}
 				}
 
-
 				if (matched_some_varyation){
 					// The parser must detect no any character left in line
 					int offset = tkrConsumeLine();
@@ -903,7 +939,7 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 					}
 					else {
 						tryCatchAndThrow(
-							encodeInstruction(matched_encode, args, 0)
+							encodeInstruction(matched_encode, args, cond_desc)
 						);
 					}
 				}
@@ -963,7 +999,7 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 
 				char path[512];
 				combinePath(path, lexerCurrent()->path, "..");
-				combinePath(path, path, tk.value.string);
+				combinePath(path, path, (char*)tk.value.string);
 				
 				// The parser must detect no any character left in line
 				int offset = tkrConsumeLine();

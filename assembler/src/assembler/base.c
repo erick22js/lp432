@@ -11,7 +11,7 @@ DataName data_names[] = {
 };
 const int data_names_length = sizeof(data_names)/sizeof(DataName);
 
-extern DataName *findDataByName(const char* name){
+DataName *findDataByName(const char* name){
 	for (int i = 0; i<data_names_length; i++){
 		if (strcmp(name, data_names[i].name) == 0){
 			return &data_names[i];
@@ -46,7 +46,7 @@ Reg regs[] = {
 };
 const int regs_length = sizeof(regs)/sizeof(Reg);
 
-extern Reg *findRegByName(const char* name){
+Reg *findRegByName(const char* name){
 	for (int i = 0; i<regs_length; i++){
 		if (strcmp(name, regs[i].name) == 0){
 			return &regs[i];
@@ -56,51 +56,25 @@ extern Reg *findRegByName(const char* name){
 }
 
 
-Ist isa[] = {
-	{
-		.mne = "nop",
-		.encodes_length = 1,
-		.encodes = {
-			{
-				.opcode = 0x00, .desc = NO_DESC,
-				.params_length = 0,
-			}
-		}
-	},
-	{
-		.mne = "adc",
-		.encodes_length = 3,
-		.encodes = {
-			{
-				.opcode = 0x80, .desc = NO_DESC,
-				.params_length = 2,
-				.params = {
-					{ .type = TYPE_R8, .encode = ENCODE_REGM },
-					{ .type = TYPE_R8, .encode = ENCODE_REGO },
-				}
-			},
-			{
-				.opcode = 0x82, .desc = NO_DESC,
-				.params_length = 2,
-				.params = {
-					{ .type = TYPE_R32, .encode = ENCODE_REGM },
-					{ .type = TYPE_R32, .encode = ENCODE_REGO },
-				}
-			},
-			{
-				.opcode = 0x83, .desc = 0x2,
-				.params_length = 2,
-				.params = {
-					{ .type = TYPE_R32, .encode = ENCODE_REGM },
-					{ .type = TYPE_IMM32, .encode = ENCODE_MV32 },
-				}
-			},
-		}
-	},
+// Instruction jump conditions
+const char* jpconds[] = {
+	"eq", "ne", "gt", "lt", "ge", "le", "ab", "bl",
+	"ae", "be", "cs", "cc", "ns", "os", "vs", "vc",
+	"eqz", "nez", "gtz", "ltz", "gez", "lez", "abz", "blz",
+	"aez", "bez", "lc", "nlc", "ln", "lo", "lv", "nlv"
 };
-const int isa_length = sizeof(isa)/sizeof(Ist);
 
-extern Ist *findInstructionByName(const char* name){
+uint8 findJpCondByName(const char* name) {
+	for (int i = 0; i<32; i++){
+		if (strcmp(name, jpconds[i])==0){
+			return i;
+		}
+	}
+	return 0xFF;
+}
+
+
+Ist *findInstructionByName(const char* name){
 	for (int i = 0; i<isa_length; i++){
 		if (strcmp(name, isa[i].mne) == 0){
 			return &isa[i];
