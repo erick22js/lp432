@@ -452,11 +452,145 @@ Ist isa[] = {
 		}
 	},
 	{
+		.mne = "cvbth",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x4C, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM },
+					{ .type = TYPE_R8, .encode = ENCODE_REGO }
+				}
+			},
+			{
+				.opcode = 0x4D, .desc = 0x0,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 }
+				}
+			},
+			{
+				.opcode = 0x4D, .desc = 0x1,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM },
+					{ .type = TYPE_MEM8, .encode = ENCODE_MEM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "cvbtw",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x48, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_R8, .encode = ENCODE_REGO }
+				}
+			},
+			{
+				.opcode = 0x49, .desc = 0x0,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 }
+				}
+			},
+			{
+				.opcode = 0x49, .desc = 0x1,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_MEM8, .encode = ENCODE_MEM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "cvhtw",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x4A, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_R16, .encode = ENCODE_REGO }
+				}
+			},
+			{
+				.opcode = 0x4B, .desc = 0x0,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 }
+				}
+			},
+			{
+				.opcode = 0x4B, .desc = 0x1,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_MEM16, .encode = ENCODE_MEM }
+				}
+			}
+		}
+	},
+	{
 		.mne = "debug",
 		.encodes_length = 1,
 		.encodes = {
 			{
 				.opcode = 0x2, .desc = NO_DESC,
+				.params_length = 0
+			}
+		}
+	},
+	{
+		.mne = "enter",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x34, .desc = NO_DESC,
+				.params_length = 0
+			},
+			{
+				.opcode = 0x35, .desc = NO_DESC,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 }
+				}
+			},
+			{
+				.opcode = 0x36, .desc = NO_DESC,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "int",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x32, .desc = NO_DESC,
+				.params_length = 0
+			}
+		}
+	},
+	{
+		.mne = "iret",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x31, .desc = NO_DESC,
 				.params_length = 0
 			}
 		}
@@ -625,6 +759,1021 @@ Ist isa[] = {
 		}
 	},
 	{
+		.mne = "lea",
+		.encodes_length = 10,
+		.encodes = {
+			{
+				.opcode = 0x60, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO }
+				}
+			},
+			{
+				.opcode = 0x61, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO }
+				}
+			},
+			{
+				.opcode = 0x62, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO }
+				}
+			},
+			{
+				.opcode = 0x63, .desc = 0x0,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM },
+					{ .type = TYPE_MEM8, .encode = ENCODE_MEM }
+				}
+			},
+			{
+				.opcode = 0x63, .desc = 0x1,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM },
+					{ .type = TYPE_MEM16, .encode = ENCODE_MEM }
+				}
+			},
+			{
+				.opcode = 0x63, .desc = 0x2,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_MEM32, .encode = ENCODE_MEM }
+				}
+			},
+			{
+				.opcode = 0x64, .desc = NO_DESC,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO },
+					{ .type = TYPE_IMMS16, .encode = ENCODE_MV16 }
+				}
+			},
+			{
+				.opcode = 0x65, .desc = NO_DESC,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO },
+					{ .type = TYPE_IMMS16, .encode = ENCODE_MV16 }
+				}
+			},
+			{
+				.opcode = 0x66, .desc = NO_DESC,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO },
+					{ .type = TYPE_IMMS16, .encode = ENCODE_MV16 }
+				}
+			},
+			{
+				.opcode = 0x67, .desc = NO_DESC,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO },
+					{ .type = TYPE_IMMS32, .encode = ENCODE_MV32 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "leave",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x37, .desc = NO_DESC,
+				.params_length = 0
+			}
+		}
+	},
+	{
+		.mne = "mov",
+		.encodes_length = 21,
+		.encodes = {
+			{
+				.opcode = 0x70, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM },
+					{ .type = TYPE_R8, .encode = ENCODE_REGO }
+				}
+			},
+			{
+				.opcode = 0x71, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM },
+					{ .type = TYPE_R16, .encode = ENCODE_REGO }
+				}
+			},
+			{
+				.opcode = 0x72, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO }
+				}
+			},
+			{
+				.opcode = 0x74, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 }
+				}
+			},
+			{
+				.opcode = 0x75, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 }
+				}
+			},
+			{
+				.opcode = 0x76, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV32 }
+				}
+			},
+			{
+				.opcode = 0x73, .desc = 0x0,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_IMMS8, .encode = ENCODE_MV8 }
+				}
+			},
+			{
+				.opcode = 0x73, .desc = 0x1,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_IMMS16, .encode = ENCODE_MV16 }
+				}
+			},
+			{
+				.opcode = 0x73, .desc = 0x2,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM },
+					{ .type = TYPE_IMMS8, .encode = ENCODE_MV8 }
+				}
+			},
+			{
+				.opcode = 0x73, .desc = 0x3,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM },
+					{ .type = TYPE_MEM8, .encode = ENCODE_MEM }
+				}
+			},
+			{
+				.opcode = 0x73, .desc = 0x4,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM },
+					{ .type = TYPE_MEM16, .encode = ENCODE_MEM }
+				}
+			},
+			{
+				.opcode = 0x73, .desc = 0x5,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_MEM32, .encode = ENCODE_MEM }
+				}
+			},
+			{
+				.opcode = 0x73, .desc = 0x6,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 }
+				}
+			},
+			{
+				.opcode = 0x73, .desc = 0x7,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 }
+				}
+			},
+			{
+				.opcode = 0x73, .desc = 0x8,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 }
+				}
+			},
+			{
+				.opcode = 0x73, .desc = 0x9,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM },
+					{ .type = TYPE_MEM8, .encode = ENCODE_MEM }
+				}
+			},
+			{
+				.opcode = 0x73, .desc = 0xA,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_MEM8, .encode = ENCODE_MEM }
+				}
+			},
+			{
+				.opcode = 0x73, .desc = 0xB,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_MEM16, .encode = ENCODE_MEM }
+				}
+			},
+			{
+				.opcode = 0x77, .desc = 0x0,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_MEM8, .encode = ENCODE_MEM },
+					{ .type = TYPE_R8, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x77, .desc = 0x1,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_MEM16, .encode = ENCODE_MEM },
+					{ .type = TYPE_R16, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x77, .desc = 0x2,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_MEM32, .encode = ENCODE_MEM },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvab",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x44, .desc = 0x6,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x45, .desc = 0x6,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x46, .desc = 0x6,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvae",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x44, .desc = 0x8,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x45, .desc = 0x8,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x46, .desc = 0x8,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvbe",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x44, .desc = 0x9,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x45, .desc = 0x9,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x46, .desc = 0x9,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvbl",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x44, .desc = 0x7,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x45, .desc = 0x7,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x46, .desc = 0x7,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mveq",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x44, .desc = 0x0,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x45, .desc = 0x0,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x46, .desc = 0x0,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mveqz",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x44, .desc = 0xA,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			},
+			{
+				.opcode = 0x45, .desc = 0xA,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			},
+			{
+				.opcode = 0x46, .desc = 0xA,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvfir",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x3A, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_IR, .encode = ENCODE_REGO }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvfisp",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x3C, .desc = NO_DESC,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvge",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x44, .desc = 0x4,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x45, .desc = 0x4,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x46, .desc = 0x4,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvgez",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x44, .desc = 0xE,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			},
+			{
+				.opcode = 0x45, .desc = 0xE,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			},
+			{
+				.opcode = 0x46, .desc = 0xE,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvgt",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x44, .desc = 0x2,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x45, .desc = 0x2,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x46, .desc = 0x2,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvgtz",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x44, .desc = 0xC,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			},
+			{
+				.opcode = 0x45, .desc = 0xC,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			},
+			{
+				.opcode = 0x46, .desc = 0xC,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvle",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x44, .desc = 0x5,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x45, .desc = 0x5,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x46, .desc = 0x5,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvlez",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x44, .desc = 0xF,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			},
+			{
+				.opcode = 0x45, .desc = 0xF,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			},
+			{
+				.opcode = 0x46, .desc = 0xF,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvlt",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x44, .desc = 0x3,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x45, .desc = 0x3,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x46, .desc = 0x3,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvltz",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x44, .desc = 0xD,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			},
+			{
+				.opcode = 0x45, .desc = 0xD,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			},
+			{
+				.opcode = 0x46, .desc = 0xD,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvne",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x44, .desc = 0x1,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x45, .desc = 0x1,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			},
+			{
+				.opcode = 0x46, .desc = 0x1,
+				.params_length = 4,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvnez",
+		.encodes_length = 3,
+		.encodes = {
+			{
+				.opcode = 0x44, .desc = 0xB,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			},
+			{
+				.opcode = 0x45, .desc = 0xB,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			},
+			{
+				.opcode = 0x46, .desc = 0xB,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvtas",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x38, .desc = 0x3,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvtbs",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x38, .desc = 0x4,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvtcs",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x38, .desc = 0x0,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvtds",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x38, .desc = 0x2,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvtes",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x38, .desc = 0x5,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvtfs",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x38, .desc = 0x6,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvtgs",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x38, .desc = 0x7,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvtisp",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x3D, .desc = NO_DESC,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvtitd",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x39, .desc = 0x2,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvtptd",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x39, .desc = 0x1,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvtss",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x38, .desc = 0x1,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "mvtstd",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x39, .desc = 0x0,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM }
+				}
+			}
+		}
+	},
+	{
 		.mne = "nop",
 		.encodes_length = 1,
 		.encodes = {
@@ -640,6 +1789,173 @@ Ist isa[] = {
 		.encodes = {
 			{
 				.opcode = 0x1, .desc = NO_DESC,
+				.params_length = 0
+			}
+		}
+	},
+	{
+		.mne = "pop",
+		.encodes_length = 6,
+		.encodes = {
+			{
+				.opcode = 0x50, .desc = NO_DESC,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x51, .desc = NO_DESC,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x52, .desc = NO_DESC,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x53, .desc = 0x0,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_MEM8, .encode = ENCODE_MEM }
+				}
+			},
+			{
+				.opcode = 0x53, .desc = 0x1,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_MEM16, .encode = ENCODE_MEM }
+				}
+			},
+			{
+				.opcode = 0x53, .desc = 0x2,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_MEM32, .encode = ENCODE_MEM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "poplst",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x5B, .desc = NO_DESC,
+				.params_length = 0
+			}
+		}
+	},
+	{
+		.mne = "popst",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x5C, .desc = NO_DESC,
+				.params_length = 0
+			}
+		}
+	},
+	{
+		.mne = "psh",
+		.encodes_length = 9,
+		.encodes = {
+			{
+				.opcode = 0x54, .desc = NO_DESC,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x55, .desc = NO_DESC,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x56, .desc = NO_DESC,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x57, .desc = 0x0,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_MEM8, .encode = ENCODE_MEM }
+				}
+			},
+			{
+				.opcode = 0x57, .desc = 0x1,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_MEM16, .encode = ENCODE_MEM }
+				}
+			},
+			{
+				.opcode = 0x57, .desc = 0x2,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_MEM32, .encode = ENCODE_MEM }
+				}
+			},
+			{
+				.opcode = 0x58, .desc = NO_DESC,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 }
+				}
+			},
+			{
+				.opcode = 0x59, .desc = NO_DESC,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 }
+				}
+			},
+			{
+				.opcode = 0x5A, .desc = NO_DESC,
+				.params_length = 1,
+				.params = {
+					{ .type = TYPE_IMM32, .encode = ENCODE_MV32 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "pshlst",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x5D, .desc = NO_DESC,
+				.params_length = 0
+			}
+		}
+	},
+	{
+		.mne = "pshst",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x5E, .desc = NO_DESC,
+				.params_length = 0
+			}
+		}
+	},
+	{
+		.mne = "ret",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x30, .desc = NO_DESC,
 				.params_length = 0
 			}
 		}
@@ -803,6 +2119,96 @@ Ist isa[] = {
 		}
 	},
 	{
+		.mne = "sea",
+		.encodes_length = 10,
+		.encodes = {
+			{
+				.opcode = 0x68, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGO },
+					{ .type = TYPE_R8, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x69, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGO },
+					{ .type = TYPE_R16, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x6A, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGO },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x6B, .desc = 0x0,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_MEM8, .encode = ENCODE_MEM },
+					{ .type = TYPE_R8, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x6B, .desc = 0x1,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_MEM16, .encode = ENCODE_MEM },
+					{ .type = TYPE_R16, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x6B, .desc = 0x2,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_MEM32, .encode = ENCODE_MEM },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x6C, .desc = NO_DESC,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGO },
+					{ .type = TYPE_IMMS16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R8, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x6D, .desc = NO_DESC,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGO },
+					{ .type = TYPE_IMMS16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R16, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x6E, .desc = NO_DESC,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGO },
+					{ .type = TYPE_IMMS16, .encode = ENCODE_MV16 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x67, .desc = NO_DESC,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGO },
+					{ .type = TYPE_IMMS32, .encode = ENCODE_MV32 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM }
+				}
+			}
+		}
+	},
+	{
 		.mne = "setb",
 		.encodes_length = 1,
 		.encodes = {
@@ -869,6 +2275,240 @@ Ist isa[] = {
 			{
 				.opcode = 0x18, .desc = NO_DESC,
 				.params_length = 0
+			}
+		}
+	},
+	{
+		.mne = "stab",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x4F, .desc = 0x6,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "stae",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x4F, .desc = 0x8,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "stbe",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x4F, .desc = 0x9,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "stbl",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x4F, .desc = 0x7,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "steq",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x4F, .desc = 0x0,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "steqz",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x4F, .desc = 0xA,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "stge",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x4F, .desc = 0x4,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "stgez",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x4F, .desc = 0xE,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "stgt",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x4F, .desc = 0x2,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "stgtz",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x4F, .desc = 0xC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "stle",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x4F, .desc = 0x5,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "stlez",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x4F, .desc = 0xF,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "stlt",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x4F, .desc = 0x3,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "stltz",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x4F, .desc = 0xD,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "stne",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x4F, .desc = 0x1,
+				.params_length = 3,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO2 }
+				}
+			}
+		}
+	},
+	{
+		.mne = "stnez",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x4F, .desc = 0xB,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM1 },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM2 }
+				}
 			}
 		}
 	},
@@ -1071,6 +2711,16 @@ Ist isa[] = {
 		}
 	},
 	{
+		.mne = "updfp",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x5F, .desc = NO_DESC,
+				.params_length = 0
+			}
+		}
+	},
+	{
 		.mne = "xbch",
 		.encodes_length = 1,
 		.encodes = {
@@ -1078,6 +2728,60 @@ Ist isa[] = {
 				.opcode = 0x2F, .desc = NO_DESC,
 				.params_length = 1,
 				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM }
+				}
+			}
+		}
+	},
+	{
+		.mne = "xchg",
+		.encodes_length = 6,
+		.encodes = {
+			{
+				.opcode = 0x78, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R8, .encode = ENCODE_REGM },
+					{ .type = TYPE_R8, .encode = ENCODE_REGO }
+				}
+			},
+			{
+				.opcode = 0x79, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM },
+					{ .type = TYPE_R16, .encode = ENCODE_REGO }
+				}
+			},
+			{
+				.opcode = 0x7A, .desc = NO_DESC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO }
+				}
+			},
+			{
+				.opcode = 0x7B, .desc = 0x0,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_MEM8, .encode = ENCODE_MEM },
+					{ .type = TYPE_R8, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x7B, .desc = 0x1,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_MEM16, .encode = ENCODE_MEM },
+					{ .type = TYPE_R16, .encode = ENCODE_REGM }
+				}
+			},
+			{
+				.opcode = 0x7B, .desc = 0x2,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_MEM32, .encode = ENCODE_MEM },
 					{ .type = TYPE_R32, .encode = ENCODE_REGM }
 				}
 			}

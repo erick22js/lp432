@@ -450,6 +450,96 @@
 			}
 		]
 	},
+	"cvbth": {
+		"description": "Converts a byte value to half by signal extension",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4C",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0x4D",
+				"desc": "0x0",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x4D",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem8", "mem"]
+				]
+			}
+		]
+	},
+	"cvbtw": {
+		"description": "Converts a byte value to word by signal extension",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x48",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0x49",
+				"desc": "0x0",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x49",
+				"desc": "0x1",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem8", "mem"]
+				]
+			}
+		]
+	},
+	"cvhtw": {
+		"description": "Converts a half value to word by signal extension",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4A",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0x4B",
+				"desc": "0x0",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x4B",
+				"desc": "0x1",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem16", "mem"]
+				]
+			}
+		]
+	},
 	"debug": {
 		"description": "Do a Debug Interruption",
 		"cycles": 1,
@@ -457,6 +547,51 @@
 		"encode": [
 			{
 				"opcode": "0x02",
+				"args": []
+			}
+		]
+	},
+	"enter": {
+		"description": "Creates and enters in a procedure frame",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x34",
+				"args": []
+			},
+			{
+				"opcode": "0x35",
+				"args": [
+					["size", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x36",
+				"args": [
+					["size", "r16", "regm"]
+				]
+			}
+		]
+	},
+	"int": {
+		"description": "Calls for a Software Interruption",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x32",
+				"args": []
+			}
+		]
+	},
+	"iret": {
+		"description": "Returns from a interruption call",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x31",
 				"args": []
 			}
 		]
@@ -618,6 +753,1038 @@
 			}
 		]
 	},
+	"lea": {
+		"Description": "Loads the value at address pointed in memory indirect address to register",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x60",
+				"args": [
+					["dest", "r8", "regm"],
+					["base", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0x61",
+				"args": [
+					["dest", "r16", "regm"],
+					["base", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0x62",
+				"args": [
+					["dest", "r32", "regm"],
+					["base", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0x63",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["base", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x63",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["base", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0x63",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["base", "mem32", "mem"]
+				]
+			},
+			{
+				"opcode": "0x64",
+				"args": [
+					["dest", "r8", "regm"],
+					["base", "r32", "rego"],
+					["offset", "imms16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x65",
+				"args": [
+					["dest", "r16", "regm"],
+					["base", "r32", "rego"],
+					["offset", "imms16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x66",
+				"args": [
+					["dest", "r32", "regm"],
+					["base", "r32", "rego"],
+					["offset", "imms16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x67",
+				"args": [
+					["dest", "r32", "regm"],
+					["base", "r32", "rego"],
+					["offset", "imms32", "mv32"]
+				]
+			}
+		]
+	},
+	"leave": {
+		"description": "Leaves the current procedure frame",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x37",
+				"args": []
+			}
+		]
+	},
+	"mov": {
+		"description": "Moves a value from a operand to another",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x70",
+				"args": [
+					["dest", "r8", "regm"],
+					["source", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0x71",
+				"args": [
+					["dest", "r16", "regm"],
+					["source", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0x72",
+				"args": [
+					["dest", "r32", "regm"],
+					["source", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0x74",
+				"args": [
+					["dest", "r8", "regm"],
+					["source", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x75",
+				"args": [
+					["dest", "r16", "regm"],
+					["source", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x76",
+				"args": [
+					["dest", "r32", "regm"],
+					["source", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0x73",
+				"desc": "0x0",
+				"args": [
+					["dest", "r32", "regm"],
+					["source", "imms8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x73",
+				"desc": "0x1",
+				"args": [
+					["dest", "r32", "regm"],
+					["source", "imms16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x73",
+				"desc": "0x2",
+				"args": [
+					["dest", "r16", "regm"],
+					["source", "imms8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x73",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["source", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x73",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["source", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0x73",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["source", "mem32", "mem"]
+				]
+			},
+			{
+				"opcode": "0x73",
+				"desc": "0x6",
+				"args": [
+					["dest", "r16", "regm"],
+					["source", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x73",
+				"desc": "0x7",
+				"args": [
+					["dest", "r32", "regm"],
+					["source", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x73",
+				"desc": "0x8",
+				"args": [
+					["dest", "r32", "regm"],
+					["source", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x73",
+				"desc": "0x9",
+				"args": [
+					["dest", "r16", "regm"],
+					["source", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x73",
+				"desc": "0xA",
+				"args": [
+					["dest", "r32", "regm"],
+					["source", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x73",
+				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm"],
+					["source", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0x77",
+				"desc": "0x0",
+				"args": [
+					["dest", "mem8", "mem"],
+					["source", "r8", "regm"]
+				]
+			},
+			{
+				"opcode": "0x77",
+				"desc": "0x1",
+				"args": [
+					["dest", "mem16", "mem"],
+					["source", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0x77",
+				"desc": "0x2",
+				"args": [
+					["dest", "mem32", "mem"],
+					["source", "r32", "regm"]
+				]
+			}
+		]
+	},
+	"mvab": {
+		"description": "Move immediate data to register if the reg1 is above than reg2",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x44",
+				"desc": "0x6",
+				"args": [
+					["dest", "r8", "regm1"],
+					["data", "imm8", "mv8"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x45",
+				"desc": "0x6",
+				"args": [
+					["dest", "r16", "regm1"],
+					["data", "imm16", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x46",
+				"desc": "0x6",
+				"args": [
+					["dest", "r32", "regm1"],
+					["data", "imm32", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"mvae": {
+		"description": "Move immediate data to register if the reg1 is above or equal to reg2",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x44",
+				"desc": "0x8",
+				"args": [
+					["dest", "r8", "regm1"],
+					["data", "imm8", "mv8"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x45",
+				"desc": "0x8",
+				"args": [
+					["dest", "r16", "regm1"],
+					["data", "imm16", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x46",
+				"desc": "0x8",
+				"args": [
+					["dest", "r32", "regm1"],
+					["data", "imm32", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"mvbe": {
+		"description": "Move immediate data to register if the reg1 is below or equal to reg2",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x44",
+				"desc": "0x9",
+				"args": [
+					["dest", "r8", "regm1"],
+					["data", "imm8", "mv8"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x45",
+				"desc": "0x9",
+				"args": [
+					["dest", "r16", "regm1"],
+					["data", "imm16", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x46",
+				"desc": "0x9",
+				"args": [
+					["dest", "r32", "regm1"],
+					["data", "imm32", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"mvbl": {
+		"description": "Move immediate data to register if the reg1 is below than reg2",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x44",
+				"desc": "0x7",
+				"args": [
+					["dest", "r8", "regm1"],
+					["data", "imm8", "mv8"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x45",
+				"desc": "0x7",
+				"args": [
+					["dest", "r16", "regm1"],
+					["data", "imm16", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x46",
+				"desc": "0x7",
+				"args": [
+					["dest", "r32", "regm1"],
+					["data", "imm32", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"mveq": {
+		"description": "Move immediate data to register if the reg1 and reg2 are equal",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x44",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm1"],
+					["data", "imm8", "mv8"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x45",
+				"desc": "0x0",
+				"args": [
+					["dest", "r16", "regm1"],
+					["data", "imm16", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x46",
+				"desc": "0x0",
+				"args": [
+					["dest", "r32", "regm1"],
+					["data", "imm32", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"mveqz": {
+		"description": "Move immediate data to register if the reg1 is equal to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x44",
+				"desc": "0xA",
+				"args": [
+					["dest", "r8", "regm1"],
+					["data", "imm8", "mv8"],
+					["reg1", "r32", "regm2"]
+				]
+			},
+			{
+				"opcode": "0x45",
+				"desc": "0xA",
+				"args": [
+					["dest", "r16", "regm1"],
+					["data", "imm16", "mv16"],
+					["reg1", "r32", "regm2"]
+				]
+			},
+			{
+				"opcode": "0x46",
+				"desc": "0xA",
+				"args": [
+					["dest", "r32", "regm1"],
+					["data", "imm32", "mv16"],
+					["reg1", "r32", "regm2"]
+				]
+			}
+		]
+	},
+	"mvfir": {
+		"description": "Moves data from Interruption Register to General Purpose Registers",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x3A",
+				"args": [
+					["dest", "r32", "regm"],
+					["source", "ir", "rego"]
+				]
+			}
+		]
+	},
+	"mvfisp": {
+		"description": "Move Interruption Stack Pointer register data to a General Purpose Register",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x3C",
+				"args": [
+					["dest", "r32", "regm"]
+				]
+			}
+		]
+	},
+	"mvge": {
+		"description": "Move immediate data to register if the reg1 is greater or equal to reg2",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x44",
+				"desc": "0x4",
+				"args": [
+					["dest", "r8", "regm1"],
+					["data", "imm8", "mv8"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x45",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm1"],
+					["data", "imm16", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x46",
+				"desc": "0x4",
+				"args": [
+					["dest", "r32", "regm1"],
+					["data", "imm32", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"mvgez": {
+		"description": "Move immediate data to register if the reg1 is greater or equal to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x44",
+				"desc": "0xE",
+				"args": [
+					["dest", "r8", "regm1"],
+					["data", "imm8", "mv8"],
+					["reg1", "r32", "regm2"]
+				]
+			},
+			{
+				"opcode": "0x45",
+				"desc": "0xE",
+				"args": [
+					["dest", "r16", "regm1"],
+					["data", "imm16", "mv16"],
+					["reg1", "r32", "regm2"]
+				]
+			},
+			{
+				"opcode": "0x46",
+				"desc": "0xE",
+				"args": [
+					["dest", "r32", "regm1"],
+					["data", "imm32", "mv16"],
+					["reg1", "r32", "regm2"]
+				]
+			}
+		]
+	},
+	"mvgt": {
+		"description": "Move immediate data to register if the reg1 is greater than reg2",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x44",
+				"desc": "0x2",
+				"args": [
+					["dest", "r8", "regm1"],
+					["data", "imm8", "mv8"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x45",
+				"desc": "0x2",
+				"args": [
+					["dest", "r16", "regm1"],
+					["data", "imm16", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x46",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm1"],
+					["data", "imm32", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"mvgtz": {
+		"description": "Move immediate data to register if the reg1 is greater than zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x44",
+				"desc": "0xC",
+				"args": [
+					["dest", "r8", "regm1"],
+					["data", "imm8", "mv8"],
+					["reg1", "r32", "regm2"]
+				]
+			},
+			{
+				"opcode": "0x45",
+				"desc": "0xC",
+				"args": [
+					["dest", "r16", "regm1"],
+					["data", "imm16", "mv16"],
+					["reg1", "r32", "regm2"]
+				]
+			},
+			{
+				"opcode": "0x46",
+				"desc": "0xC",
+				"args": [
+					["dest", "r32", "regm1"],
+					["data", "imm32", "mv16"],
+					["reg1", "r32", "regm2"]
+				]
+			}
+		]
+	},
+	"mvle": {
+		"description": "Move immediate data to register if the reg1 is lesser or equal to reg2",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x44",
+				"desc": "0x5",
+				"args": [
+					["dest", "r8", "regm1"],
+					["data", "imm8", "mv8"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x45",
+				"desc": "0x5",
+				"args": [
+					["dest", "r16", "regm1"],
+					["data", "imm16", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x46",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm1"],
+					["data", "imm32", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"mvlez": {
+		"description": "Move immediate data to register if the reg1 is lesser or equal to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x44",
+				"desc": "0xF",
+				"args": [
+					["dest", "r8", "regm1"],
+					["data", "imm8", "mv8"],
+					["reg1", "r32", "regm2"]
+				]
+			},
+			{
+				"opcode": "0x45",
+				"desc": "0xF",
+				"args": [
+					["dest", "r16", "regm1"],
+					["data", "imm16", "mv16"],
+					["reg1", "r32", "regm2"]
+				]
+			},
+			{
+				"opcode": "0x46",
+				"desc": "0xF",
+				"args": [
+					["dest", "r32", "regm1"],
+					["data", "imm32", "mv16"],
+					["reg1", "r32", "regm2"]
+				]
+			}
+		]
+	},
+	"mvlt": {
+		"description": "Move immediate data to register if the reg1 is lesser than reg2",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x44",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm1"],
+					["data", "imm8", "mv8"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x45",
+				"desc": "0x3",
+				"args": [
+					["dest", "r16", "regm1"],
+					["data", "imm16", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x46",
+				"desc": "0x3",
+				"args": [
+					["dest", "r32", "regm1"],
+					["data", "imm32", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"mvltz": {
+		"description": "Move immediate data to register if the reg1 is lesser than zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x44",
+				"desc": "0xD",
+				"args": [
+					["dest", "r8", "regm1"],
+					["data", "imm8", "mv8"],
+					["reg1", "r32", "regm2"]
+				]
+			},
+			{
+				"opcode": "0x45",
+				"desc": "0xD",
+				"args": [
+					["dest", "r16", "regm1"],
+					["data", "imm16", "mv16"],
+					["reg1", "r32", "regm2"]
+				]
+			},
+			{
+				"opcode": "0x46",
+				"desc": "0xD",
+				"args": [
+					["dest", "r32", "regm1"],
+					["data", "imm32", "mv16"],
+					["reg1", "r32", "regm2"]
+				]
+			}
+		]
+	},
+	"mvne": {
+		"description": "Move immediate data to register if the reg1 and reg2 are not equal",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x44",
+				"desc": "0x1",
+				"args": [
+					["dest", "r8", "regm1"],
+					["data", "imm8", "mv8"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x45",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm1"],
+					["data", "imm16", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x46",
+				"desc": "0x1",
+				"args": [
+					["dest", "r32", "regm1"],
+					["data", "imm32", "mv16"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"mvnez": {
+		"description": "Move immediate data to register if the reg1 is not equal to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x44",
+				"desc": "0xB",
+				"args": [
+					["dest", "r8", "regm1"],
+					["data", "imm8", "mv8"],
+					["reg1", "r32", "regm2"]
+				]
+			},
+			{
+				"opcode": "0x45",
+				"desc": "0xB",
+				"args": [
+					["dest", "r16", "regm1"],
+					["data", "imm16", "mv16"],
+					["reg1", "r32", "regm2"]
+				]
+			},
+			{
+				"opcode": "0x46",
+				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm1"],
+					["data", "imm32", "mv16"],
+					["reg1", "r32", "regm2"]
+				]
+			}
+		]
+	},
+	"mvtas": {
+		"description": "Move register data to register segment AS",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x38",
+				"desc": "0x3",
+				"args": [
+					["source", "r8", "regm"]
+				]
+			}
+		]
+	},
+	"mvtbs": {
+		"description": "Move register data to register segment BS",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x38",
+				"desc": "0x4",
+				"args": [
+					["source", "r8", "regm"]
+				]
+			}
+		]
+	},
+	"mvtcs": {
+		"description": "Move register data to register segment CS",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x38",
+				"desc": "0x0",
+				"args": [
+					["source", "r8", "regm"]
+				]
+			}
+		]
+	},
+	"mvtds": {
+		"description": "Move register data to register segment DS",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x38",
+				"desc": "0x2",
+				"args": [
+					["source", "r8", "regm"]
+				]
+			}
+		]
+	},
+	"mvtes": {
+		"description": "Move register data to register segment ES",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x38",
+				"desc": "0x5",
+				"args": [
+					["source", "r8", "regm"]
+				]
+			}
+		]
+	},
+	"mvtfs": {
+		"description": "Move register data to register segment FS",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x38",
+				"desc": "0x6",
+				"args": [
+					["source", "r8", "regm"]
+				]
+			}
+		]
+	},
+	"mvtgs": {
+		"description": "Move register data to register segment GS",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x38",
+				"desc": "0x7",
+				"args": [
+					["source", "r8", "regm"]
+				]
+			}
+		]
+	},
+	"mvtisp": {
+		"description": "Move General Purpose Register data to Interruption Stack Pointer register",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x3D",
+				"args": [
+					["source", "r32", "regm"]
+				]
+			}
+		]
+	},
+	"mvtitd": {
+		"description": "Move register data to register Interruption Table Descriptor",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x39",
+				"desc": "0x2",
+				"args": [
+					["source", "r32", "regm"]
+				]
+			}
+		]
+	},
+	"mvtptd": {
+		"description": "Move register data to register Pagining Table Descriptor",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x39",
+				"desc": "0x1",
+				"args": [
+					["source", "r32", "regm"]
+				]
+			}
+		]
+	},
+	"mvtss": {
+		"description": "Move register data to register segment SS",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x38",
+				"desc": "0x1",
+				"args": [
+					["source", "r8", "regm"]
+				]
+			}
+		]
+	},
+	"mvtstd": {
+		"description": "Move register data to register Segment Table Descriptor",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x39",
+				"desc": "0x0",
+				"args": [
+					["source", "r32", "regm"]
+				]
+			}
+		]
+	},
 	"nop": {
 		"description": "Don't do any operation",
 		"cycles": 1,
@@ -636,6 +1803,171 @@
 		"encode": [
 			{
 				"opcode": "0x01",
+				"args": []
+			}
+		]
+	},
+	"pop": {
+		"description": "Pops a value from stack",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x50",
+				"args": [
+					["dest", "r8", "regm"]
+				]
+			},
+			{
+				"opcode": "0x51",
+				"args": [
+					["dest", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0x52",
+				"args": [
+					["dest", "r32", "regm"]
+				]
+			},
+			{
+				"opcode": "0x53",
+				"desc": "0x0",
+				"args": [
+					["dest", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x53",
+				"desc": "0x1",
+				"args": [
+					["dest", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0x53",
+				"desc": "0x2",
+				"args": [
+					["dest", "mem32", "mem"]
+				]
+			}
+		]
+	},
+	"poplst": {
+		"description": "Pops the lesser half of Program Status Register from stack",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x5B",
+				"args": []
+			}
+		]
+	},
+	"popst": {
+		"description": "Pops the entire Program Status Register from stack",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x5C",
+				"args": []
+			}
+		]
+	},
+	"psh": {
+		"description": "Pushes a value to stack",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x54",
+				"args": [
+					["source", "r8", "regm"]
+				]
+			},
+			{
+				"opcode": "0x55",
+				"args": [
+					["source", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0x56",
+				"args": [
+					["source", "r32", "regm"]
+				]
+			},
+			{
+				"opcode": "0x57",
+				"desc": "0x0",
+				"args": [
+					["source", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x57",
+				"desc": "0x1",
+				"args": [
+					["source", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0x57",
+				"desc": "0x2",
+				"args": [
+					["source", "mem32", "mem"]
+				]
+			},
+			{
+				"opcode": "0x58",
+				"args": [
+					["source", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x59",
+				"args": [
+					["source", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x5A",
+				"args": [
+					["source", "imm32", "mv32"]
+				]
+			}
+		]
+	},
+	"pshlst": {
+		"description": "Pushes the lesser half of Program Status Register to stack",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x5D",
+				"args": []
+			}
+		]
+	},
+	"pshst": {
+		"description": "Pushes the entire Program Status Register to stack",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x5E",
+				"args": []
+			}
+		]
+	},
+	"ret": {
+		"description": "Returns from a branched jump",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x30",
 				"args": []
 			}
 		]
@@ -796,6 +2128,90 @@
 			}
 		]
 	},
+	"sea": {
+		"Description": "Stores register value to address pointed in memory indirect address",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x68",
+				"args": [
+					["base", "r32", "rego"],
+					["dest", "r8", "regm"]
+				]
+			},
+			{
+				"opcode": "0x69",
+				"args": [
+					["base", "r32", "rego"],
+					["dest", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0x6A",
+				"args": [
+					["base", "r32", "rego"],
+					["dest", "r32", "regm"]
+				]
+			},
+			{
+				"opcode": "0x6B",
+				"desc": "0x0",
+				"args": [
+					["base", "mem8", "mem"],
+					["dest", "r8", "regm"]
+				]
+			},
+			{
+				"opcode": "0x6B",
+				"desc": "0x1",
+				"args": [
+					["base", "mem16", "mem"],
+					["dest", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0x6B",
+				"desc": "0x2",
+				"args": [
+					["base", "mem32", "mem"],
+					["dest", "r32", "regm"]
+				]
+			},
+			{
+				"opcode": "0x6C",
+				"args": [
+					["base", "r32", "rego"],
+					["offset", "imms16", "mv16"],
+					["dest", "r8", "regm"]
+				]
+			},
+			{
+				"opcode": "0x6D",
+				"args": [
+					["base", "r32", "rego"],
+					["offset", "imms16", "mv16"],
+					["dest", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0x6E",
+				"args": [
+					["base", "r32", "rego"],
+					["offset", "imms16", "mv16"],
+					["dest", "r32", "regm"]
+				]
+			},
+			{
+				"opcode": "0x67",
+				"args": [
+					["base", "r32", "rego"],
+					["offset", "imms32", "mv32"],
+					["dest", "r32", "regm"]
+				]
+			}
+		]
+	},
 	"setb": {
 		"description": "Enables flag Borrow",
 		"cycles": 1,
@@ -870,6 +2286,256 @@
 			{
 				"opcode": "0x18",
 				"args": []
+			}
+		]
+	},
+	"stab": {
+		"description": "Sets the register value to 1 if reg1 is above than reg2, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4F",
+				"desc": "0x6",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"stae": {
+		"description": "Sets the register value to 1 if reg1 is above or equal to reg2, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4F",
+				"desc": "0x8",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"stbe": {
+		"description": "Sets the register value to 1 if reg1 is below or equal to reg2, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4F",
+				"desc": "0x9",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"stbl": {
+		"description": "Sets the register value to 1 if reg1 is below than reg2, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4F",
+				"desc": "0x7",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"steq": {
+		"description": "Sets the register value to 1 if reg1 is equal to reg2, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4F",
+				"desc": "0x0",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"steqz": {
+		"description": "Sets the register value to 1 if reg1 is equal to zero, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4F",
+				"desc": "0xA",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "r32", "regm2"]
+				]
+			}
+		]
+	},
+	"stge": {
+		"description": "Sets the register value to 1 if reg1 is greater or equal to reg2, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4F",
+				"desc": "0x4",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"stgez": {
+		"description": "Sets the register value to 1 if reg1 is greater or equal to zero, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4F",
+				"desc": "0xE",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "r32", "regm2"]
+				]
+			}
+		]
+	},
+	"stgt": {
+		"description": "Sets the register value to 1 if reg1 is greater than reg2, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4F",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"stgtz": {
+		"description": "Sets the register value to 1 if reg1 is greater than zero, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4F",
+				"desc": "0xC",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "r32", "regm2"]
+				]
+			}
+		]
+	},
+	"stle": {
+		"description": "Sets the register value to 1 if reg1 is lesser or equal to reg2, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4F",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"stlez": {
+		"description": "Sets the register value to 1 if reg1 is lesser or equal to zero, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4F",
+				"desc": "0xF",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "r32", "regm2"]
+				]
+			}
+		]
+	},
+	"stlt": {
+		"description": "Sets the register value to 1 if reg1 is lesser than reg2, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4F",
+				"desc": "0x3",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"stltz": {
+		"description": "Sets the register value to 1 if reg1 is lesser than zero, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4F",
+				"desc": "0xD",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "r32", "regm2"]
+				]
+			}
+		]
+	},
+	"stne": {
+		"description": "Sets the register value to 1 if reg1 is not equal to reg2, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4F",
+				"desc": "0x1",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "r32", "regm2"],
+					["reg2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"stnez": {
+		"description": "Sets the register value to 1 if reg1 is not equal to zero, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x4F",
+				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "r32", "regm2"]
+				]
 			}
 		]
 	},
@@ -1073,6 +2739,17 @@
 			}
 		]
 	},
+	"updfp": {
+		"description": "Updates the Frame Pointer register with the Stack Pointer register",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x5F",
+				"args": []
+			}
+		]
+	},
 	"xbch": {
 		"Description": "Saves current program address and exchanges register value by program address",
 		"cycles": 1,
@@ -1082,6 +2759,58 @@
 				"opcode": "0x2F",
 				"args": [
 					["operand", "r32", "regm"]
+				]
+			}
+		]
+	},
+	"xchg": {
+		"Description": "Exchanges the value between operands",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x78",
+				"args": [
+					["opr1", "r8", "regm"],
+					["opr2", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0x79",
+				"args": [
+					["opr1", "r16", "regm"],
+					["opr2", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0x7A",
+				"args": [
+					["opr1", "r32", "regm"],
+					["opr2", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0x7B",
+				"desc": "0x0",
+				"args": [
+					["opr1", "mem8", "mem"],
+					["opr2", "r8", "regm"]
+				]
+			},
+			{
+				"opcode": "0x7B",
+				"desc": "0x1",
+				"args": [
+					["opr1", "mem16", "mem"],
+					["opr2", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0x7B",
+				"desc": "0x2",
+				"args": [
+					["opr1", "mem32", "mem"],
+					["opr2", "r32", "regm"]
 				]
 			}
 		]

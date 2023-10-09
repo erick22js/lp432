@@ -27,21 +27,21 @@ cpuInterr proc73(Cpu *cpu_s){
 
 	switch (cpu_s->os_desc){
 		case 0x0:{
-			// Instruction: mov r8:regm, imm8:MV
+			// Instruction: mov r32:regm, imms8:MV
 			cpuFetchMV8();
-			cpuWriteReg8(cpu_s->os_regm, cpu_s->code);
+			cpuWriteReg32(cpu_s->os_regm, u8ToInt(cpu_s->code));
 		}
 		break;
 		case 0x1:{
-			// Instruction: mov r16:regm, imm16:MV
+			// Instruction: mov r32:regm, imms16:MV
 			cpuFetchMV16();
-			cpuWriteReg16(cpu_s->os_regm, cpu_s->code);
+			cpuWriteReg32(cpu_s->os_regm, u16ToInt(cpu_s->code));
 		}
 		break;
 		case 0x2:{
-			// Instruction: mov r32:regm, imm32:MV
+			// Instruction: mov r16:regm, imms8:MV
 			cpuFetchMV32();
-			cpuWriteReg32(cpu_s->os_regm, cpu_s->code);
+			cpuWriteReg16(cpu_s->os_regm, u8ToInt(cpu_s->code));
 		}
 		break;
 		case 0x3:{

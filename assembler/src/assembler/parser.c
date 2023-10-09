@@ -987,6 +987,48 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 				parserExpression(&val);
 				parser.pc = parser.bc = val.value.integer;
 			}
+			else if ((strcmp(cmd, "byte")==0) || (strcmp(cmd, "half")==0) || (strcmp(cmd, "word")==0)){
+				int type = (strcmp(cmd, "byte")==0)? 8: (strcmp(cmd, "half")==0)? 16: 32;
+				createSeek();
+				
+				tryCatchAndThrow(
+					tkrFetchToken(&tk)
+				);
+				while (tk.kind != TOKEN_NEW_LINE){
+					restoreSeek();
+					Value in;
+					tryCatchAndThrow(
+						parserExpression(&in)
+					);
+					if (type==8){
+						out8(in.value.integer);
+					}
+					else if (type==16){
+						out16(in.value.integer);
+					}
+					else {
+						out32(in.value.integer);
+					}
+					saveSeek();
+
+					// Check if next provided argument is a comma
+					// only if is, will keep fetching for arguments
+					tryCatchAndThrow(
+						tkrFetchToken(&tk)
+					);
+					if (tkIsSymbol(tk, ',')){
+						saveSeek();
+						tryCatchAndThrow(
+							tkrFetchToken(&tk)
+						);
+						continue;
+					}
+					else {
+						break;
+					}
+				}
+				restoreSeek();
+			}
 			else if (strcmp(cmd, "include")==0){
 				tryCatchAndThrow(
 					tkrFetchToken(&tk)
