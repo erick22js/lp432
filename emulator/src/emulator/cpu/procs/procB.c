@@ -42,7 +42,7 @@
 
 #define procBitScanFoward(v, res, size) {\
 	res = 0;\
-	for (int i=0; i<size; i++){\
+	for (int i=size-1; i>=0; i--){\
 		if ((v>>i)&1){\
 			break;\
 		}\
@@ -57,7 +57,7 @@
 
 #define procBitScanBackward(v, res, size) {\
 	res = 0;\
-	for (int i=size-1; i>=0; i--){\
+	for (int i=0; i<size; i++){\
 		if ((v>>i)&1){\
 			break;\
 		}\

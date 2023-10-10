@@ -554,7 +554,7 @@ cpuInterr procD3(Cpu *cpu_s){
 		}
 		break;
 		case 0xF: {
-			// Instruction: fdbtsg fpr:regm1, fpr:regm2
+			// Instruction: ftrunc fpr:regm1, fpr:regm2
 			uint8 dest = cpu_s->os_regm;
 			cpuFetchOS();
 			float32 single = (float32)cpu_s->fregs[cpu_s->os_regm];

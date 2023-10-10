@@ -136,50 +136,50 @@ cpuInterr procF7(Cpu *cpu_s){
 
 	switch (cpu_s->os_desc){
 		case 0x0: {
-			// Instruction: out imm8:MV, r8:rego
+			// Instruction: out imm8:MV, r8:regm
 			cpuFetchMV8();
 			uint16 adr = ioAdr8To16(cpu_s->mv);
-			uint8 data = cpuReadReg8(cpu_s->os_rego);
+			uint8 data = cpuReadReg8(cpu_s->os_regm);
 			procOut8(adr, data);
 		}
 		break;
 		case 0x1: {
-			// Instruction: out imm8:MV, r16:rego
+			// Instruction: out imm8:MV, r16:regm
 			cpuFetchMV8();
 			uint16 adr = ioAdr8To16(cpu_s->mv);
-			uint16 data = cpuReadReg16(cpu_s->os_rego);
+			uint16 data = cpuReadReg16(cpu_s->os_regm);
 			procOut16(adr, data);
 		}
 		break;
 		case 0x2: {
-			// Instruction: out imm8:MV, r16:rego
+			// Instruction: out imm8:MV, r16:regm
 			cpuFetchMV8();
 			uint16 adr = ioAdr8To16(cpu_s->mv);
-			uint32 data = cpuReadReg32(cpu_s->os_rego);
+			uint32 data = cpuReadReg32(cpu_s->os_regm);
 			procOut32(adr, data);
 		}
 		break;
 		case 0x3: {
-			// Instruction: out imm16:MV, r8:rego
+			// Instruction: out imm16:MV, r8:regm
 			cpuFetchMV16();
 			uint16 adr = cpu_s->mv;
-			uint8 data = cpuReadReg8(cpu_s->os_rego);
+			uint8 data = cpuReadReg8(cpu_s->os_regm);
 			procOut8(adr, data);
 		}
 		break;
 		case 0x4: {
-			// Instruction: out imm16:MV, r16:rego
+			// Instruction: out imm16:MV, r16:regm
 			cpuFetchMV16();
 			uint16 adr = cpu_s->mv;
-			uint16 data = cpuReadReg16(cpu_s->os_rego);
+			uint16 data = cpuReadReg16(cpu_s->os_regm);
 			procOut16(adr, data);
 		}
 		break;
 		case 0x5: {
-			// Instruction: out imm16:MV, r32:rego
+			// Instruction: out imm16:MV, r32:regm
 			cpuFetchMV16();
 			uint16 adr = cpu_s->mv;
-			uint32 data = cpuReadReg32(cpu_s->os_rego);
+			uint32 data = cpuReadReg32(cpu_s->os_regm);
 			procOut32(adr, data);
 		}
 		break;

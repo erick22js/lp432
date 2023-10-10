@@ -311,6 +311,162 @@
 			}
 		]
 	},
+	"and": {
+		"description": "Do bitwise operation 'and' between src and dest",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xB0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0xB1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0xB2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0xB3",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xB3",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xB3",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0xB3",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xB3",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0xB3",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem32", "mem"]
+				]
+			},
+			{
+				"opcode": "0xB3",
+				"desc": "0x6",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xB3",
+				"desc": "0x7",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xB3",
+				"desc": "0x8",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xB3",
+				"desc": "0x9",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xB3",
+				"desc": "0xA",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xB3",
+				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0xB3",
+				"desc": "0xC",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xB3",
+				"desc": "0xD",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xB3",
+				"desc": "0xE",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xB3",
+				"desc": "0xF",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems16", "mv16"]
+				]
+			}
+		]
+	},
 	"ba": {
 		"Description": "Saves current address to stack and branches to a absolute address",
 		"cycles": 1,
@@ -369,6 +525,229 @@
 				"args": [
 					["comparator", "r32", "regm"],
 					["offset", "imm16", "mv16"]
+				]
+			}
+		]
+	},
+	"bsb": {
+		"description": "Scans from back for bit set in operand value and retrives the ammount of clear bits",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xBF",
+				"desc": "0x6",
+				"args": [
+					["bits", "r8", "rego2"],
+					["operand", "r32", "regm1"]
+				]
+			},
+			{
+				"opcode": "0xBF",
+				"desc": "0x7",
+				"args": [
+					["bits", "r16", "rego2"],
+					["operand", "r32", "regm1"]
+				]
+			},
+			{
+				"opcode": "0xBF",
+				"desc": "0x8",
+				"args": [
+					["bits", "r32", "rego2"],
+					["operand", "r32", "regm1"]
+				]
+			},
+			{
+				"opcode": "0xBF",
+				"desc": "0x9",
+				"args": [
+					["bits", "mem8", "mem"],
+					["operand", "r32", "regm1"]
+				]
+			},
+			{
+				"opcode": "0xBF",
+				"desc": "0xA",
+				"args": [
+					["bits", "mem16", "mem"],
+					["operand", "r32", "regm1"]
+				]
+			},
+			{
+				"opcode": "0xBF",
+				"desc": "0xB",
+				"args": [
+					["bits", "mem32", "mem"],
+					["operand", "r32", "regm1"]
+				]
+			}
+		]
+	},
+	"bsf": {
+		"description": "Scans from front for bit set in operand value and retrives the ammount of clear bits",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xBF",
+				"desc": "0x0",
+				"args": [
+					["bits", "r8", "rego2"],
+					["operand", "r32", "regm1"]
+				]
+			},
+			{
+				"opcode": "0xBF",
+				"desc": "0x1",
+				"args": [
+					["bits", "r16", "rego2"],
+					["operand", "r32", "regm1"]
+				]
+			},
+			{
+				"opcode": "0xBF",
+				"desc": "0x2",
+				"args": [
+					["bits", "r32", "rego2"],
+					["operand", "r32", "regm1"]
+				]
+			},
+			{
+				"opcode": "0xBF",
+				"desc": "0x3",
+				"args": [
+					["bits", "mem8", "mem"],
+					["operand", "r32", "regm1"]
+				]
+			},
+			{
+				"opcode": "0xBF",
+				"desc": "0x4",
+				"args": [
+					["bits", "mem16", "mem"],
+					["operand", "r32", "regm1"]
+				]
+			},
+			{
+				"opcode": "0xBF",
+				"desc": "0x5",
+				"args": [
+					["bits", "mem32", "mem"],
+					["operand", "r32", "regm1"]
+				]
+			}
+		]
+	},
+	"bswap": {
+		"description": "Swap bytes order in operand",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xDD",
+				"args": [
+					["operand", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0xDE",
+				"args": [
+					["operand", "r32", "regm"]
+				]
+			}
+		]
+	},
+	"bt": {
+		"description": "Do a bit test operation on operand",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xBE",
+				"desc": "0x0",
+				"args": [
+					["operand", "r8", "regm"]
+				]
+			},
+			{
+				"opcode": "0xBE",
+				"desc": "0x1",
+				"args": [
+					["operand", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0xBE",
+				"desc": "0x2",
+				"args": [
+					["operand", "r32", "regm"]
+				]
+			},
+			{
+				"opcode": "0xBE",
+				"desc": "0x3",
+				"args": [
+					["operand", "mem8", "regm"]
+				]
+			},
+			{
+				"opcode": "0xBE",
+				"desc": "0x4",
+				"args": [
+					["operand", "mem16", "regm"]
+				]
+			},
+			{
+				"opcode": "0xBE",
+				"desc": "0x5",
+				"args": [
+					["operand", "mem32", "regm"]
+				]
+			}
+		]
+	},
+	"btc": {
+		"description": "Clears the bit of operand",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xBE",
+				"desc": "0x7",
+				"args": [
+					["operand", "r8", "regm"],
+					["bit", "imm8", "mv8"]
+				]
+			}
+		]
+	},
+	"bts": {
+		"description": "Sets the bit of operand",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xBE",
+				"desc": "0x6",
+				"args": [
+					["operand", "r8", "regm"],
+					["bit", "imm8", "mv8"]
+				]
+			}
+		]
+	},
+	"btt": {
+		"description": "Toggles the bit of operand",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xBE",
+				"desc": "0x8",
+				"args": [
+					["operand", "r8", "regm"],
+					["bit", "imm8", "mv8"]
 				]
 			}
 		]
@@ -447,6 +826,162 @@
 			{
 				"opcode": "0x19",
 				"args": []
+			}
+		]
+	},
+	"cmp": {
+		"description": "Compares src value to dest",
+		"cycles": 1,
+		"flags": {"BF":2, "VF":2, "ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xA8",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0xA9",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0xAA",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0xAB",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xAB",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xAB",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0xAB",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xAB",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0xAB",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem32", "mem"]
+				]
+			},
+			{
+				"opcode": "0xAB",
+				"desc": "0x6",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xAB",
+				"desc": "0x7",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xAB",
+				"desc": "0x8",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xAB",
+				"desc": "0x9",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xAB",
+				"desc": "0xA",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xAB",
+				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0xAB",
+				"desc": "0xC",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xAB",
+				"desc": "0xD",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xAB",
+				"desc": "0xE",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xAB",
+				"desc": "0xF",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems16", "mv16"]
+				]
 			}
 		]
 	},
@@ -551,6 +1086,187 @@
 			}
 		]
 	},
+	"dec": {
+		"description": "Decrements value in operand",
+		"cycles": 1,
+		"flags": {"VF":2, "ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xE4",
+				"args": [
+					["operand", "r8", "regm"]
+				]
+			},
+			{
+				"opcode": "0xE5",
+				"args": [
+					["operand", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0xE6",
+				"args": [
+					["operand", "r32", "regm"]
+				]
+			}
+		]
+	},
+	"div": {
+		"description": "Divides src value to dest",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0x98",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0x99",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0x9A",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0x9B",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x9B",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x9B",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0x9B",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x9B",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0x9B",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem32", "mem"]
+				]
+			},
+			{
+				"opcode": "0x9B",
+				"desc": "0x6",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x9B",
+				"desc": "0x7",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x9B",
+				"desc": "0x8",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x9B",
+				"desc": "0x9",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x9B",
+				"desc": "0xA",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x9B",
+				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0x9B",
+				"desc": "0xC",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x9B",
+				"desc": "0xD",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x9B",
+				"desc": "0xE",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x9B",
+				"desc": "0xF",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems16", "mv16"]
+				]
+			}
+		]
+	},
 	"enter": {
 		"description": "Creates and enters in a procedure frame",
 		"cycles": 1,
@@ -570,6 +1286,1294 @@
 				"opcode": "0x36",
 				"args": [
 					["size", "r16", "regm"]
+				]
+			}
+		]
+	},
+	"f2xm1": {
+		"Description": "Floating point, calculates 2 to the power of x minus 1",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD2",
+				"desc": "0xC",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["x", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fadc": {
+		"Description": "Floating point, adds opr1 with opr2 to dest with carry",
+		"cycles": 1,
+		"flags": {"CF": 0},
+		"encode": [
+			{
+				"opcode": "0xD1",
+				"desc": "0x0",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["opr1", "fpr", "regm2"],
+					["opr2", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"fadd": {
+		"Description": "Floating point, adds opr1 with opr2 to dest",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD1",
+				"desc": "0x1",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["opr1", "fpr", "regm2"],
+					["opr2", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"faddi": {
+		"Description": "Floating point, adds opr1 with integer opr2 to dest",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD1",
+				"desc": "0x2",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["opr1", "fpr", "regm2"],
+					["opr2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"facos": {
+		"Description": "Floating point, calculates arccossine of fp",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD2",
+				"desc": "0x7",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fasin": {
+		"Description": "Floating point, calculates arcsine of fp",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD2",
+				"desc": "0x6",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fatan": {
+		"Description": "Floating point, calculates arctangent of fp",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD2",
+				"desc": "0x8",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fatan2": {
+		"Description": "Floating point, calculates arctangent in bidimensional vector of fp",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD2",
+				"desc": "0x8",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["y", "fpr", "regm2"],
+					["x", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"fcbrt": {
+		"Description": "Floating point, calculates cubic root of value",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD2",
+				"desc": "0xB",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fceil": {
+		"Description": "Floating point, round up operand to nearest integer",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD3",
+				"desc": "0x1",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fcmp": {
+		"Description": "Floating point, compares opr1 with opr2, if greater stores 1, if lesser stores -1, otherwise stores zero in dest",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD2",
+				"desc": "0x0",
+				"args": [
+					["dest", "r32", "regm1"],
+					["opr1", "fpr", "regm2"],
+					["opr2", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"fcmpi": {
+		"Description": "Floating point, compares opr1 with integer opr2, if greater stores 1, if lesser stores -1, otherwise stores zero in dest",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD2",
+				"desc": "0x1",
+				"args": [
+					["dest", "r32", "regm1"],
+					["opr1", "fpr", "regm2"],
+					["opr2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"fcos": {
+		"Description": "Floating point, calculates cossine of fp",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD2",
+				"desc": "0x4",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fcvfb": {
+		"Description": "Floating point, convert integer byte to fp",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD3",
+				"desc": "0x9",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "r8", "regm2"]
+				]
+			}
+		]
+	},
+	"fcvfh": {
+		"Description": "Floating point, convert integer half to fp",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD3",
+				"desc": "0xA",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "r16", "regm2"]
+				]
+			}
+		]
+	},
+	"fcvfsb": {
+		"Description": "Floating point, convert signed byte to fp",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD3",
+				"desc": "0xC",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "r8", "regm2"]
+				]
+			}
+		]
+	},
+	"fcvfsh": {
+		"Description": "Floating point, convert signed half to fp",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD3",
+				"desc": "0xD",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "r16", "regm2"]
+				]
+			}
+		]
+	},
+	"fcvfsw": {
+		"Description": "Floating point, convert signed word to fp",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD3",
+				"desc": "0xE",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "r32", "regm2"]
+				]
+			}
+		]
+	},
+	"fcvfw": {
+		"Description": "Floating point, convert integer word to fp",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD3",
+				"desc": "0xB",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "r32", "regm2"]
+				]
+			}
+		]
+	},
+	"fcvtb": {
+		"Description": "Floating point, convert fp to integer byte",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD3",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fcvth": {
+		"Description": "Floating point, convert fp to integer half",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD3",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fcvtsb": {
+		"Description": "Floating point, convert fp to signed byte",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD3",
+				"desc": "0x6",
+				"args": [
+					["dest", "r8", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fcvtsh": {
+		"Description": "Floating point, convert fp to signed half",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD3",
+				"desc": "0x7",
+				"args": [
+					["dest", "r16", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fcvtsw": {
+		"Description": "Floating point, convert fp to signed word",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD3",
+				"desc": "0x8",
+				"args": [
+					["dest", "r32", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fcvtw": {
+		"Description": "Floating point, convert fp to integer word",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD3",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fdec": {
+		"Description": "Floating point, decrements operand",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD1",
+				"desc": "0xE",
+				"args": [
+					["operand", "fpr", "regm"]
+				]
+			}
+		]
+	},
+	"fdiv": {
+		"Description": "Floating point, divides opr1 by opr2 to dest",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD1",
+				"desc": "0x9",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["opr1", "fpr", "regm2"],
+					["opr2", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"fdsbb": {
+		"Description": "Floating point, divides opr1 by opr2, and subtracts opr3 with borrow to dest",
+		"cycles": 1,
+		"flags": {"BF": 0},
+		"encode": [
+			{
+				"opcode": "0xD1",
+				"desc": "0xA",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["opr1", "fpr", "regm2"],
+					["opr2", "fpr", "rego2"],
+					["opr3", "fpr", "rego3"]
+				]
+			}
+		]
+	},
+	"fdsub": {
+		"Description": "Floating point, divides opr1 by opr2, and subtracts opr3 to dest",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD1",
+				"desc": "0xB",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["opr1", "fpr", "regm2"],
+					["opr2", "fpr", "rego2"],
+					["opr3", "fpr", "rego3"]
+				]
+			}
+		]
+	},
+	"ffloor": {
+		"Description": "Floating point, round down operand to nearest integer",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD3",
+				"desc": "0x0",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"finc": {
+		"Description": "Floating point, increments operand",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD1",
+				"desc": "0xD",
+				"args": [
+					["operand", "fpr", "regm"]
+				]
+			}
+		]
+	},
+	"flog": {
+		"Description": "Floating point, calculates natural logarithm",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD2",
+				"desc": "0xD",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"flog2": {
+		"Description": "Floating point, calculates logarithm of base 2",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD2",
+				"desc": "0xE",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"flog2x": {
+		"Description": "Floating point, calculates logarithm of base 2 and multiplies by x",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD2",
+				"desc": "0xF",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "fpr", "regm2"],
+					["x", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"fmadc": {
+		"Description": "Floating point, multiplies opr1 with opr2, and adds opr3 with carry to dest",
+		"cycles": 1,
+		"flags": {"CF": 0},
+		"encode": [
+			{
+				"opcode": "0xD1",
+				"desc": "0x7",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["opr1", "fpr", "regm2"],
+					["opr2", "fpr", "rego2"],
+					["opr3", "fpr", "rego3"]
+				]
+			}
+		]
+	},
+	"fmadd": {
+		"Description": "Floating point, multiplies opr1 with opr2, and adds opr3 to dest",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD1",
+				"desc": "0x8",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["opr1", "fpr", "regm2"],
+					["opr2", "fpr", "rego2"],
+					["opr3", "fpr", "rego3"]
+				]
+			}
+		]
+	},
+	"fmod": {
+		"Description": "Floating point, gets remainder from division of opr1 by opr2 and stores in dest",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD1",
+				"desc": "0xC",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["opr1", "fpr", "regm2"],
+					["opr2", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"fmul": {
+		"Description": "Floating point, multiplies opr1 with opr2 to dest",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD1",
+				"desc": "0x6",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["opr1", "fpr", "regm2"],
+					["opr2", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"fmvd": {
+		"Description": "Floating point, moves raw data of double precision",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD0",
+				"desc": "0x5",
+				"args": [
+					["desthi", "r32", "regm2"],
+					["destlo", "r32", "regm1"],
+					["source", "fpr", "rego2"]
+				]
+			},
+			{
+				"opcode": "0xD0",
+				"desc": "0x6",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["sourcehi", "r32", "rego2"],
+					["sourcelo", "r32", "regm2"]
+				]
+			},
+			{
+				"opcode": "0xD0",
+				"desc": "0x7",
+				"args": [
+					["dest", "mem64", "mem"],
+					["source", "fpr", "regm"]
+				]
+			},
+			{
+				"opcode": "0xD0",
+				"desc": "0x8",
+				"args": [
+					["dest", "fpr", "regm"],
+					["source", "mem64", "mem"]
+				]
+			}
+		]
+	},
+	"fmvs": {
+		"Description": "Floating point, moves raw data of single precision",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD0",
+				"desc": "0x0",
+				"args": [
+					["dest", "r32", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			},
+			{
+				"opcode": "0xD0",
+				"desc": "0x1",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "r32", "regm2"]
+				]
+			},
+			{
+				"opcode": "0xD0",
+				"desc": "0x2",
+				"args": [
+					["dest", "fpr", "regm"],
+					["source", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0xD0",
+				"desc": "0x3",
+				"args": [
+					["dest", "mem32", "mem"],
+					["source", "fpr", "regm"]
+				]
+			},
+			{
+				"opcode": "0xD0",
+				"desc": "0x4",
+				"args": [
+					["dest", "fpr", "regm"],
+					["source", "mem32", "mem"]
+				]
+			}
+		]
+	},
+	"fneg": {
+		"Description": "Floating point, inverts signal of operand",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD1",
+				"desc": "0xF",
+				"args": [
+					["operand", "fpr", "regm"]
+				]
+			}
+		]
+	},
+	"fpopd": {
+		"Description": "Floating point, pops double precision raw data from stack",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD0",
+				"desc": "0xA",
+				"args": [
+					["dest", "fpr", "regm"]
+				]
+			}
+		]
+	},
+	"fpops": {
+		"Description": "Floating point, pops single precision raw data from stack",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD0",
+				"desc": "0x9",
+				"args": [
+					["dest", "fpr", "regm"]
+				]
+			}
+		]
+	},
+	"fpshd": {
+		"Description": "Floating point, pushes double precision raw data to stack",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD0",
+				"desc": "0xC",
+				"args": [
+					["source", "fpr", "regm"]
+				]
+			}
+		]
+	},
+	"fpshs": {
+		"Description": "Floating point, pushes single precision raw data to stack",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD0",
+				"desc": "0xB",
+				"args": [
+					["source", "fpr", "regm"]
+				]
+			}
+		]
+	},
+	"fround": {
+		"Description": "Floating point, round operand to most nearest integer",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD3",
+				"desc": "0x2",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fsbb": {
+		"Description": "Floating point, subtracts opr2 from opr1 to dest with borrow",
+		"cycles": 1,
+		"flags": {"BF": 0},
+		"encode": [
+			{
+				"opcode": "0xD1",
+				"desc": "0x3",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["opr1", "fpr", "regm2"],
+					["opr2", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"fsin": {
+		"Description": "Floating point, calculates sine of fp",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD2",
+				"desc": "0x3",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fsqrt": {
+		"Description": "Floating point, calculates square root of operand",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD2",
+				"desc": "0xA",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fsub": {
+		"Description": "Floating point, subtracts opr2 from opr1 to dest",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD1",
+				"desc": "0x4",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["opr1", "fpr", "regm2"],
+					["opr2", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"ftan": {
+		"Description": "Floating point, calculates tangent of fp",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD2",
+				"desc": "0x5",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"ftrunc": {
+		"Description": "Floating point, truncates value of fp, from double precision to single",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD3",
+				"desc": "0xF",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["source", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fxam": {
+		"Description": "Floating point, examinates the content of fp register, stores zero if is equal to zero, 1 if normal, 2 if subnormal, 3 if not-a-number or 4 if infinite to dest",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD2",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm1"],
+					["operand", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fsteq": {
+		"description": "Floating point, sets the register value to 1 if reg1 is equal to reg2, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD7",
+				"desc": "0x0",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "fpr", "regm2"],
+					["reg2", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"fsteqz": {
+		"description": "Floating point, sets the register value to 1 if operand is equal to zero, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD7",
+				"desc": "0x6",
+				"args": [
+					["dest", "r32", "regm1"],
+					["operand", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fstreqz": {
+		"description": "Floating point, sets the register value to 1 if reg1 is nearly rounded by reg2 equal to zero, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD7",
+				"desc": "0x7",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "fpr", "regm2"],
+					["reg2", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"fstes": {
+		"description": "Floating point, sets the register value to 1 if operand signal is equivalent to negative flag, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD7",
+				"desc": "0xE",
+				"args": [
+					["dest", "r32", "regm1"],
+					["operand", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fstge": {
+		"description": "Floating point, sets the register value to 1 if reg1 is greater or equal to reg2, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD7",
+				"desc": "0x4",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "fpr", "regm2"],
+					["reg2", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"fstgez": {
+		"description": "Floating point, sets the register value to 1 if operand is greater or equal to zero, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD7",
+				"desc": "0xC",
+				"args": [
+					["dest", "r32", "regm1"],
+					["operand", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fstgt": {
+		"description": "Floating point, sets the register value to 1 if reg1 is greater than reg2, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD7",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "fpr", "regm2"],
+					["reg2", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"fstgtz": {
+		"description": "Floating point, sets the register value to 1 if operand is greater than zero, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD7",
+				"desc": "0xA",
+				"args": [
+					["dest", "r32", "regm1"],
+					["operand", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fstle": {
+		"description": "Floating point, sets the register value to 1 if reg1 is lesser or equal to reg2, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD7",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "fpr", "regm2"],
+					["reg2", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"fstlez": {
+		"description": "Floating point, sets the register value to 1 if operand is lesser or equal to zero, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD7",
+				"desc": "0xD",
+				"args": [
+					["dest", "r32", "regm1"],
+					["operand", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fstlt": {
+		"description": "Floating point, sets the register value to 1 if reg1 is lesser than reg2, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD7",
+				"desc": "0x3",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "fpr", "regm2"],
+					["reg2", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"fstltz": {
+		"description": "Floating point, sets the register value to 1 if operand is greater than zero, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD7",
+				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm1"],
+					["operand", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fstne": {
+		"description": "Floating point, sets the register value to 1 if reg1 is not equal to reg2, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD7",
+				"desc": "0x1",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "fpr", "regm2"],
+					["reg2", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"fstnez": {
+		"description": "Floating point, sets the register value to 1 if operand is not equal to zero, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD7",
+				"desc": "0x8",
+				"args": [
+					["dest", "r32", "regm1"],
+					["operand", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fstns": {
+		"description": "Floating point, sets the register value to 1 if operand signal is not equivalent to negative flag, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD7",
+				"desc": "0xF",
+				"args": [
+					["dest", "r32", "regm1"],
+					["operand", "fpr", "regm2"]
+				]
+			}
+		]
+	},
+	"fstrnez": {
+		"description": "Floating point, sets the register value to 1 if reg1 is nearly rounded by reg2 not equal to zero, otherwise sets to zero",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD7",
+				"desc": "0x9",
+				"args": [
+					["dest", "r32", "regm1"],
+					["reg1", "fpr", "regm2"],
+					["reg2", "fpr", "rego2"]
+				]
+			}
+		]
+	},
+	"fsubi": {
+		"Description": "Floating point, subtracts integer opr2 from opr1 to dest",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xD1",
+				"desc": "0x5",
+				"args": [
+					["dest", "fpr", "regm1"],
+					["opr1", "fpr", "regm2"],
+					["opr2", "r32", "rego2"]
+				]
+			}
+		]
+	},
+	"halt": {
+		"description": "Stops the processor",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xF8",
+				"args": []
+			}
+		]
+	},
+	"hmul": {
+		"description": "Multiplies src value to dest and stores high product part",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0x94",
+				"args": [
+					["dest", "r32", "regm1"],
+					["high", "r32", "rego1"],
+					["src", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x95",
+				"args": [
+					["dest", "r32", "regm"],
+					["high", "r32", "rego"],
+					["src", "mem32", "mem"]
+				]
+			}
+		]
+	},
+	"hsmul": {
+		"description": "Multiplies with sign extension to 64-bit src value to dest and stores high product part",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0x96",
+				"args": [
+					["dest", "r32", "regm1"],
+					["high", "r32", "rego1"],
+					["src", "r32", "rego2"]
+				]
+			},
+			{
+				"opcode": "0x97",
+				"args": [
+					["dest", "r32", "regm"],
+					["high", "r32", "rego"],
+					["src", "mem32", "mem"]
+				]
+			}
+		]
+	},
+	"in": {
+		"description": "Reads value from device port to register",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xF0",
+				"args": [
+					["dest", "r8", "regm"],
+					["port", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0xF1",
+				"args": [
+					["dest", "r16", "regm"],
+					["port", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0xF2",
+				"args": [
+					["dest", "r32", "regm"],
+					["port", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0xF3",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["port", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xF3",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["port", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xF3",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["port", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xF3",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["port", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xF3",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["port", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xF3",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["port", "imm16", "mv16"]
+				]
+			}
+		]
+	},
+	"inc": {
+		"description": "Increments value in operand",
+		"cycles": 1,
+		"flags": {"VF":2, "ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xE0",
+				"args": [
+					["operand", "r8", "regm"]
+				]
+			},
+			{
+				"opcode": "0xE1",
+				"args": [
+					["operand", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0xE2",
+				"args": [
+					["operand", "r32", "regm"]
 				]
 			}
 		]
@@ -848,6 +2852,362 @@
 			}
 		]
 	},
+	"lrot": {
+		"description": "Left rotate dest operand by source",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xC8",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0xC9",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0xCA",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0xCB",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xCB",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xCB",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xCB",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xCB",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0xCB",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem32", "mem"]
+				]
+			},
+			{
+				"opcode": "0xCB",
+				"desc": "0x9",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xCB",
+				"desc": "0xA",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xCB",
+				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem16", "mem"]
+				]
+			}
+		]
+	},
+	"lsh": {
+		"description": "Left shift dest operand by source",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xC0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0xC1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0xC2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0xC3",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xC3",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xC3",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xC3",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xC3",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0xC3",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem32", "mem"]
+				]
+			},
+			{
+				"opcode": "0xC3",
+				"desc": "0x9",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xC3",
+				"desc": "0xA",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xC3",
+				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem16", "mem"]
+				]
+			}
+		]
+	},
+	"mod": {
+		"description": "Gets the division remainder from src value to dest",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xA0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0xA1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0xA2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0xA3",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xA3",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xA3",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0xA3",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xA3",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0xA3",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem32", "mem"]
+				]
+			},
+			{
+				"opcode": "0xA3",
+				"desc": "0x6",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xA3",
+				"desc": "0x7",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xA3",
+				"desc": "0x8",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xA3",
+				"desc": "0x9",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xA3",
+				"desc": "0xA",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xA3",
+				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0xA3",
+				"desc": "0xC",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xA3",
+				"desc": "0xD",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xA3",
+				"desc": "0xE",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xA3",
+				"desc": "0xF",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems16", "mv16"]
+				]
+			}
+		]
+	},
 	"mov": {
 		"description": "Moves a value from a operand to another",
 		"cycles": 1,
@@ -1013,6 +3373,162 @@
 				"args": [
 					["dest", "mem32", "mem"],
 					["source", "r32", "regm"]
+				]
+			}
+		]
+	},
+	"mul": {
+		"description": "Multiplies src value to dest",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0x90",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0x91",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0x92",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0x93",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x93",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x93",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0x93",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x93",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0x93",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem32", "mem"]
+				]
+			},
+			{
+				"opcode": "0x93",
+				"desc": "0x6",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x93",
+				"desc": "0x7",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x93",
+				"desc": "0x8",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x93",
+				"desc": "0x9",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x93",
+				"desc": "0xA",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x93",
+				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0x93",
+				"desc": "0xC",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x93",
+				"desc": "0xD",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x93",
+				"desc": "0xE",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x93",
+				"desc": "0xF",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems16", "mv16"]
 				]
 			}
 		]
@@ -1785,6 +4301,31 @@
 			}
 		]
 	},
+	"neg": {
+		"description": "Inverts value signal in operand",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xE8",
+				"args": [
+					["operand", "r8", "regm"]
+				]
+			},
+			{
+				"opcode": "0xE9",
+				"args": [
+					["operand", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0xEA",
+				"args": [
+					["operand", "r32", "regm"]
+				]
+			}
+		]
+	},
 	"nop": {
 		"description": "Don't do any operation",
 		"cycles": 1,
@@ -1793,6 +4334,263 @@
 			{
 				"opcode": "0x00",
 				"args": []
+			}
+		]
+	},
+	"not": {
+		"description": "Inverts value bits in operand",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xEC",
+				"args": [
+					["operand", "r8", "regm"]
+				]
+			},
+			{
+				"opcode": "0xED",
+				"args": [
+					["operand", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0xEE",
+				"args": [
+					["operand", "r32", "regm"]
+				]
+			}
+		]
+	},
+	"out": {
+		"description": "Writes register value to device port",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xF4",
+				"args": [
+					["port", "r16", "regm"],
+					["source", "r8", "regm"]
+				]
+			},
+			{
+				"opcode": "0xF5",
+				"args": [
+					["port", "r16", "regm"],
+					["source", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0xF6",
+				"args": [
+					["port", "r16", "regm"],
+					["source", "r32", "regm"]
+				]
+			},
+			{
+				"opcode": "0xF7",
+				"desc": "0x0",
+				"args": [
+					["port", "imm8", "mv8"],
+					["source", "r8", "regm"]
+				]
+			},
+			{
+				"opcode": "0xF7",
+				"desc": "0x1",
+				"args": [
+					["port", "imm8", "mv8"],
+					["source", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0xF7",
+				"desc": "0x2",
+				"args": [
+					["port", "imm8", "mv8"],
+					["source", "r32", "regm"]
+				]
+			},
+			{
+				"opcode": "0xF7",
+				"desc": "0x3",
+				"args": [
+					["port", "imm16", "mv16"],
+					["source", "r8", "regm"]
+				]
+			},
+			{
+				"opcode": "0xF7",
+				"desc": "0x4",
+				"args": [
+					["port", "imm16", "mv16"],
+					["source", "r16", "regm"]
+				]
+			},
+			{
+				"opcode": "0xF7",
+				"desc": "0x5",
+				"args": [
+					["port", "imm16", "mv16"],
+					["source", "r32", "regm"]
+				]
+			}
+		]
+	},
+	"or": {
+		"description": "Do bitwise operation 'or' between src and dest",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xB4",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0xB5",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0xB6",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0xB7",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xB7",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xB7",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0xB7",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xB7",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0xB7",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem32", "mem"]
+				]
+			},
+			{
+				"opcode": "0xB7",
+				"desc": "0x6",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xB7",
+				"desc": "0x7",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xB7",
+				"desc": "0x8",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xB7",
+				"desc": "0x9",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xB7",
+				"desc": "0xA",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xB7",
+				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0xB7",
+				"desc": "0xC",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xB7",
+				"desc": "0xD",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xB7",
+				"desc": "0xE",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xB7",
+				"desc": "0xF",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems16", "mv16"]
+				]
 			}
 		]
 	},
@@ -1972,6 +4770,206 @@
 			}
 		]
 	},
+	"rrot": {
+		"description": "Right rotate dest operand by source",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xCC",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0xCD",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0xCE",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0xCF",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xCF",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xCF",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xCF",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xCF",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0xCF",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem32", "mem"]
+				]
+			},
+			{
+				"opcode": "0xC3",
+				"desc": "0x9",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xCF",
+				"desc": "0xA",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xCF",
+				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem16", "mem"]
+				]
+			}
+		]
+	},
+	"rsh": {
+		"description": "Right shift dest operand by source",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xC4",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0xC5",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0xC6",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0xC7",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xC7",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xC7",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xC7",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xC7",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0xC7",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem32", "mem"]
+				]
+			},
+			{
+				"opcode": "0xC7",
+				"desc": "0x9",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xC7",
+				"desc": "0xA",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xC7",
+				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem16", "mem"]
+				]
+			}
+		]
+	},
 	"sbb": {
 		"description": "Subtracts src value with borrow from dest",
 		"cycles": 1,
@@ -2120,6 +5118,162 @@
 			},
 			{
 				"opcode": "0x8B",
+				"desc": "0xF",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems16", "mv16"]
+				]
+			}
+		]
+	},
+	"sdiv": {
+		"description": "Divides with sign extension src value to dest",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0x9C",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0x9D",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0x9E",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0x9F",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x9F",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x9F",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0x9F",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x9F",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0x9F",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem32", "mem"]
+				]
+			},
+			{
+				"opcode": "0x9F",
+				"desc": "0x6",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x9F",
+				"desc": "0x7",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x9F",
+				"desc": "0x8",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x9F",
+				"desc": "0x9",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x9F",
+				"desc": "0xA",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x9F",
+				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0x9F",
+				"desc": "0xC",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x9F",
+				"desc": "0xD",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x9F",
+				"desc": "0xE",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0x9F",
 				"desc": "0xF",
 				"args": [
 					["dest", "r32", "regm"],
@@ -2289,6 +5443,162 @@
 			}
 		]
 	},
+	"smod": {
+		"description": "Gets the division remainder with sign extension from src value to dest",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xA4",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0xA5",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0xA6",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0xA7",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xA7",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xA7",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0xA7",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xA7",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0xA7",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem32", "mem"]
+				]
+			},
+			{
+				"opcode": "0xA7",
+				"desc": "0x6",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xA7",
+				"desc": "0x7",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xA7",
+				"desc": "0x8",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xA7",
+				"desc": "0x9",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xA7",
+				"desc": "0xA",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xA7",
+				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0xA7",
+				"desc": "0xC",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xA7",
+				"desc": "0xD",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xA7",
+				"desc": "0xE",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xA7",
+				"desc": "0xF",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems16", "mv16"]
+				]
+			}
+		]
+	},
 	"stab": {
 		"description": "Sets the register value to 1 if reg1 is above than reg2, otherwise sets to zero",
 		"cycles": 1,
@@ -2443,6 +5753,17 @@
 					["dest", "r32", "regm1"],
 					["reg1", "r32", "regm2"]
 				]
+			}
+		]
+	},
+	"stop": {
+		"description": "Stops the processor and sends signal to stop the entire system",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xFA",
+				"args": []
 			}
 		]
 	},
@@ -2750,6 +6071,17 @@
 			}
 		]
 	},
+	"wait": {
+		"description": "Wait for interruption signal",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0xF9",
+				"args": []
+			}
+		]
+	},
 	"xbch": {
 		"Description": "Saves current program address and exchanges register value by program address",
 		"cycles": 1,
@@ -2812,6 +6144,14 @@
 					["opr1", "mem32", "mem"],
 					["opr2", "r32", "regm"]
 				]
+			},
+			{
+				"opcode": "0xD0",
+				"desc": "0xD",
+				"args": [
+					["opr1", "fpr", "regm1"],
+					["opr2", "fpr", "regm2"]
+				]
 			}
 		]
 	},
@@ -2824,6 +6164,162 @@
 				"opcode": "0x27",
 				"args": [
 					["operand", "r32", "regm"]
+				]
+			}
+		]
+	},
+	"xor": {
+		"description": "Do bitwise operation 'xor' between src and dest",
+		"cycles": 1,
+		"flags": {"ZF":2, "NF":2, "OF":2},
+		"encode": [
+			{
+				"opcode": "0xB8",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "r8", "rego"]
+				]
+			},
+			{
+				"opcode": "0xB9",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "r16", "rego"]
+				]
+			},
+			{
+				"opcode": "0xBA",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "r32", "rego"]
+				]
+			},
+			{
+				"opcode": "0xBB",
+				"desc": "0x0",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xBB",
+				"desc": "0x1",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xBB",
+				"desc": "0x2",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm32", "mv32"]
+				]
+			},
+			{
+				"opcode": "0xBB",
+				"desc": "0x3",
+				"args": [
+					["dest", "r8", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xBB",
+				"desc": "0x4",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0xBB",
+				"desc": "0x5",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem32", "mem"]
+				]
+			},
+			{
+				"opcode": "0xBB",
+				"desc": "0x6",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xBB",
+				"desc": "0x7",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xBB",
+				"desc": "0x8",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xBB",
+				"desc": "0x9",
+				"args": [
+					["dest", "r16", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xBB",
+				"desc": "0xA",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0xBB",
+				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mem16", "mem"]
+				]
+			},
+			{
+				"opcode": "0xBB",
+				"desc": "0xC",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xBB",
+				"desc": "0xD",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "imms16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0xBB",
+				"desc": "0xE",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xBB",
+				"desc": "0xF",
+				"args": [
+					["dest", "r32", "regm"],
+					["src", "mems16", "mv16"]
 				]
 			}
 		]

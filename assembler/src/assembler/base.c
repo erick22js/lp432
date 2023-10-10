@@ -5,9 +5,11 @@ DataName data_names[] = {
 	{"Byte", TYPE_R8, TYPE_IMM8, TYPE_MEM8},
 	{"Half", TYPE_R16, TYPE_IMM16, TYPE_MEM16},
 	{"Word", TYPE_R32, TYPE_IMM32, TYPE_MEM32},
+	{"Dword", TYPE_VOID, TYPE_VOID, TYPE_MEM64},
 	{"SByte", TYPE_R8, TYPE_IMMS8, TYPE_MEMS8},
 	{"SHalf", TYPE_R16, TYPE_IMMS16, TYPE_MEMS16},
 	{"SWord", TYPE_R32, TYPE_IMMS32, TYPE_MEMS32},
+	{"SDword", TYPE_VOID, TYPE_VOID, TYPE_MEMS64},
 };
 const int data_names_length = sizeof(data_names)/sizeof(DataName);
 
@@ -78,6 +80,27 @@ Ist *findInstructionByName(const char* name){
 	for (int i = 0; i<isa_length; i++){
 		if (strcmp(name, isa[i].mne) == 0){
 			return &isa[i];
+		}
+	}
+	return null;
+}
+
+// Prefix Struct
+Prefix prefix[] = {
+	{ "cs", 0xEB },
+	{ "ss", 0xEF },
+	{ "as", 0xFB },
+	{ "bs", 0xFC },
+	{ "es", 0xFD },
+	{ "fs", 0xFE },
+	{ "gs", 0xFF },
+};
+const int prefix_length = sizeof(prefix)/sizeof(Prefix);
+
+Prefix *findPrefixByName(const char* name){
+	for (int i = 0; i<prefix_length; i++){
+		if (strcmp(prefix[i].name, name)==0){
+			return &prefix[i];
 		}
 	}
 	return null;

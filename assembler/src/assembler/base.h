@@ -15,8 +15,8 @@ typedef enum{
 	TYPE_FPR, TYPE_IR,
 	TYPE_IMM8, TYPE_IMM16, TYPE_IMM32, TYPE_IMM,
 	TYPE_IMMS8, TYPE_IMMS16, TYPE_IMMS32, TYPE_IMMS,
-	TYPE_MEM8, TYPE_MEM16, TYPE_MEM32, TYPE_MEM,
-	TYPE_MEMS8, TYPE_MEMS16, TYPE_MEMS32, TYPE_MEMS,
+	TYPE_MEM8, TYPE_MEM16, TYPE_MEM32, TYPE_MEM64, TYPE_MEM,
+	TYPE_MEMS8, TYPE_MEMS16, TYPE_MEMS32, TYPE_MEMS64, TYPE_MEMS,
 }DataType;
 
 // Encoding mode of Data
@@ -25,6 +25,7 @@ typedef enum{
 	ENCODE_REGM, ENCODE_REGO, ENCODE_DESC,
 	ENCODE_REGM1, ENCODE_REGO1, ENCODE_DESC1,
 	ENCODE_REGM2, ENCODE_REGO2, ENCODE_DESC2,
+	ENCODE_REGM3, ENCODE_REGO3, ENCODE_DESC3,
 	ENCODE_MEM,
 	ENCODE_MV8, ENCODE_MV16, ENCODE_MV32,
 }DataEncode;
@@ -123,6 +124,16 @@ extern Ist isa[];
 extern const int isa_length;
 
 Ist *findInstructionByName(const char* name);
+
+// Prefix Struct
+typedef struct{
+	const char* name; // The prefix name
+	uint8 code; // Code of prefix
+}Prefix;
+extern Prefix prefix[];
+extern const int prefix_length;
+
+Prefix *findPrefixByName(const char* name);
 
 
 // Operand Struct

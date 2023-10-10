@@ -2,5 +2,5 @@
 .include "include.asm"
 teste:
 	adc gl, bl
-	adc eax, @+teste
+	cs.adc eax, @+teste
 ja.eqz eax, teste

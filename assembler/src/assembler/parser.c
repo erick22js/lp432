@@ -57,10 +57,12 @@ int encodeInstruction(Enc *encode, Arg* args, uint8 cond_desc) {
 	// Resulting encoding
 	bool has_os1 = false;
 	bool has_os2 = false;
+	bool has_os3 = false;
 	bool has_ns = false;
 	bool has_mv = false;
 	uint8 os1 = 0x0;
 	uint8 os2 = 0x0;
+	uint8 os3 = 0x0;
 	MemAccess mem;
 	uint32 mv = 0x0;
 	uint8 mv_size = 32;
@@ -91,6 +93,16 @@ int encodeInstruction(Enc *encode, Arg* args, uint8 cond_desc) {
 			case ENCODE_REGO2: {
 				has_os2 = true;
 				os2 = (os2&0x0F) | ((arg->value.code&0xF) << 4);
+			}
+			break;
+			case ENCODE_REGM3: {
+				has_os3 = true;
+				os3 = (os3&0xF0) | (arg->value.code&0x0F);
+			}
+			break;
+			case ENCODE_REGO3: {
+				has_os3 = true;
+				os3 = (os3&0x0F) | ((arg->value.code&0xF) << 4);
 			}
 			break;
 			case ENCODE_MEM: {
@@ -136,6 +148,9 @@ int encodeInstruction(Enc *encode, Arg* args, uint8 cond_desc) {
 		}
 		if (has_os2){
 			out8(os2);
+			if (has_os3){
+				out8(os3);
+			}
 		}
 	}
 	if (has_ns){
@@ -849,6 +864,7 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 		else if (tk.kind == TOKEN_IDENTIFIER){
 			// Identify if is a instruction mnemonic
 			Ist *instruction = null;
+			Prefix *prefix = null;
 			if ((instruction = findInstructionByName(tk.value.string))){
 				// Fetch all the arguments given in instruction
 				Enc *matched_encode = null;
@@ -947,6 +963,19 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 					throwError(ERROR_UNKNOWN);
 					log("NOT MATCHED!\n");
 				}
+			}
+			// May be a prefix declaration
+			else if ((prefix = findPrefixByName(tk.value.string))){
+				tryCatchAndThrow(
+					tkrFetchToken(&tk)
+				);
+				if (!tkIsSymbol(tk, '.')){
+					// TODO: Error => Prefix may be followed by a dot marker
+					throwError(ERROR_UNKNOWN);
+					log("PREFIX MUST BE FOLLOWED BY A DOT MARKER!\n");
+				}
+				out8(prefix->code);
+				continue;
 			}
 			// Otherwise, must be a label declaration
 			else {
