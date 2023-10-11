@@ -1,5 +1,6 @@
 #include "assembler.h"
 #include "parser.h"
+#include "symbols.h"
 
 
 /*
@@ -7,6 +8,7 @@
 */
 
 int asmAssembly(Lexer*(*opener)(const char*), const char* src, uint8** bin, uint32* bin_size) {
+	scopeReset();
 	opener(src);
 	int err = parserParse(true, bin, bin_size);
 	if (err){
@@ -14,6 +16,7 @@ int asmAssembly(Lexer*(*opener)(const char*), const char* src, uint8** bin, uint
 		return err;
 	}
 
+	scopeReset();
 	opener(src);
 	err = parserParse(false, bin, bin_size);
 	if (err){

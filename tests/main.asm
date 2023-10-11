@@ -1,6 +1,14 @@
-.adr 4
+.byte 10, 20
 .include "include.asm"
-teste:
-	adc gl, bl
-	cs.adc eax, @+teste
-ja.eqz eax, teste
+
+.scope
+	.byte 30, 40 
+	teste:
+		.byte 50, 60
+		cs.adc eax, @+teste2
+	teste2:
+.endscope
+.byte 70, 80
+etiqueta:
+ja.eqz eax, etiqueta
+.byte 90, 100

@@ -8,19 +8,42 @@
 	Symbols Structures
 */
 
+extern char sym_buffer[];
+extern int sym_top;
+
 // Label
-typedef struct{
+struct SymLabel;
+typedef struct SymLabel SymLabel;
+struct SymLabel{
 	const char* name;
 	Value value;
-}SymLabel;
+	SymLabel *next;
+};
 
-extern SymLabel sym_labels[];
-extern int sym_labels_top;
-
-extern SymLabel *findSymLabel(const char* name);
 extern void storeSymLabel(const char* name, Value value);
 
+
+// Scope
+struct Scope;
+typedef struct Scope Scope;
+struct Scope{
+	const char* name;
+	SymLabel *first_label;
+	Scope *parent;
+	Scope *child;
+	Scope *ite;
+	Scope *next;
+};
+extern Scope* scope_cur;
+extern Scope* scope_first;
+
+extern void scopeReset();
+extern void scopeEnter();
+extern bool scopeLeave();
+
+
 // General
+extern SymLabel *findSymLabel(Scope *cur_scope, const char* name);
 extern Value *findSymbol(const char* name);
 
 #endif

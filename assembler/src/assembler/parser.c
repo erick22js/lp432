@@ -239,9 +239,13 @@ int parserExpUnary(Value *out){
 		if (val){
 			*out = *val;
 		}
-		else{
+		else if(!parser.phase_one){
 			// TODO: Error => Symbol not found!
 			throwError(ERROR_UNKNOWN);
+		}
+		else {
+			out->type = TYPE_IMM;
+			out->value.integer = 0;
 		}
 	}
 	else if (tkIsSymbol(tk, '@') || tkIsSymbol(tk, '$')){
@@ -1015,6 +1019,12 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 				Value val;
 				parserExpression(&val);
 				parser.pc = parser.bc = val.value.integer;
+			}
+			else if (strcmp(cmd, "scope")==0){
+				scopeEnter();
+			}
+			else if (strcmp(cmd, "endscope")==0){
+				scopeLeave();
 			}
 			else if ((strcmp(cmd, "byte")==0) || (strcmp(cmd, "half")==0) || (strcmp(cmd, "word")==0)){
 				int type = (strcmp(cmd, "byte")==0)? 8: (strcmp(cmd, "half")==0)? 16: 32;

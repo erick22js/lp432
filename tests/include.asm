@@ -1,1 +1,2 @@
-adc dl, al
+zotro:
+adc dl, teste2
