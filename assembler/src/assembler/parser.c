@@ -342,6 +342,10 @@ int parserExpUnary(Value *out){
 				case TYPE_IMMS8: { out->value.integer = (sint32)((sint8)out->value.integer); } break;
 				case TYPE_IMMS16: { out->value.integer = (sint32)((sint16)out->value.integer); } break;
 				case TYPE_IMMS32: { out->value.integer = (sint32)((sint32)out->value.integer); } break;
+				default: {
+					// TODO: Error => Invalid cast type
+					throwError(ERROR_UNKNOWN);
+				}
 			}
 			out->type = data_type->type_imm;
 		}
@@ -620,16 +624,18 @@ bool matchTypes(DataType base, DataType given){
 	return base == given;
 }
 
-int parserFetchArgs(Arg* args, int* count){
+int parserFetchArgs(Arg* args, int* count, int limit){
 	createSeek();
 	Token tk = {0};
 	tryCatchAndThrow(
 		tkrFetchToken(&tk)
 	);
 
-	while (tk.kind != TOKEN_NEW_LINE && tk.kind != TOKEN_END_OF_FILE && (*count < 4)){
+	while (tk.kind != TOKEN_NEW_LINE && tk.kind != TOKEN_END_OF_FILE && (*count < limit)){
 		// The argument is a register
 		Reg *reg = null;
+		SymArg *arg = null;
+
 		if (tk.kind == TOKEN_IDENTIFIER && (reg = findRegByName(tk.value.string))){
 			args[*count].type = reg->type;
 			args[*count].value.code = reg->code;
@@ -792,6 +798,11 @@ int parserFetchArgs(Arg* args, int* count){
 				throwError(ERROR_UNKNOWN);
 			}
 		}
+		// The argument is a parameter reference
+		else if (tk.kind == TOKEN_IDENTIFIER && (arg = findSymArg(tk.value.string))) {
+			args[*count].type = arg->type;
+			args[*count].value = arg->value.value;
+		}
 		// The argument is a immediate literal
 		else {
 			restoreSeek();
@@ -855,6 +866,9 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 		
 		// Lexer has ended
 		if (tk.kind == TOKEN_END_OF_FILE){
+			if (lexerCurrent()->status){
+				scopeLeave();
+			}
 			if (!lexerClose()){
 				break;
 			}
@@ -869,6 +883,7 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 			// Identify if is a instruction mnemonic
 			Ist *instruction = null;
 			Prefix *prefix = null;
+			SymMacro *macro = null;
 			if ((instruction = findInstructionByName(tk.value.string))){
 				// Fetch all the arguments given in instruction
 				Enc *matched_encode = null;
@@ -894,11 +909,10 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 					restoreSeek();
 				}
 
-
 				Arg args[4];
 				int args_count = 0;
 				tryCatchAndThrow(
-					parserFetchArgs(args, &args_count)
+					parserFetchArgs(args, &args_count, 4)
 				);
 				log("arguments: %d\n", args_count);
 
@@ -981,6 +995,52 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 				out8(prefix->code);
 				continue;
 			}
+			// Otherwise, may be a macro invokation
+			else if ((macro = findMacro(tk.value.string))){
+				Arg args[4];
+				int args_count = 0;
+				tryCatchAndThrow(
+					parserFetchArgs(args, &args_count, 4)
+				);
+				log("arguments: %d\n", args_count);
+				scopeEnter();
+
+				// The number of parameters and the arguments must match
+				if (macro->params_len != args_count){
+					// TODO: Error => Macro invoked with wrong number of arguments
+					throwError(ERROR_UNKNOWN);
+				}
+
+				// The parser must detect no any character left in line
+				int offset = tkrConsumeLine();
+				if (offset != (-1)){
+					// TODO: Error => Expected end of line
+					throwError(ERROR_UNKNOWN);
+					log("ERROR: Has something more left in line!\n");
+				}
+
+				// Compares with each parameter to verify wich the variant is acceptable
+				for (int ai = 0; ai<macro->params_len; ai++){
+					Arg *arg = &args[ai];
+
+					if (!matchTypes(macro->params[ai].type, arg->type)){
+						// TODO: Error => Argument in macro does not match the param
+						throwError(ERROR_UNKNOWN);
+					}
+					else {
+						Value value;
+						value.type = macro->params[ai].type;
+						value.value = arg->value;
+						storeSymArg(macro->params[ai].name, value);
+					}
+				}
+
+				lexerOpenFile(macro->src);
+				lexerSeekSet(macro->start);
+				lexerCurrent()->limit = macro->end;
+				lexerCurrent()->status = 1;
+				continue;
+			}
 			// Otherwise, must be a label declaration
 			else {
 				const char* name = tk.value.string;
@@ -997,10 +1057,9 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 						// TODO: Error => Already declarated symbol with name
 						throwError(ERROR_UNKNOWN);
 					}
+					Value v = {.type = TYPE_IMM, .value = {.integer = parser.pc}};
+					storeSymLabel(name, v);
 				}
-				
-				Value v = {.type = TYPE_IMM, .value = {.integer = parser.pc}};
-				storeSymLabel(name, v);
 				log("Label with name \"%s\" with address 0x%X declarated!\n", name, parser.pc);
 				continue;
 			}
@@ -1021,10 +1080,156 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 				parser.pc = parser.bc = val.value.integer;
 			}
 			else if (strcmp(cmd, "scope")==0){
+				createSeek();
+				tryCatchAndThrow(
+					tkrFetchToken(&tk)
+				);
+
+				if (tk.kind == TOKEN_IDENTIFIER){
+					const char *name = tk.value.string;
+
+					if (parser.phase_one){
+						if (findSymbol(name)){
+							// TODO: Error => Already declarated symbol with name
+							throwError(ERROR_UNKNOWN);
+						}
+						Value v = {.type = TYPE_IMM, .value = {.integer = parser.pc}};
+						storeSymLabel(name, v);
+					}
+				}
+				else {
+					restoreSeek();
+				}
+
 				scopeEnter();
 			}
 			else if (strcmp(cmd, "endscope")==0){
 				scopeLeave();
+			}
+			else if (strcmp(cmd, "macro") == 0){
+				tryCatchAndThrow(
+					tkrFetchToken(&tk)
+				);
+
+				if (tk.kind != TOKEN_IDENTIFIER){
+					// TODO: Error => Expected identifier name for constant
+					throwError(ERROR_UNKNOWN);
+				}
+				const char *name = tk.value.string;
+				log("Declaring macro with name %s\n", name);
+
+				SymMacro macro;
+				macro.name = name;
+				macro.params_len = 0;
+				createSeek();
+
+				tryCatchAndThrow(
+					tkrFetchToken(&tk)
+				);
+				while (tk.kind != TOKEN_NEW_LINE && macro.params_len<4){
+					restoreSeek();
+					//Value in;
+					Token tk;
+					tryCatchAndThrow(
+						tkrFetchToken(&tk)
+					);
+					if (tk.kind != TOKEN_IDENTIFIER){
+						// TODO: Error => Expected identifier name for macro parameter
+						throwError(ERROR_UNKNOWN);
+					}
+					macro.params[macro.params_len].name = textReuse(tk.value.string);
+					saveSeek();
+
+					saveSeek();
+					tryCatchAndThrow(
+						tkrFetchToken(&tk)
+					);
+					if (tkIsSymbol(tk, ':')){
+						tryCatchAndThrow(
+							tkrFetchToken(&tk)
+						);
+						DataName *data_type;
+						if ((tk.kind == TOKEN_IDENTIFIER) && (data_type = findDataByName(tk.value.string))){
+							macro.params[macro.params_len].type = data_type->type;
+						}
+						else {
+							// TODO: Error => Expected Data type name
+							throwError(ERROR_UNKNOWN);
+						}
+					}
+					else {
+						macro.params[macro.params_len].type = TYPE_IMM;
+						restoreSeek();
+					}
+
+					macro.params_len++;
+
+					// Check if next provided argument is a comma
+					// only if is, will keep fetching for arguments
+					tryCatchAndThrow(
+						tkrFetchToken(&tk)
+					);
+					if (tkIsSymbol(tk, ',')){
+						saveSeek();
+						tryCatchAndThrow(
+							tkrFetchToken(&tk)
+						);
+						continue;
+					}
+					else {
+						break;
+					}
+				}
+				restoreSeek();
+
+				uint32 start = lexerTell();
+				uint32 end = start;
+				while (!tkrEnded()){
+					tkrConsumeLine();
+					end = lexerTell();
+					tryCatchAndThrow(
+						tkrFetchToken(&tk)
+					);
+					if (tkIsSymbol(tk, '.')){
+						tryCatchAndThrow(
+							tkrFetchToken(&tk)
+						);
+						if (tk.kind == TOKEN_IDENTIFIER && strcmp(tk.value.string, "endmacro") == 0){
+							break;
+						}
+					}
+				}
+				log("Macro bounds between %d and %d\n", start, end);
+
+				if (parser.phase_one){
+					if (findMacro(name)){
+						// TODO: Error => Already declarated macro with name
+						throwError(ERROR_UNKNOWN);
+					}
+					macro.start = start;
+					macro.end = end;
+					macro.src = textReuse(lexerCurrent()->path);
+					storeSymMacro(macro);
+				}
+			}
+			else if (strcmp(cmd, "const")==0){
+				tryCatchAndThrow(
+					tkrFetchToken(&tk)
+				);
+
+				if (tk.kind != TOKEN_IDENTIFIER){
+					// TODO: Error => Expected identifier name for constant
+					throwError(ERROR_UNKNOWN);
+				}
+				const char *name = tk.value.string;
+
+				Value in;
+				tryCatchAndThrow(
+					parserExpression(&in)
+				);
+				if (!parser.phase_one){
+					storeSymConst(name, in);
+				}
 			}
 			else if ((strcmp(cmd, "byte")==0) || (strcmp(cmd, "half")==0) || (strcmp(cmd, "word")==0)){
 				int type = (strcmp(cmd, "byte")==0)? 8: (strcmp(cmd, "half")==0)? 16: 32;

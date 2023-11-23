@@ -26,6 +26,9 @@ Lexer *lexerOpenString(const char* src){
 		lsrc[lexer->src_len] = ' ';
 		lsrc[lexer->src_len+1] = 0;
 		*/
+		lexer->limit = 0;
+		lexer->status = 0;
+		lexer->args = null;
 		lexer->src = src;
 		lexer->src_len = strlen(src)+1;
 		getFullPath(lexer->path, './');
@@ -45,6 +48,9 @@ Lexer *lexerOpenFile(const char* path){
 			return null;
 		}
 		getFullPath(lexer->path, path);
+		lexer->limit = 0;
+		lexer->status = 0;
+		lexer->args = null;
 		lexer->src = null;
 		lexers_top++;
 		cur_lexer = lexer;
@@ -77,11 +83,14 @@ uint32 lexerGet(){
 		return EOF;
 	}
 	if (cur_lexer->type == LEXER_TYPE_FILE){
+		if (cur_lexer->limit && ftell(cur_lexer->file)>=cur_lexer->limit){
+			return EOF;
+		}
 		return fgetc(cur_lexer->file);
 	}
 	else{
 		uint32 chr = EOF;
-		if (cur_lexer->seek < cur_lexer->src_len){
+		if (cur_lexer->seek < cur_lexer->src_len && (!cur_lexer->limit || cur_lexer->seek<cur_lexer->limit)){
 			chr = cur_lexer->src[cur_lexer->seek];
 		}
 		if (chr == 0){
@@ -96,9 +105,15 @@ bool lexerEnded(){
 		return true;
 	}
 	if (cur_lexer->type == LEXER_TYPE_FILE){
+		if (cur_lexer->limit && ftell(cur_lexer->file)>=cur_lexer->limit){
+			return true;
+		}
 		return feof(cur_lexer->file);
 	}
 	else{
+		if (cur_lexer->limit && cur_lexer->seek>=cur_lexer->limit){
+			return true;
+		}
 		return cur_lexer->seek >= cur_lexer->src_len;
 	}
 }

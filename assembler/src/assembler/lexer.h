@@ -21,6 +21,9 @@ typedef struct{
 	FILE *file;
 
 	// Common properties
+	uint32 limit;
+	uint32 status;
+	void *args;
 	uint32 seek;
 }Lexer;
 

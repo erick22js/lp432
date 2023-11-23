@@ -2,14 +2,19 @@
 
 
 DataName data_names[] = {
-	{"Byte", TYPE_R8, TYPE_IMM8, TYPE_MEM8},
-	{"Half", TYPE_R16, TYPE_IMM16, TYPE_MEM16},
-	{"Word", TYPE_R32, TYPE_IMM32, TYPE_MEM32},
-	{"Dword", TYPE_VOID, TYPE_VOID, TYPE_MEM64},
-	{"SByte", TYPE_R8, TYPE_IMMS8, TYPE_MEMS8},
-	{"SHalf", TYPE_R16, TYPE_IMMS16, TYPE_MEMS16},
-	{"SWord", TYPE_R32, TYPE_IMMS32, TYPE_MEMS32},
-	{"SDword", TYPE_VOID, TYPE_VOID, TYPE_MEMS64},
+	{"Byte", TYPE_R8, TYPE_IMM8, TYPE_MEM8, TYPE_IMM8},
+	{"Half", TYPE_R16, TYPE_IMM16, TYPE_MEM16, TYPE_IMM16},
+	{"Word", TYPE_R32, TYPE_IMM32, TYPE_MEM32, TYPE_IMM32},
+	{"Dword", TYPE_VOID, TYPE_VOID, TYPE_MEM64, TYPE_VOID},
+	{"SByte", TYPE_R8, TYPE_IMMS8, TYPE_MEMS8, TYPE_IMMS8},
+	{"SHalf", TYPE_R16, TYPE_IMMS16, TYPE_MEMS16, TYPE_IMMS16},
+	{"SWord", TYPE_R32, TYPE_IMMS32, TYPE_MEMS32, TYPE_IMMS32},
+	{"SDword", TYPE_VOID, TYPE_VOID, TYPE_MEMS64, TYPE_VOID},
+	{"Reg8", TYPE_R8, TYPE_VOID, TYPE_VOID, TYPE_R8},
+	{"Reg16", TYPE_R16, TYPE_VOID, TYPE_VOID, TYPE_R16},
+	{"Reg32", TYPE_R32, TYPE_VOID, TYPE_VOID, TYPE_R32},
+	{"IReg", TYPE_IR, TYPE_VOID, TYPE_VOID, TYPE_IR},
+	{"FPReg", TYPE_FPR, TYPE_VOID, TYPE_VOID, TYPE_FPR},
 };
 const int data_names_length = sizeof(data_names)/sizeof(DataName);
 
@@ -42,7 +47,10 @@ Reg regs[] = {
 	{"f4", TYPE_FPR, 4}, {"f5", TYPE_FPR, 5}, {"f6", TYPE_FPR, 6}, {"f7", TYPE_FPR, 7},
 	{"f8", TYPE_FPR, 8}, {"f9", TYPE_FPR, 9}, {"f10", TYPE_FPR, 10}, {"f11", TYPE_FPR, 11},
 	{"f12", TYPE_FPR, 12}, {"f13", TYPE_FPR, 13}, {"f14", TYPE_FPR, 14}, {"f15", TYPE_FPR, 15},
-	
+
+	{"sr0", TYPE_SR, 0}, {"sr1", TYPE_SR, 1}, {"sr2", TYPE_SR, 2}, {"sr3", TYPE_SR, 4},
+	{"sr4", TYPE_SR, 4}, {"sr5", TYPE_SR, 5}, {"sr6", TYPE_SR, 6}, {"sr7", TYPE_SR, 7},
+
 	{"ir0", TYPE_IR, 0}, {"ir1", TYPE_IR, 1}, {"ir2", TYPE_IR, 2}, {"ir3", TYPE_IR, 4},
 	{"ir4", TYPE_IR, 4}, {"ir5", TYPE_IR, 5}, {"ir6", TYPE_IR, 6}, {"ir7", TYPE_IR, 7},
 };
@@ -87,13 +95,14 @@ Ist *findInstructionByName(const char* name){
 
 // Prefix Struct
 Prefix prefix[] = {
-	{ "cs", 0xEB },
+	{"0", 0x00},
+	/*{ "cs", 0xEB },
 	{ "ss", 0xEF },
 	{ "as", 0xFB },
 	{ "bs", 0xFC },
 	{ "es", 0xFD },
 	{ "fs", 0xFE },
-	{ "gs", 0xFF },
+	{ "gs", 0xFF },*/
 };
 const int prefix_length = sizeof(prefix)/sizeof(Prefix);
 

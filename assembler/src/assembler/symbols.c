@@ -69,13 +69,98 @@ void storeSymLabel(const char* name, Value value){
 }
 
 
+// Constant
+SymConst *findSymConst(Scope *scope, const char* name){
+	SymConst **cur_const = &scope->first_const;
+	while (*cur_const){
+		if (strcmp((*cur_const)->name, name) == 0){
+			return *cur_const;
+		}
+		cur_const = &(*cur_const)->next;
+	}
+	return null;
+}
+void storeSymConst(const char* name, Value value){
+	SymConst **cur_const = &scope_cur->first_const;
+	while (*cur_const){
+		cur_const = &(*cur_const)->next;
+	}
+	*cur_const = sym_alloc(SymConst);
+	(*cur_const)->name = textReuse(name);
+	(*cur_const)->value = value;
+	(*cur_const)->next = null;
+}
+
+
+// Macro
+SymMacro* findMacro(const char* name) {
+	Scope *scope = scope_cur;
+	while (scope){
+		SymMacro **cur_macro = &scope->first_macro;
+		while (*cur_macro){
+			if (strcmp((*cur_macro)->name, name) == 0){
+				return *cur_macro;
+			}
+			cur_macro = &(*cur_macro)->next;
+		}
+		scope = scope->parent;
+	}
+	return null;
+}
+void storeSymMacro(SymMacro macro) {
+	SymMacro **cur_macro = &scope_cur->first_macro;
+	while (*cur_macro){
+		cur_macro = &(*cur_macro)->next;
+	}
+	*cur_macro = sym_alloc(SymMacro);
+	**cur_macro = macro;
+	(*cur_macro)->name = textReuse(macro.name);
+	for (int i = 0; i<(*cur_macro)->params_len; i++){
+		(*cur_macro)->params[i].name = textReuse((*cur_macro)->params[i].name);
+	}
+	(*cur_macro)->next = null;
+}
+
+
+// Arguments
+SymArg* findSymArg(const char* name){
+	SymArg **cur_arg = &scope_cur->first_arg;
+	while (*cur_arg){
+		if (strcmp((*cur_arg)->name, name) == 0){
+			return *cur_arg;
+		}
+		cur_arg = &(*cur_arg)->next;
+	}
+	return null;
+}
+void storeSymArg(const char* name, Value value){
+	SymArg **cur_arg = &scope_cur->first_arg;
+	while (*cur_arg){
+		if (strcmp((*cur_arg)->name, name) == 0){
+			(*cur_arg)->value = value;
+			return;
+		}
+		cur_arg = &(*cur_arg)->next;
+	}
+	*cur_arg = sym_alloc(SymArg);
+	(*cur_arg)->name = name;
+	(*cur_arg)->value = value;
+	(*cur_arg)->type = value.type;
+	(*cur_arg)->next = null;
+}
+
+
 // General
 Value *findSymbol(const char* name){
 	Scope *scope = scope_cur;
 	while (scope){
-		SymLabel *label = findSymLabel(scope_cur, name);
+		SymLabel *label = findSymLabel(scope, name);
 		if (label){
 			return &label->value;
+		}
+		SymConst *constant = findSymConst(scope, name);
+		if (constant){
+			return &constant->value;
 		}
 		scope = scope->parent;
 	}

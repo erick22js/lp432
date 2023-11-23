@@ -4080,97 +4080,6 @@ Ist isa[] = {
 		}
 	},
 	{
-		.mne = "mvtas",
-		.encodes_length = 1,
-		.encodes = {
-			{
-				.opcode = 0x38, .desc = 0x3,
-				.params_length = 1,
-				.params = {
-					{ .type = TYPE_R8, .encode = ENCODE_REGM }
-				}
-			}
-		}
-	},
-	{
-		.mne = "mvtbs",
-		.encodes_length = 1,
-		.encodes = {
-			{
-				.opcode = 0x38, .desc = 0x4,
-				.params_length = 1,
-				.params = {
-					{ .type = TYPE_R8, .encode = ENCODE_REGM }
-				}
-			}
-		}
-	},
-	{
-		.mne = "mvtcs",
-		.encodes_length = 1,
-		.encodes = {
-			{
-				.opcode = 0x38, .desc = 0x0,
-				.params_length = 1,
-				.params = {
-					{ .type = TYPE_R8, .encode = ENCODE_REGM }
-				}
-			}
-		}
-	},
-	{
-		.mne = "mvtds",
-		.encodes_length = 1,
-		.encodes = {
-			{
-				.opcode = 0x38, .desc = 0x2,
-				.params_length = 1,
-				.params = {
-					{ .type = TYPE_R8, .encode = ENCODE_REGM }
-				}
-			}
-		}
-	},
-	{
-		.mne = "mvtes",
-		.encodes_length = 1,
-		.encodes = {
-			{
-				.opcode = 0x38, .desc = 0x5,
-				.params_length = 1,
-				.params = {
-					{ .type = TYPE_R8, .encode = ENCODE_REGM }
-				}
-			}
-		}
-	},
-	{
-		.mne = "mvtfs",
-		.encodes_length = 1,
-		.encodes = {
-			{
-				.opcode = 0x38, .desc = 0x6,
-				.params_length = 1,
-				.params = {
-					{ .type = TYPE_R8, .encode = ENCODE_REGM }
-				}
-			}
-		}
-	},
-	{
-		.mne = "mvtgs",
-		.encodes_length = 1,
-		.encodes = {
-			{
-				.opcode = 0x38, .desc = 0x7,
-				.params_length = 1,
-				.params = {
-					{ .type = TYPE_R8, .encode = ENCODE_REGM }
-				}
-			}
-		}
-	},
-	{
 		.mne = "mvtisp",
 		.encodes_length = 1,
 		.encodes = {
@@ -4210,13 +4119,14 @@ Ist isa[] = {
 		}
 	},
 	{
-		.mne = "mvtss",
+		.mne = "mvtsr",
 		.encodes_length = 1,
 		.encodes = {
 			{
-				.opcode = 0x38, .desc = 0x1,
-				.params_length = 1,
+				.opcode = 0x38, .desc = NO_DESC,
+				.params_length = 2,
 				.params = {
+					{ .type = TYPE_SR, .encode = ENCODE_REGO },
 					{ .type = TYPE_R8, .encode = ENCODE_REGM }
 				}
 			}

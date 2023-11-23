@@ -2,10 +2,12 @@ const fs = require("fs");
 let isa_j = JSON.parse(fs.readFileSync("../docs/isa.json", {"encoding": "utf-8"}));
 
 let c_code = '#include "base.h"\n\n\nIst isa[] = {';
+let mnes = '';
 
 let first = true;
 for (let name in isa_j){
 	let mne = isa_j[name];
+	mnes += name+' ';
 	
 	if (first){
 		first = false;
@@ -66,3 +68,5 @@ for (let name in isa_j){
 
 c_code += '\n};\nconst int isa_length = sizeof(isa)/sizeof(Ist);\n';
 fs.writeFileSync('../assembler/src/assembler/instructions.c', c_code, {"encoding": "utf-8"});
+fs.writeFileSync('./mnemonics.txt', mnes, {"encoding": "utf-8"});
+console.log('Done!');

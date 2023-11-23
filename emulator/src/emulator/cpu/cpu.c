@@ -32,10 +32,6 @@ bool cpuRequestInterrupt(Cpu *cpu_s, uint16 port){
 }
 
 void cpuReset(Cpu *cpu_s){
-	// Reset the preffered segments
-	cpu_s->seg_code = &cpu_s->sregs[SREG_CS];
-	cpu_s->seg_stack = &cpu_s->sregs[SREG_SS];
-	cpu_s->seg_data = &cpu_s->sregs[SREG_DS];
 }
 
 void cpuStep(Cpu *cpu_s){
@@ -46,7 +42,6 @@ void cpuStep(Cpu *cpu_s){
 	else{
 		// Reset modifiers
 		cpu_s->reg_lpc = cpu_s->reg_pc;
-		cpu_s->seg_data = &cpu_s->sregs[SREG_DS];
 	}
 
 	// Querying for instruction opcode

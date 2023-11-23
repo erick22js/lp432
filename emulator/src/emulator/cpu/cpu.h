@@ -28,14 +28,14 @@
 #define GREG_TOTAL 16
 
 // Segment Registers
-#define SREG_CS 0x0
-#define SREG_SS 0x1
-#define SREG_DS 0x2
-#define SREG_AS 0x3
-#define SREG_BS 0x4
-#define SREG_ES 0x5
-#define SREG_FS 0x6
-#define SREG_GS 0x7
+#define SREG_S0 0x0
+#define SREG_S1 0x1
+#define SREG_S2 0x2
+#define SREG_S3 0x3
+#define SREG_S4 0x4
+#define SREG_S5 0x5
+#define SREG_S6 0x6
+#define SREG_S7 0x7
 #define SREG_TOTAL 8
 
 // Floating Point Registers
@@ -99,13 +99,6 @@ struct Cpu{
 
 	// Interruption Registers
 	uint32 iregs[IREG_TOTAL];
-
-	/*
-		Preferred Segments
-	*/
-	CpuSegment *seg_code;
-	CpuSegment *seg_stack;
-	CpuSegment *seg_data;
 
 	/*
 		Code Storage

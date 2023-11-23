@@ -12,7 +12,7 @@
 typedef enum{
 	TYPE_VOID,
 	TYPE_R8, TYPE_R16, TYPE_R32, TYPE_R,
-	TYPE_FPR, TYPE_IR,
+	TYPE_FPR, TYPE_SR, TYPE_IR,
 	TYPE_IMM8, TYPE_IMM16, TYPE_IMM32, TYPE_IMM,
 	TYPE_IMMS8, TYPE_IMMS16, TYPE_IMMS32, TYPE_IMMS,
 	TYPE_MEM8, TYPE_MEM16, TYPE_MEM32, TYPE_MEM64, TYPE_MEM,
@@ -46,6 +46,7 @@ typedef struct{
 	DataType type_reg; // The type in register format
 	DataType type_imm; // The type in immediate format
 	DataType type_mem; // The type in memory format
+	DataType type; // The type in general terms
 }DataName;
 extern DataName data_names[];
 extern const int data_names_length;
@@ -71,30 +72,29 @@ extern const char* jpconds[];
 extern uint8 findJpCondByName(const char* name);
 
 
-// Constant Expression values Struct
-typedef struct{
-	DataType type;
-	union {
-		uint8 code; // For Registers
-		uint32 integer; // For Immediate Values
-		float32 real; // For Immediate Values
-	}value;
-}Value;
-
-// Instruction Argument Struct
+// Raw data value
 typedef struct{
 	AddressingMode adrm;
 	uint8 regi, reg1, reg2;
 	uint32 nv; // Immediate of memory addressing
 }MemAccess;
+typedef union {
+	uint8 code; // For Registers
+	uint32 integer; // For Immediate Values
+	float32 real; // For Immediate Values
+	MemAccess mem; // For Memory Access
+}RawData;
+
+// Constant Expression values Struct
 typedef struct{
 	DataType type;
-	union {
-		uint8 code; // For Registers
-		uint32 integer; // For Immediate Values
-		float32 real; // For Immediate Values
-		MemAccess mem; // For Memory Access
-	}value;
+	RawData value;
+}Value;
+
+// Instruction Argument Struct
+typedef struct{
+	DataType type;
+	RawData value;
 }Arg;
 
 // Instruction Parameter Struct

@@ -23,12 +23,57 @@ struct SymLabel{
 extern void storeSymLabel(const char* name, Value value);
 
 
+// Constant
+struct SymConst;
+typedef struct SymConst SymConst;
+struct SymConst{
+	const char* name;
+	Value value;
+	SymConst *next;
+};
+
+extern void storeSymConst(const char* name, Value value);
+
+
+// Macro
+struct SymMacro;
+typedef struct SymMacro SymMacro;
+struct SymMacro{
+	const char* name;
+	const char* src;
+	struct {
+		const char* name;
+		DataType type;
+	}params[4];
+	int params_len;
+	uint32 start, end;
+	SymMacro *next;
+};
+
+
+// Arguments
+struct SymArg;
+typedef struct SymArg SymArg;
+struct SymArg{
+	const char* name;
+	Value value;
+	DataType type;
+	SymArg *next;
+};
+
+extern SymMacro* findMacro(const char* name);
+extern void storeSymMacro(SymMacro macro);
+
+
 // Scope
 struct Scope;
 typedef struct Scope Scope;
 struct Scope{
 	const char* name;
 	SymLabel *first_label;
+	SymConst *first_const;
+	SymMacro *first_macro;
+	SymArg *first_arg;
 	Scope *parent;
 	Scope *child;
 	Scope *ite;
@@ -36,6 +81,9 @@ struct Scope{
 };
 extern Scope* scope_cur;
 extern Scope* scope_first;
+
+extern SymArg* findSymArg(const char* name);
+extern void storeSymArg(const char* name, Value value);
 
 extern void scopeReset();
 extern void scopeEnter();

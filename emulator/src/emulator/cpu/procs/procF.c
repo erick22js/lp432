@@ -212,7 +212,7 @@ cpuInterr procFA(Cpu *cpu_s){
 	// TODO
 	return 0;
 }
-
+/*
 cpuInterr procFB(Cpu *cpu_s){
 	// Prefix: AS
 	cpu_s->prefix = true;
@@ -247,4 +247,4 @@ cpuInterr procFF(Cpu *cpu_s){
 	cpu_s->seg_data = &cpu_s->sregs[SREG_GS];
 	return 0;
 }
-
+*/

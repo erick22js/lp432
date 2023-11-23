@@ -1,2 +1,2 @@
 zotro:
-adc dl, teste2
+	adc dl, final

@@ -7,14 +7,17 @@
 	Memory Address Translation
 */
 
-#define cpuTrAdr(adr, seg_reg, seg_flag, acs_intr, pag_flag) {\
+#define cpuTrAdr(adr, seg_flag, acs_intr, pag_flag) {\
 	if (cpu_s->reg_st&FLAG_SE){\
+		CpuSegment *seg_reg = &cpu_s->sregs[adr>>29];\
 		if (seg_reg->flags&SEG_ENABLED){\
 			if (seg_reg->flags&SEG_PROTECTED && eval(cpu_s->reg_st&FLAG_PM)){\
 				cpuThrowInterruption(INTR_PROTECTED_MODE_VIOLATION);\
 			}\
-			adr += seg_reg->base;\
-			if (seg_reg->flags&seg_flag && (adr<seg_reg->limit) && (adr>seg_reg->base)){}\
+			adr &= 0x1FFFFFFF;\
+			if (seg_reg->flags&seg_flag && (adr<seg_reg->limit)){\
+				adr += seg_reg->base;\
+			}\
 			else{\
 				cpuThrowInterruption(acs_intr);\
 			}\
@@ -49,11 +52,11 @@
 		}\
 	}\
 }
-#define cpuTrAdrCode(adr) {if (!(cpu_s->reg_st&0x0F000000)){cpuTrAdr(adr, cpu_s->seg_stack, SEG_EXECUTABLE, INTR_DENIED_CODE_ACCESS, PAG_EXECUTABLE)}}
-#define cpuTrAdrReadStack(adr) cpuTrAdr(adr, cpu_s->seg_stack, SEG_READABLE, INTR_DENIED_DATA_ACCESS, PAG_READABLE)
-#define cpuTrAdrWriteStack(adr) cpuTrAdr(adr, cpu_s->seg_stack, SEG_WRITEABLE, INTR_DENIED_DATA_ACCESS, PAG_WRITEABLE)
-#define cpuTrAdrReadData(adr) cpuTrAdr(adr, cpu_s->seg_data, SEG_READABLE, INTR_DENIED_DATA_ACCESS, PAG_READABLE)
-#define cpuTrAdrWriteData(adr) cpuTrAdr(adr, cpu_s->seg_data, SEG_WRITEABLE, INTR_DENIED_DATA_ACCESS, PAG_WRITEABLE)
+#define cpuTrAdrCode(adr) {if (!(cpu_s->reg_st&0x0F000000)){cpuTrAdr(adr, SEG_EXECUTABLE, INTR_DENIED_CODE_ACCESS, PAG_EXECUTABLE)}}
+#define cpuTrAdrReadStack(adr) cpuTrAdr(adr, SEG_READABLE, INTR_DENIED_DATA_ACCESS, PAG_READABLE)
+#define cpuTrAdrWriteStack(adr) cpuTrAdr(adr, SEG_WRITEABLE, INTR_DENIED_DATA_ACCESS, PAG_WRITEABLE)
+#define cpuTrAdrReadData(adr) cpuTrAdr(adr, SEG_READABLE, INTR_DENIED_DATA_ACCESS, PAG_READABLE)
+#define cpuTrAdrWriteData(adr) cpuTrAdr(adr, SEG_WRITEABLE, INTR_DENIED_DATA_ACCESS, PAG_WRITEABLE)
 
 /*
 	Memory Access and Code Fetching

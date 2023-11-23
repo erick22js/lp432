@@ -4134,104 +4134,6 @@
 			}
 		]
 	},
-	"mvtas": {
-		"description": "Move register data to register segment AS",
-		"cycles": 1,
-		"flags": {},
-		"encode": [
-			{
-				"opcode": "0x38",
-				"desc": "0x3",
-				"args": [
-					["source", "r8", "regm"]
-				]
-			}
-		]
-	},
-	"mvtbs": {
-		"description": "Move register data to register segment BS",
-		"cycles": 1,
-		"flags": {},
-		"encode": [
-			{
-				"opcode": "0x38",
-				"desc": "0x4",
-				"args": [
-					["source", "r8", "regm"]
-				]
-			}
-		]
-	},
-	"mvtcs": {
-		"description": "Move register data to register segment CS",
-		"cycles": 1,
-		"flags": {},
-		"encode": [
-			{
-				"opcode": "0x38",
-				"desc": "0x0",
-				"args": [
-					["source", "r8", "regm"]
-				]
-			}
-		]
-	},
-	"mvtds": {
-		"description": "Move register data to register segment DS",
-		"cycles": 1,
-		"flags": {},
-		"encode": [
-			{
-				"opcode": "0x38",
-				"desc": "0x2",
-				"args": [
-					["source", "r8", "regm"]
-				]
-			}
-		]
-	},
-	"mvtes": {
-		"description": "Move register data to register segment ES",
-		"cycles": 1,
-		"flags": {},
-		"encode": [
-			{
-				"opcode": "0x38",
-				"desc": "0x5",
-				"args": [
-					["source", "r8", "regm"]
-				]
-			}
-		]
-	},
-	"mvtfs": {
-		"description": "Move register data to register segment FS",
-		"cycles": 1,
-		"flags": {},
-		"encode": [
-			{
-				"opcode": "0x38",
-				"desc": "0x6",
-				"args": [
-					["source", "r8", "regm"]
-				]
-			}
-		]
-	},
-	"mvtgs": {
-		"description": "Move register data to register segment GS",
-		"cycles": 1,
-		"flags": {},
-		"encode": [
-			{
-				"opcode": "0x38",
-				"desc": "0x7",
-				"args": [
-					["source", "r8", "regm"]
-				]
-			}
-		]
-	},
 	"mvtisp": {
 		"description": "Move General Purpose Register data to Interruption Stack Pointer register",
 		"cycles": 1,
@@ -4273,15 +4175,15 @@
 			}
 		]
 	},
-	"mvtss": {
+	"mvtsr": {
 		"description": "Move register data to register segment SS",
 		"cycles": 1,
 		"flags": {},
 		"encode": [
 			{
 				"opcode": "0x38",
-				"desc": "0x1",
 				"args": [
+					["dest", "sr", "rego"],
 					["source", "r8", "regm"]
 				]
 			}

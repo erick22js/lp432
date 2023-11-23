@@ -123,14 +123,14 @@ cpuInterr procEA(Cpu *cpu_s){
 	cpuWriteReg32(cpu_s->os_regm, v);
 	return 0;
 }
-
+/*
 cpuInterr procEB(Cpu *cpu_s){
 	// Prefix: CS
 	cpu_s->prefix = true;
 	cpu_s->seg_data = &cpu_s->sregs[SREG_CS];
 	return 0;
 }
-
+*/
 cpuInterr procEC(Cpu *cpu_s){
 	// Instruction: not r8:regm
 	cpuFetchOS();
@@ -157,11 +157,11 @@ cpuInterr procEE(Cpu *cpu_s){
 	cpuWriteReg32(cpu_s->os_regm, v);
 	return 0;
 }
-
+/*
 cpuInterr procEF(Cpu *cpu_s){
 	// Prefix: SS
 	cpu_s->prefix = true;
 	cpu_s->seg_data = &cpu_s->sregs[SREG_SS];
 	return 0;
 }
-
+*/

@@ -255,11 +255,11 @@ cpuProc cpuProcedures[256] = {
 	[0xE8] = procE8,
 	[0xE9] = procE9,
 	[0xEA] = procEA,
-	[0xEB] = procEB,
+	[0xEB] = procNull, //procEB,
 	[0xEC] = procEC,
 	[0xED] = procED,
 	[0xEE] = procEE,
-	[0xEF] = procEF,
+	[0xEF] = procNull, //procEF,
 
 	// 0xF0
 	[0xF0] = procF0,
@@ -273,9 +273,9 @@ cpuProc cpuProcedures[256] = {
 	[0xF8] = procF8,
 	[0xF9] = procF9,
 	[0xFA] = procFA,
-	[0xFB] = procFB,
-	[0xFC] = procFC,
-	[0xFD] = procFD,
-	[0xFE] = procFE,
-	[0xFF] = procFF,
+	[0xFB] = procNull, //procFB,
+	[0xFC] = procNull, //procFC,
+	[0xFD] = procNull, //procFD,
+	[0xFE] = procNull, //procFE,
+	[0xFF] = procNull, //procFF,
 };

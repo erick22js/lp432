@@ -95,67 +95,16 @@ cpuInterr proc37(Cpu *cpu_s){
 cpuInterr proc38(Cpu *cpu_s){
 	cpuFetchOS();
 
-	switch (cpu_s->os_desc){
-		case 0x0:{
-			// Instruction: mvtcs r8:regm
-			uint8 data = cpuReadReg8(cpu_s->os_regm);
-			cpu_s->sregs[SREG_CS].selector = data;
-			procLoadSegment(cpu_s, &cpu_s->sregs[SREG_CS]);
-		}
-		break;
-		case 0x1:{
-			// Instruction: mvtss r8:regm
-			uint8 data = cpuReadReg8(cpu_s->os_regm);
-			cpu_s->sregs[SREG_SS].selector = data;
-			procLoadSegment(cpu_s, &cpu_s->sregs[SREG_SS]);
-		}
-		break;
-		case 0x2:{
-			// Instruction: mvtds r8:regm
-			uint8 data = cpuReadReg8(cpu_s->os_regm);
-			cpu_s->sregs[SREG_DS].selector = data;
-			procLoadSegment(cpu_s, &cpu_s->sregs[SREG_DS]);
-		}
-		break;
-		case 0x3:{
-			// Instruction: mvtas r8:regm
-			uint8 data = cpuReadReg8(cpu_s->os_regm);
-			cpu_s->sregs[SREG_AS].selector = data;
-			procLoadSegment(cpu_s, &cpu_s->sregs[SREG_AS]);
-		}
-		break;
-		case 0x4:{
-			// Instruction: mvtbs r8:regm
-			uint8 data = cpuReadReg8(cpu_s->os_regm);
-			cpu_s->sregs[SREG_BS].selector = data;
-			procLoadSegment(cpu_s, &cpu_s->sregs[SREG_BS]);
-		}
-		break;
-		case 0x5:{
-			// Instruction: mvtes r8:regm
-			uint8 data = cpuReadReg8(cpu_s->os_regm);
-			cpu_s->sregs[SREG_ES].selector = data;
-			procLoadSegment(cpu_s, &cpu_s->sregs[SREG_ES]);
-		}
-		break;
-		case 0x6:{
-			// Instruction: mvtfs r8:regm
-			uint8 data = cpuReadReg8(cpu_s->os_regm);
-			cpu_s->sregs[SREG_FS].selector = data;
-			procLoadSegment(cpu_s, &cpu_s->sregs[SREG_FS]);
-		}
-		break;
-		case 0x7:{
-			// Instruction: mvtgs r8:regm
-			uint8 data = cpuReadReg8(cpu_s->os_regm);
-			cpu_s->sregs[SREG_GS].selector = data;
-			procLoadSegment(cpu_s, &cpu_s->sregs[SREG_GS]);
-		}
-		break;
-		default: {
-			cpuThrowInterruption(INTR_INVALID_OPCODE);
-		}
+	if (cpu_s->os_desc < 8){
+		// Instruction: mvtsr sr:desc r8:regm
+		uint8 data = cpuReadReg8(cpu_s->os_regm);
+		cpu_s->sregs[cpu_s->os_desc].selector = data;
+		procLoadSegment(cpu_s, &cpu_s->sregs[cpu_s->os_desc]);
 	}
+	else {
+		cpuThrowInterruption(INTR_INVALID_OPCODE);
+	}
+
 	return 0;
 }
 
