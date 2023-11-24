@@ -2,6 +2,7 @@
 
 
 int main(int args, char** argv) {
+	vmSetup();
 	spInit();
 
 	_Bool running = 1;

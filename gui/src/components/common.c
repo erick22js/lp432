@@ -46,3 +46,7 @@ void vmRun() {
 	emuRun(&g_emu);
 }
 
+void vmStep() {
+	emuStep(&g_emu);
+}
+

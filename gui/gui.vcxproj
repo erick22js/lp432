@@ -135,6 +135,8 @@
   <ItemGroup>
     <ClInclude Include="src\components\common.h" />
     <ClInclude Include="src\components\components.h" />
+    <ClInclude Include="src\components\display\draw.h" />
+    <ClInclude Include="src\components\display\gui.h" />
     <ClInclude Include="src\components\display\inspector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

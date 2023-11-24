@@ -1,2 +1,3 @@
-﻿  main.c
+﻿  inspector.c
+c:\users\erick\documents\meus-projetos\c\lp432\gui\src\components\display\gui.h(144): warning C4018: '<': incompatibilidade de signed/unsigned
   gui.vcxproj -> C:\Users\erick\Documents\meus-projetos\c\lp432\Debug\gui.exe

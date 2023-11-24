@@ -31,6 +31,8 @@ extern void vmReset();
 
 extern void vmRun();
 
+extern void vmStep();
+
 
 
 #endif

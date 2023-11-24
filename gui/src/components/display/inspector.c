@@ -3,113 +3,151 @@
 #include <SDL_image.h>
 
 #include "inspector.h"
+#include "gui.h"
 #include "../common.h"
 
 
-// Global Control properties
-extern const unsigned char vga_font[];
-SDL_Window *sp_win;
-SDL_Renderer *sp_rnd;
-SDL_Texture *sp_chars;
-
+//
+// GUI Properties
+//
+struct {
+	char* name;
+}gregs[16] = {
+	{"EAX"},
+	{"EDX"},
+	{"ECX"},
+	{"EBX"},
+	{"EEX"},
+	{"EHX"},
+	{"EGX"},
+	{"EFX"},
+	{"EX0"},
+	{"EX3"},
+	{"EX2"},
+	{"EX1"},
+	{"EDS"},
+	{"ESD"},
+	{"ESP"},
+	{"EFP"},
+};
+struct {
+	char* name;
+}fregs[16] = {
+	{"F0"},
+	{"F1"},
+	{"F2"},
+	{"F3"},
+	{"F4"},
+	{"F5"},
+	{"F6"},
+	{"F7"},
+	{"F8"},
+	{"F9"},
+	{"F10"},
+	{"F11"},
+	{"F12"},
+	{"F13"},
+	{"F14"},
+	{"F15"},
+};
+struct {
+	char* name;
+}oregs[16] = {
+	{"I0"},
+	{"I1"},
+	{"I2"},
+	{"I3"},
+	{"I4"},
+	{"I5"},
+	{"I6"},
+	{"I7"},
+	{"S0"},
+	{"S1"},
+	{"S2"},
+	{"S3"},
+	{"S4"},
+	{"S5"},
+	{"S6"},
+	{"S7"},
+};
+struct {
+	char* name;
+}flags[] = {
+	{"CF"},
+	{"BF"},
+	{"VF"},
+	{"NF"},
+	{"ZF"},
+	{"OF"},
+	{"PM"},
+	{"SE"},
+	{"PE"},
+	{"IE"},
+};
 
 //
-//	Draw Functions
+//	Process Functions
 //
-Uint32 text_color = 0xFFFFFF;
-Uint32 rect_color = 0xFFFFFF;
-
-float line_width = 1.0;
-
-#define COLOR_BLACK 0x000000
-#define COLOR_WHITE 0xFFFFFF
-#define COLOR_GRAY 0x888888
-#define COLOR_LIGHTGRAY 0xCCCCCC
-#define COLOR_DARKGRAY 0x444444
-#define COLOR_RED 0x0000FF
-#define COLOR_BLUE 0xFF0000
-#define COLOR_CYAN 0xFFFF00
-#define COLOR_LIME 0x00FF00
-#define COLOR_GREEN 0x00AA00
-#define COLOR_YELLOW 0x00FFFF
-#define COLOR_ORANGE 0x0066FF
-#define COLOR_BROWN 0x004488
-#define COLOR_VIOLET 0xFF00FF
-#define COLOR_PURPLE 0xFF0088
-#define COLOR_PINK 0x8800FF
-
-void dwText(char* text, int left, int top, float size){
-	SDL_SetTextureColorMod(sp_chars, text_color&0xFF, (text_color>>8)&0xFF, (text_color>>16)&0xFF);
-	char chr = *text;
-	while (chr){
-		SDL_Rect src = {0, chr*12, 8, 12};
-		SDL_Rect dest = {left, top, (int)(8*size), (int)(12*size)};
-		SDL_RenderCopy(sp_rnd, sp_chars, &src, &dest);
-		left += (int)(8*size);
-		chr = *(++text);
-	}
-}
-
-void dwFillRect(int left, int top, int width, int height){
-	SDL_SetRenderDrawColor(sp_rnd, rect_color&0xFF, (rect_color>>8)&0xFF, (rect_color>>16)&0xFF, 0xFF);
-	SDL_Rect dest = {left, top, width, height};
-	SDL_RenderFillRect(sp_rnd, &dest);
-}
-
-void dwStrokeRect(int left, int top, int width, int height){
-	SDL_SetRenderDrawColor(sp_rnd, rect_color&0xFF, (rect_color>>8)&0xFF, (rect_color>>16)&0xFF, 0xFF);
-	SDL_RenderSetScale(sp_rnd, line_width, line_width);
-	SDL_Point points[5] = {
-		{(int)((left)/line_width), (int)((top)/line_width)},
-		{(int)((left+width)/line_width), (int)((top)/line_width)},
-		{(int)((left+width)/line_width), (int)((top+height)/line_width)},
-		{(int)((left)/line_width), (int)((top+height)/line_width)},
-		{(int)((left)/line_width), (int)((top)/line_width)},
-	};
-	SDL_RenderDrawLines(sp_rnd, points, 5);
-	SDL_RenderSetScale(sp_rnd, 1, 1);
-}
-
 
 //
-//	Control Functions
+//	Main Functions
 //
 void spInit() {
-	SDL_Init(SDL_INIT_EVERYTHING);
+	guiStart();
 
-	sp_win = SDL_CreateWindow("LP432 Inspector", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 480, 0);
-	sp_rnd = SDL_CreateRenderer(sp_win, 0, 0);
+	// Decorative text
+	guiCreateLabel("LP432 Virtual Machine - Inspector", 250, 20);
 
-	SDL_Surface *font_img = IMG_Load("../gui/font.png");
-	sp_chars = SDL_CreateTextureFromSurface(sp_rnd, font_img);
+	// Registers
+	for (int i = 0; i<16; i++){
+		guiCreateLabel(gregs[i].name, 20, 70 + i*20);
+		guiCreateLabel("0x00000000", 50, 70 + i*20);
+	}
+	for (int i = 0; i<16; i++){
+		guiCreateLabel(fregs[i].name, 150, 70 + i*20);
+		guiCreateLabel("0.0000E+00", 180, 70 + i*20);
+	}
+	for (int i = 0; i<16; i++){
+		guiCreateLabel(oregs[i].name, 280, 70 + i*20);
+		guiCreateLabel(i<8? "0x00000000": "0x00", 310, 70 + i*20);
+	}
 
-	printf("Done!");
-}
+	// Program flags
+	for (int i = 0; i<10; i++){
+		guiCreateLabel(flags[i].name, 20 + i*35, 410);
+		guiCreateDiv(20 + i*35, 430, 15, 15);
+	}
 
-int spHandle() {
-	SDL_Event ev;
-	while (SDL_PollEvent(&ev)){
-		if (ev.type == SDL_QUIT){
-			return SDL_QUIT;
+	// Memory inspector
+	for (int c = 0; c<16; c++){
+		static char* (offset[16]) = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"};
+		guiCreateLabel(offset[c], 475 + c*20, 130);
+	}
+	for (int r = 0; r<16; r++){
+		guiCreateLabel("00000000", 400, 150 + r*20);
+		for (int c = 0; c<16; c++){
+			guiCreateLabel("00", 470 + c*20, 150 + r*20);
 		}
 	}
 
-	rect_color = COLOR_DARKGRAY;
-	dwFillRect(0, 0, 800, 480);
+	// Control panel
+	Element step_btn = guiCreateDiv(410, 70, 70, 30);
+	guiCreateLabel("Step", 420, 80);
+	guiSetElementBackColor(step_btn, COLOR_WHITE);
+	guiSetElementForeColor(step_btn, COLOR_BLACK);
+	guiSetElementForeWidth(step_btn, 2);
 
-	rect_color = COLOR_LIGHTGRAY;
-	line_width = 2;
-	dwStrokeRect(100, 100, 300, 300);
+	Element reset_btn = guiCreateDiv(490, 70, 70, 30);
+	guiCreateLabel("Reset", 500, 80);
+	guiSetElementBackColor(reset_btn, COLOR_WHITE);
+	guiSetElementForeColor(reset_btn, COLOR_BLACK);
+	guiSetElementForeWidth(reset_btn, 2);
+}
 
-	text_color = COLOR_WHITE;
-	dwText("Hello World!", 100, 100, 1.5);
-
-	SDL_RenderPresent(sp_rnd);
-	return 0;
+int spHandle() {
+	return guiProcess();
 }
 
 void spEnd() {
-	SDL_DestroyRenderer(sp_rnd);
-	SDL_DestroyWindow(sp_win);
-	SDL_Quit();
+	guiClose();
 }
