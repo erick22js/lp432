@@ -3,13 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.33919.361
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "emulator", "emulator\emulator.vcxproj", "{9F6B8B4E-7AA0-4769-BAFE-A22AFAF039D6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "console", "console\console.vcxproj", "{9F6B8B4E-7AA0-4769-BAFE-A22AFAF039D6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "assembler", "assembler\assembler.vcxproj", "{61B843B3-A626-4903-BFF9-295C1BE04E51}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui", "gui\gui.vcxproj", "{D618B083-5419-4237-AB7E-FAEA989A0687}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "base", "base\base.vcxitems", "{3B30B94F-103E-4D9A-8A2F-F41ECF96E2B2}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		base\base.vcxitems*{3b30b94f-103e-4d9a-8a2f-f41ecf96e2b2}*SharedItemsImports = 9
+		base\base.vcxitems*{9f6b8b4e-7aa0-4769-bafe-a22afaf039d6}*SharedItemsImports = 4
+		base\base.vcxitems*{d618b083-5419-4237-ab7e-faea989a0687}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86

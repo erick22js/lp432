@@ -2,6 +2,8 @@
 /Debug/
 /Release/
 /assembler/Debug/
-/emulator/Debug/
 /assembler/Release/
-/emulator/Release/
+/console/Release/
+/console/Debug/
+/gui/Release/
+/gui/Debug/

@@ -1,7 +1,2 @@
-﻿  inspector.c
-c:\users\erick\documents\meus-projetos\c\lp432\gui\src\components\display\inspector.c(62): warning C4244: 'inicializando': conversão de 'float' para 'int', possível perda de dados
-c:\users\erick\documents\meus-projetos\c\lp432\gui\src\components\display\inspector.c(63): warning C4244: 'inicializando': conversão de 'float' para 'int', possível perda de dados
-c:\users\erick\documents\meus-projetos\c\lp432\gui\src\components\display\inspector.c(64): warning C4244: 'inicializando': conversão de 'float' para 'int', possível perda de dados
-c:\users\erick\documents\meus-projetos\c\lp432\gui\src\components\display\inspector.c(65): warning C4244: 'inicializando': conversão de 'float' para 'int', possível perda de dados
-c:\users\erick\documents\meus-projetos\c\lp432\gui\src\components\display\inspector.c(66): warning C4244: 'inicializando': conversão de 'float' para 'int', possível perda de dados
+﻿  main.c
   gui.vcxproj -> C:\Users\erick\Documents\meus-projetos\c\lp432\Debug\gui.exe

@@ -21,8 +21,9 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{9F6B8B4E-7AA0-4769-BAFE-A22AFAF039D6}</ProjectGuid>
-    <RootNamespace>emulator</RootNamespace>
+    <RootNamespace>console</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <ProjectName>console</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -55,6 +56,7 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
+    <Import Project="..\base\base.vcxitems" Label="Shared" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -123,43 +125,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\emulator\bus.c" />
-    <ClCompile Include="src\emulator\cpu\cpu.c" />
-    <ClCompile Include="src\emulator\cpu\interruption.c" />
-    <ClCompile Include="src\emulator\cpu\memory.c" />
-    <ClCompile Include="src\emulator\cpu\procs\procF.c" />
-    <ClCompile Include="src\emulator\cpu\procs\proc0.c" />
-    <ClCompile Include="src\emulator\cpu\procs\proc1.c" />
-    <ClCompile Include="src\emulator\cpu\procs\proc2.c" />
-    <ClCompile Include="src\emulator\cpu\procs\proc3.c" />
-    <ClCompile Include="src\emulator\cpu\procs\proc4.c" />
-    <ClCompile Include="src\emulator\cpu\procs\proc5.c" />
-    <ClCompile Include="src\emulator\cpu\procs\proc6.c" />
-    <ClCompile Include="src\emulator\cpu\procs\proc7.c" />
-    <ClCompile Include="src\emulator\cpu\procs\proc8.c" />
-    <ClCompile Include="src\emulator\cpu\procs\proc9.c" />
-    <ClCompile Include="src\emulator\cpu\procs\procA.c" />
-    <ClCompile Include="src\emulator\cpu\procs\procB.c" />
-    <ClCompile Include="src\emulator\cpu\procs\procC.c" />
-    <ClCompile Include="src\emulator\cpu\procs\procD.c" />
-    <ClCompile Include="src\emulator\cpu\procs\procE.c" />
-    <ClCompile Include="src\emulator\cpu\procs\procedures.c" />
-    <ClCompile Include="src\emulator\emu.c" />
-    <ClCompile Include="src\emulator\pci.c" />
     <ClCompile Include="src\main.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\emulator\common.h" />
-    <ClInclude Include="src\emulator\bus.h" />
-    <ClInclude Include="src\emulator\cpu\cpu.h" />
-    <ClInclude Include="src\emulator\cpu\interruption.h" />
-    <ClInclude Include="src\emulator\cpu\memory.h" />
-    <ClInclude Include="src\emulator\cpu\procs\procedures.h" />
-    <ClInclude Include="src\emulator\device.h" />
-    <ClInclude Include="src\emulator\dma.h" />
-    <ClInclude Include="src\emulator\emu.h" />
-    <ClInclude Include="src\emulator\emulator.h" />
-    <ClInclude Include="src\emulator\pci.h" />
     <ClInclude Include="src\setup.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 
 #include "inspector.h"
+#include "../common.h"
 
 
 // Global Control properties
@@ -59,11 +60,11 @@ void dwStrokeRect(int left, int top, int width, int height){
 	SDL_SetRenderDrawColor(sp_rnd, rect_color&0xFF, (rect_color>>8)&0xFF, (rect_color>>16)&0xFF, 0xFF);
 	SDL_RenderSetScale(sp_rnd, line_width, line_width);
 	SDL_Point points[5] = {
-		{(left)/line_width, (top)/line_width},
-		{(left+width)/line_width, (top)/line_width},
-		{(left+width)/line_width, (top+height)/line_width},
-		{(left)/line_width, (top+height)/line_width},
-		{(left)/line_width, (top)/line_width},
+		{(int)((left)/line_width), (int)((top)/line_width)},
+		{(int)((left+width)/line_width), (int)((top)/line_width)},
+		{(int)((left+width)/line_width), (int)((top+height)/line_width)},
+		{(int)((left)/line_width), (int)((top+height)/line_width)},
+		{(int)((left)/line_width), (int)((top)/line_width)},
 	};
 	SDL_RenderDrawLines(sp_rnd, points, 5);
 	SDL_RenderSetScale(sp_rnd, 1, 1);
