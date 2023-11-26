@@ -32,6 +32,21 @@ bool cpuRequestInterrupt(Cpu *cpu_s, uint16 port){
 }
 
 void cpuReset(Cpu *cpu_s){
+	memset(&cpu_s->gregs, 0, sizeof(cpu_s->gregs));
+	memset(&cpu_s->sregs, 0, sizeof(cpu_s->sregs));
+	memset(&cpu_s->fregs, 0, sizeof(cpu_s->fregs));
+	memset(&cpu_s->iregs, 0, sizeof(cpu_s->iregs));
+	cpu_s->reg_pc = 0;
+	cpu_s->reg_lpc = 0;
+	cpu_s->reg_st = 0;
+	cpu_s->reg_std = 0;
+	cpu_s->reg_ptd = 0;
+	cpu_s->reg_itd = 0;
+	cpu_s->reg_isp = 0;
+	cpu_s->request_external = false;
+	cpu_s->request_port = 0;
+	cpu_s->halted = false;
+	cpu_s->waiting = false;
 }
 
 void cpuStep(Cpu *cpu_s){

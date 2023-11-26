@@ -24,7 +24,7 @@ void emuCycles(Emu *emu, uint32 cycles){
 */
 
 void emuSetup(Emu *emu, Cpu *cpu_s, Pci *pci, Bus *bus) {
-	// BUS must be initialized before been used
+	// BUS must be initialized before be used
 	assert(bus->state=='SET1');
 
 	// Connect emu to components

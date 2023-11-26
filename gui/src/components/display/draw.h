@@ -19,6 +19,7 @@ SDL_Texture *sp_chars;
 Uint32 text_color = 0xFFFFFF;
 Uint32 rect_color = 0xFFFFFF;
 
+float alpha = 1.0;
 float line_width = 1.0;
 
 #define COLOR_BLACK 0x000000
@@ -39,6 +40,7 @@ float line_width = 1.0;
 #define COLOR_PINK 0x8800FF
 
 void dwText(char* text, int left, int top, float size){
+	SDL_SetTextureAlphaMod(sp_chars, (Uint8)(0xFF*alpha));
 	SDL_SetTextureColorMod(sp_chars, text_color&0xFF, (text_color>>8)&0xFF, (text_color>>16)&0xFF);
 	char chr = *text;
 	while (chr){
@@ -51,23 +53,35 @@ void dwText(char* text, int left, int top, float size){
 }
 
 void dwFillRect(int left, int top, int width, int height){
-	SDL_SetRenderDrawColor(sp_rnd, rect_color&0xFF, (rect_color>>8)&0xFF, (rect_color>>16)&0xFF, 0xFF);
+	SDL_SetRenderDrawColor(sp_rnd, rect_color&0xFF, (rect_color>>8)&0xFF, (rect_color>>16)&0xFF, (Uint8)(0xFF*alpha));
 	SDL_Rect dest = {left, top, width, height};
 	SDL_RenderFillRect(sp_rnd, &dest);
 }
 
 void dwStrokeRect(int left, int top, int width, int height){
-	SDL_SetRenderDrawColor(sp_rnd, rect_color&0xFF, (rect_color>>8)&0xFF, (rect_color>>16)&0xFF, 0xFF);
+	SDL_SetRenderDrawColor(sp_rnd, rect_color&0xFF, (rect_color>>8)&0xFF, (rect_color>>16)&0xFF, (Uint8)(0xFF*alpha));
 	SDL_RenderSetScale(sp_rnd, line_width, line_width);
 	SDL_Point points[5] = {
 		{(int)((left)/line_width), (int)((top)/line_width)},
-	{(int)((left+width)/line_width), (int)((top)/line_width)},
-	{(int)((left+width)/line_width), (int)((top+height)/line_width)},
-	{(int)((left)/line_width), (int)((top+height)/line_width)},
-	{(int)((left)/line_width), (int)((top)/line_width)},
+		{(int)((left+width)/line_width), (int)((top)/line_width)},
+		{(int)((left+width)/line_width), (int)((top+height)/line_width)},
+		{(int)((left)/line_width), (int)((top+height)/line_width)},
+		{(int)((left)/line_width), (int)((top)/line_width)},
 	};
 	SDL_RenderDrawLines(sp_rnd, points, 5);
 	SDL_RenderSetScale(sp_rnd, 1, 1);
+}
+
+
+//
+//	Main Functions
+//
+
+void dwSetup() {
+	SDL_Surface *font_img = IMG_Load("../gui/font.png");
+	sp_chars = SDL_CreateTextureFromSurface(sp_rnd, font_img);
+	SDL_SetRenderDrawBlendMode(sp_rnd, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureBlendMode(sp_chars, SDL_BLENDMODE_BLEND);
 }
 
 
