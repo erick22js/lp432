@@ -31,12 +31,12 @@ typedef struct _Element{
 	char* text;
 	_Bool visible, active;
 	_Bool hoverable, hovered, holdable, holded;
-	void (*onClick)(Element el, Uint32 x, Uint32 y);
+	void (*onClick)(Element el, int button, Uint32 x, Uint32 y);
 }_Element;
 _Element _elements[MAX_GUI_ELEMENTS];
 Uint32 _elements_top = 0;
 
-void (*_onKeyDown)(Uint32 key);
+void (*_onKeyDown)(Uint32 key, _Bool ctrl, _Bool alt, _Bool shift, _Bool caps);
 
 
 /*
@@ -152,11 +152,11 @@ void guiSetElementActive(Element el, _Bool active){
 	_elements[el].active = active;
 }
 
-void guiSetElementOnClick(Element el, void(*onclick)(Element e, Uint32 x, Uint32 y)){
+void guiSetElementOnClick(Element el, void(*onclick)(Element e, int btn, Uint32 x, Uint32 y)){
 	_elements[el].onClick = onclick;
 }
 
-void guiSetOnKeyDown(void (*onKeyDown)(Uint32 key)){
+void guiSetOnKeyDown(void (*onKeyDown)(Uint32 key, _Bool ctrl, _Bool alt, _Bool shift, _Bool caps)){
 	_onKeyDown = onKeyDown;
 }
 
@@ -185,6 +185,7 @@ int guiProcess() {
 		EventType type;
 		_Bool triggered;
 		Sint32 x, y;
+		int button;
 		_Bool holding;
 	}gui_event = {0};
 	gui_event.type = EVENT_NONE;
@@ -208,6 +209,7 @@ int guiProcess() {
 				gui_event.type = EVENT_MOUSE_DOWN;
 				gui_event.triggered = 1;
 				gui_event.holding = 1;
+				gui_event.button = ev.button.button;
 				gui_event.x = ev.button.x;
 				gui_event.y = ev.button.y;
 			}
@@ -216,18 +218,20 @@ int guiProcess() {
 				gui_event.type = EVENT_MOUSE_UP;
 				gui_event.triggered = 1;
 				gui_event.holding = 0;
+				gui_event.button = ev.button.button;
 				gui_event.x = ev.button.x;
 				gui_event.y = ev.button.y;
 			}
 			break;
 			case SDL_KEYDOWN: {
-				_onKeyDown(ev.key.keysym.sym);
+				_onKeyDown(ev.key.keysym.sym, (ev.key.keysym.mod&KMOD_CTRL) != 0, (ev.key.keysym.mod&KMOD_ALT) != 0, (ev.key.keysym.mod&KMOD_SHIFT) != 0, (ev.key.keysym.mod&KMOD_CAPS) != 0);
 			}
 			break;
 		}
 	}
 
 	// Clear the background
+	alpha = 1;
 	rect_color = COLOR_WHITE;
 	dwFillRect(0, 0, 800, 480);
 	
@@ -249,7 +253,7 @@ int guiProcess() {
 					gui_event.type = EVENT_NONE;
 					printf("Element: x=%d; y=%d; w=%d; h=%d\n", _elements[i].x, _elements[i].y, _elements[i].width, _elements[i].height);
 					if (_elements[i].onClick){
-						_elements[i].onClick((Element)i, gui_event.x, gui_event.y);
+						_elements[i].onClick((Element)i, gui_event.button, gui_event.x, gui_event.y);
 					}
 				}
 			}

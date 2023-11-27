@@ -114,11 +114,12 @@ struct {
 	char buffer[4];
 	Element entry;
 }mem[256];
-Element over_panel, over_text, over_value;
+Element over_panel, over_text, over_value, caret;
 
 _Bool _sp_input_active = 0;
+int _sp_input_seek = 0;
 _Bool _sp_input_istext = 0;
-char _sp_input_buffer[256];
+char _sp_input_buffer[256] = {0};
 
 
 //
@@ -165,22 +166,29 @@ void spInputNumeric(void *default_value, int type, const char* format){
 	guiSetElementActive(over_text, 1);
 	guiSetElementVisible(over_value, 1);
 	guiSetElementActive(over_value, 1);
+	guiSetElementVisible(caret, 1);
 	_sp_input_active = 1;
 	_sp_input_istext = 0;
 	printf("0x%x\n", default_value);
-	if (type==0){
-		sprintf_s(_sp_input_buffer, sizeof(_sp_input_buffer), format, (*((uint32*)default_value)));
+	if (default_value){
+		if (type==0){
+			sprintf_s(_sp_input_buffer, sizeof(_sp_input_buffer), format, (*((uint32*)default_value)));
+		}
+		if (type==1){
+			sprintf_s(_sp_input_buffer, sizeof(_sp_input_buffer), format, (*((sint64*)default_value)));
+		}
+		if (type==2){
+			sprintf_s(_sp_input_buffer, sizeof(_sp_input_buffer), format, (*((float32*)default_value)));
+		}
+		if (type==3){
+			sprintf_s(_sp_input_buffer, sizeof(_sp_input_buffer), format, (*((float64*)default_value)));
+		}
 	}
-	if (type==1){
-		sprintf_s(_sp_input_buffer, sizeof(_sp_input_buffer), format, (*((sint64*)default_value)));
+	else {
+		sprintf_s(_sp_input_buffer, sizeof(_sp_input_buffer), "0");
 	}
-	if (type==2){
-		sprintf_s(_sp_input_buffer, sizeof(_sp_input_buffer), format, (*((float32*)default_value)));
-	}
-	if (type==3){
-		sprintf_s(_sp_input_buffer, sizeof(_sp_input_buffer), format, (*((float64*)default_value)));
-	}
-	//sprintf_s(_sp_input_buffer, sizeof(_sp_input_buffer), "0x%X", default_value);
+	_sp_input_seek = strlen(_sp_input_buffer);
+	memset(_sp_input_buffer+_sp_input_seek, 0, sizeof(_sp_input_buffer)-_sp_input_seek);
 }
 
 void spInputText(const char* default_value){
@@ -191,6 +199,7 @@ void spInputText(const char* default_value){
 	guiSetElementActive(over_text, 1);
 	guiSetElementVisible(over_value, 1);
 	guiSetElementActive(over_value, 1);
+	guiSetElementVisible(caret, 1);
 	_sp_input_active = 1;
 	_sp_input_istext = 1;
 	if (default_value){
@@ -199,6 +208,8 @@ void spInputText(const char* default_value){
 	else {
 		sprintf_s(_sp_input_buffer, sizeof(_sp_input_buffer), "");
 	}
+	_sp_input_seek = strlen(_sp_input_buffer);
+	memset(_sp_input_buffer+_sp_input_seek, 0, sizeof(_sp_input_buffer)-_sp_input_seek);
 }
 
 void spCloseInput(){
@@ -209,6 +220,7 @@ void spCloseInput(){
 	guiSetElementActive(over_text, 0);
 	guiSetElementVisible(over_value, 0);
 	guiSetElementActive(over_value, 0);
+	guiSetElementVisible(caret, 0);
 }
 
 
@@ -216,37 +228,37 @@ void spCloseInput(){
 //	Process Functions
 //
 
-void spHStep(Element el, Uint32 x, Uint32 y){
+void spHStep(Element el, int btn, Uint32 x, Uint32 y){
 	vmStep();
 	spUpdate();
 }
 
-void spHReset(Element el, Uint32 x, Uint32 y){
+void spHReset(Element el, int btn, Uint32 x, Uint32 y){
 	vmReset();
 	spUpdate();
 }
 
-void spHEditGreg(Element el, Uint32 x, Uint32 y){
+void spHEditGreg(Element el, int btn, Uint32 x, Uint32 y){
 	int i = el-gregs[0].entry;
-	spInputNumeric(&g_cpu.gregs[i], 0, "0x%X");
+	spInputNumeric(&g_cpu.gregs[i], 0, "0x%X\0");
 }
 
-void spHEditFreg(Element el, Uint32 x, Uint32 y){
+void spHEditFreg(Element el, int btn, Uint32 x, Uint32 y){
 	int i = el-fregs[0].entry;
-	spInputNumeric(&g_cpu.fregs[i], 3, "%lf");
+	spInputNumeric(&g_cpu.fregs[i], 3, "%lf\0");
 }
 
-void spHEditOreg(Element el, Uint32 x, Uint32 y){
+void spHEditOreg(Element el, int btn, Uint32 x, Uint32 y){
 	int i = el-oregs[0].entry;
-	spInputNumeric(i<8? &g_cpu.iregs[i]: &g_cpu.sregs[i-8].base, i<8? 0: 0, "0x%X");
+	spInputNumeric(i<8? &g_cpu.iregs[i]: &g_cpu.sregs[i-8].base, i<8? 0: 0, "0x%X\0");
 }
 
-void spHEditCreg(Element el, Uint32 x, Uint32 y){
+void spHEditCreg(Element el, int btn, Uint32 x, Uint32 y){
 	int i = el-cregs[0].entry;
-	spInputNumeric(cregs[i].reg, 0, "0x%X");
+	spInputNumeric(cregs[i].reg, 0, "0x%X\0");
 }
 
-void spHToggleFlag(Element el, Uint32 x, Uint32 y){
+void spHToggleFlag(Element el, int btn, Uint32 x, Uint32 y){
 	int i = el-flags[0].entry;
 	if (g_cpu.reg_st&flags[i].flag){
 		g_cpu.reg_st &= ~flags[i].flag;
@@ -257,32 +269,135 @@ void spHToggleFlag(Element el, Uint32 x, Uint32 y){
 	spUpdate();
 }
 
-void spHEditMAdr(Element el, Uint32 x, Uint32 y){
+void spHEditMAdr(Element el, int btn, Uint32 x, Uint32 y){
 	int i = el-mem_adrs[0].label;
 	uint32 data = 0;
-	spInputNumeric(&data, 0, "0x%X");
+	spInputNumeric(&data, 0, "0x%X\0");
 }
 
-void spHEditVMem(Element el, Uint32 x, Uint32 y){
+void spHEditVMem(Element el, int btn, Uint32 x, Uint32 y){
 	int i = el-mem[0].entry;
 	uint32 data = busRead(i);
-	spInputNumeric(&data, 0, "0x%X");
+	spInputNumeric(&data, 0, "0x%X\0");
 }
 
-void spHOnKey(Uint32 key){
-	if (key == SDLK_F9){
-		vmStep();
-		spUpdate();
+void spHOnKey(Uint32 key, _Bool ctrl, _Bool alt, _Bool shift, _Bool caps){
+	printf("=Key 0x%x ctrl=%d alt=%d shift=%d caps=%d\n", key, ctrl, alt, shift, caps);
+	if (_sp_input_active){
+		if (key==SDLK_LSHIFT || key==SDLK_RSHIFT || key==SDLK_LALT || key==SDLK_RALT ||
+			key==SDLK_LCTRL || key==SDLK_RCTRL || key==SDLK_CAPSLOCK){
+			// Dispose keys
+		}
+		else if (key == SDLK_RETURN && _sp_input_active){
+			spCloseInput();
+		}
+		else if (key == SDLK_ESCAPE){
+			spCloseInput();
+		}
+		else if (key==SDLK_BACKSPACE){
+			if (shift){
+				for (int i = 0; i<(sizeof(_sp_input_buffer)-_sp_input_seek-1); i++){
+					_sp_input_buffer[i] = _sp_input_buffer[i+_sp_input_seek];
+				}
+				_sp_input_seek = 0;
+			}
+			else if (_sp_input_seek > 0){
+				_sp_input_seek--;
+				for (int i = _sp_input_seek; i<(sizeof(_sp_input_buffer)-_sp_input_seek-1); i++){
+					_sp_input_buffer[i] = _sp_input_buffer[i+1];
+				}
+			}
+		}
+		else if (key==SDLK_DELETE){
+			if (shift){
+				for (int i = _sp_input_seek; i<(sizeof(_sp_input_buffer)-1); i++){
+					_sp_input_buffer[i] = 0;
+				}
+			}
+			else {
+				for (int i = _sp_input_seek; i<(sizeof(_sp_input_buffer)-_sp_input_seek-1); i++){
+					_sp_input_buffer[i] = _sp_input_buffer[i+1];
+				}
+			}
+		}
+		else if (key==SDLK_LEFT){
+			if (_sp_input_seek > 0){
+				_sp_input_seek--;
+			}
+		}
+		else if (key==SDLK_RIGHT){
+			if (_sp_input_buffer[_sp_input_seek]!=0){
+				_sp_input_seek++;
+			}
+		}
+		else if (key==SDLK_HOME){
+			_sp_input_seek = 0;
+		}
+		else if (key==SDLK_END){
+			_sp_input_seek = strlen(_sp_input_buffer);
+		}
+		else if (ctrl){
+			if (key=='v'){
+				char* content = SDL_GetClipboardText();
+				char* og = content;
+				int gap = strlen(content);
+				for (int i = sizeof(_sp_input_buffer)-2; i>_sp_input_seek; i--){
+					if (gap<=i){
+						_sp_input_buffer[i] = _sp_input_buffer[i-gap];
+					}
+				}
+				for (int i = _sp_input_seek; i<(_sp_input_seek+gap) && i<(sizeof(_sp_input_buffer)-1); i++){
+					_sp_input_buffer[i] = *content;
+					content++;
+				}
+				_sp_input_seek += gap;
+				_sp_input_seek = _sp_input_seek>=sizeof(_sp_input_buffer)? sizeof(_sp_input_buffer)-2: _sp_input_seek;
+				SDL_free(og);
+			}
+			if (key=='c'){
+				SDL_SetClipboardText(_sp_input_buffer);
+			}
+		}
+		else if (alt){
+
+		}
+		else {
+			char chr = key;
+			if ((chr>='a' && chr<='z') && (shift || caps)){
+				chr -= 0x20;
+			}
+			if (_sp_input_seek < (sizeof(_sp_input_buffer)-1)){
+				for (int i = sizeof(_sp_input_buffer)-2; i>_sp_input_seek; i--){
+					_sp_input_buffer[i] = _sp_input_buffer[i-1];
+				}
+				_sp_input_buffer[_sp_input_seek] = chr;
+				_sp_input_seek++;
+			}
+		}
+		/*printf("=");
+		for (int i = 0; i<16; i++){
+			printf("%.2X, ", _sp_input_buffer[i]&0xFF);
+		}
+		printf("..\n ");
+		for (int i = 0; i<16; i++){
+			if (i==_sp_input_seek){
+				printf(" ^  ");
+			}
+			else {
+				printf("    ");
+			}
+		}
+		printf("\n");*/
 	}
-	if (key == SDLK_F1){
-		vmReset();
-		spUpdate();
-	}
-	if (key == SDLK_RETURN && _sp_input_active){
-		spCloseInput();
-	}
-	if (key == SDLK_ESCAPE){
-		spCloseInput();
+	else {
+		if (key == SDLK_F9){
+			vmStep();
+			spUpdate();
+		}
+		if (key == SDLK_F1){
+			vmReset();
+			spUpdate();
+		}
 	}
 }
 
@@ -299,6 +414,8 @@ void spInit() {
 	// Registers
 	for (int i = 0; i<16; i++){
 		guiCreateLabel(gregs[i].name, 20, 50 + i*20);
+	}
+	for (int i = 0; i<16; i++){
 		Element entry = guiCreateLabel(gregs[i].buffer/*"0x00000000"*/, 50, 50 + i*20);
 		guiSetElementBackColor(entry, COLOR_YELLOW);
 		guiSetElementHoverColor(entry, COLOR_ORANGE);
@@ -312,6 +429,8 @@ void spInit() {
 	}
 	for (int i = 0; i<16; i++){
 		guiCreateLabel(fregs[i].name, 150, 50 + i*20);
+	}
+	for (int i = 0; i<16; i++){
 		Element entry = guiCreateLabel(fregs[i].buffer/*"0.0000E+00"*/, 180, 50 + i*20);
 		guiSetElementBackColor(entry, COLOR_YELLOW);
 		guiSetElementHoverColor(entry, COLOR_ORANGE);
@@ -325,6 +444,8 @@ void spInit() {
 	}
 	for (int i = 0; i<16; i++){
 		guiCreateLabel(oregs[i].name, 280, 50 + i*20);
+	}
+	for (int i = 0; i<16; i++){
 		Element entry = guiCreateLabel(oregs[i].buffer/*i<8? "0x00000000": "0x00"*/, 310, 50 + i*20);
 		guiSetElementBackColor(entry, COLOR_YELLOW);
 		guiSetElementHoverColor(entry, COLOR_ORANGE);
@@ -337,6 +458,8 @@ void spInit() {
 	}
 	for (int i = 0; i<6; i++){
 		guiCreateLabel(cregs[i].name, 20 + (i>>1)*130, 380 + (i&1)*20);
+	}
+	for (int i = 0; i<6; i++){
 		Element entry = guiCreateLabel(cregs[i].buffer/*"0x00000000"*/, 50 + (i>>1)*130, 380 + (i&1)*20);
 		guiSetElementBackColor(entry, COLOR_YELLOW);
 		guiSetElementHoverColor(entry, COLOR_ORANGE);
@@ -420,16 +543,23 @@ void spInit() {
 	guiSetElementAlpha(over_panel, 0.75f);
 	guiSetElementVisible(over_panel, 0);
 	guiSetElementActive(over_panel, 0);
+
 	over_text = guiCreateLabel("Insert a Input value:", 20, 20);
 	guiSetElementTextColor(over_text, COLOR_WHITE);
 	guiSetElementFontSize(over_text, 2);
 	guiSetElementVisible(over_text, 0);
 	guiSetElementActive(over_text, 0);
+
 	over_value = guiCreateLabel(_sp_input_buffer, 50, 70);
 	guiSetElementTextColor(over_value, COLOR_WHITE);
 	guiSetElementFontSize(over_value, 2);
 	guiSetElementVisible(over_value, 0);
 	guiSetElementActive(over_value, 0);
+
+	caret = guiCreateDiv(50, 70, 12, 20);
+	guiSetElementBackColor(caret, COLOR_WHITE);
+	guiSetElementVisible(caret, 0);
+	guiSetElementActive(caret, 0);
 
 	guiSetOnKeyDown(spHOnKey);
 
@@ -439,6 +569,9 @@ void spInit() {
 }
 
 int spHandle() {
+	guiSetElementX(caret, 52 + _sp_input_seek*16);
+	guiSetElementAlpha(caret, SDL_GetTicks()&0x100? 1.0f: 0.0f);
+
 	return guiProcess();
 }
 
