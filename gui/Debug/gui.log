@@ -1,6 +1,4 @@
 ﻿  inspector.c
-c:\users\erick\documents\meus-projetos\c\lp432\gui\src\components\display\inspector.c(172): warning C4477: 'printf': a cadeia de formato '%x' requer um argumento do tipo 'unsigned int', mas um argumento variadic 1 tem o tipo 'void *'
-c:\users\erick\documents\meus-projetos\c\lp432\gui\src\components\display\inspector.c(299): warning C4018: '<': incompatibilidade de signed/unsigned
-c:\users\erick\documents\meus-projetos\c\lp432\gui\src\components\display\inspector.c(306): warning C4018: '<': incompatibilidade de signed/unsigned
-c:\users\erick\documents\meus-projetos\c\lp432\gui\src\components\display\inspector.c(318): warning C4018: '<': incompatibilidade de signed/unsigned
+c:\users\erick\documents\meus-projetos\c\lp432\gui\src\components\display\inspector.c(181): warning C4090: 'função': qualificadores 'const' diferentes
+c:\users\erick\documents\meus-projetos\c\lp432\gui\src\components\display\inspector.c(215): warning C4090: 'função': qualificadores 'const' diferentes
   gui.vcxproj -> C:\Users\erick\Documents\meus-projetos\c\lp432\Debug\gui.exe

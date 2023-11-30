@@ -22,6 +22,7 @@ typedef Uint32 Element;
 typedef struct _Element{
 	_ElementType type;
 	Sint32 x, y, width, height;
+	Sint32 pad_x, pad_y;
 	Uint32 text_color;
 	Uint32 back_color, hover_color, hold_color;
 	Uint32 fore_color;
@@ -32,11 +33,13 @@ typedef struct _Element{
 	_Bool visible, active;
 	_Bool hoverable, hovered, holdable, holded;
 	void (*onClick)(Element el, int button, Uint32 x, Uint32 y);
+	void (*onClickDown)(Element el, int button, Uint32 x, Uint32 y);
 }_Element;
 _Element _elements[MAX_GUI_ELEMENTS];
 Uint32 _elements_top = 0;
 
-void (*_onKeyDown)(Uint32 key, _Bool ctrl, _Bool alt, _Bool shift, _Bool caps);
+void (*_onMouseScroll)(int x, int y);
+void (*_onKeyDown)(Uint32 key, Uint32 input, _Bool ctrl, _Bool alt, _Bool shift, _Bool caps);
 
 
 /*
@@ -88,6 +91,14 @@ void guiSetElementX(Element el, Sint32 x){
 
 void guiSetElementY(Element el, Sint32 y){
 	_elements[el].y = y;
+}
+
+void guiSetElementPadX(Element el, Sint32 x){
+	_elements[el].pad_x = x;
+}
+
+void guiSetElementPadY(Element el, Sint32 y){
+	_elements[el].pad_y = y;
 }
 
 void guiSetElementWidth(Element el, Sint32 width){
@@ -156,7 +167,15 @@ void guiSetElementOnClick(Element el, void(*onclick)(Element e, int btn, Uint32 
 	_elements[el].onClick = onclick;
 }
 
-void guiSetOnKeyDown(void (*onKeyDown)(Uint32 key, _Bool ctrl, _Bool alt, _Bool shift, _Bool caps)){
+void guiSetElementOnClickDown(Element el, void(*onclickdown)(Element e, int btn, Uint32 x, Uint32 y)){
+	_elements[el].onClickDown = onclickdown;
+}
+
+void guiSetOnMouseScroll(void (*onMouseScroll)(int x, int y)){
+	_onMouseScroll = onMouseScroll;
+}
+
+void guiSetOnKeyDown(void (*onKeyDown)(Uint32 key, Uint32 input, _Bool ctrl, _Bool alt, _Bool shift, _Bool caps)){
 	_onKeyDown = onKeyDown;
 }
 
@@ -171,6 +190,7 @@ void guiStart() {
 	sp_win = SDL_CreateWindow("LP432 Inspector", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 480, 0);
 	sp_rnd = SDL_CreateRenderer(sp_win, 0, 0);
 
+	SDL_StartTextInput();
 	dwSetup();
 }
 
@@ -190,6 +210,12 @@ int guiProcess() {
 	}gui_event = {0};
 	gui_event.type = EVENT_NONE;
 	gui_event.triggered = 0;
+
+	struct {
+		_Bool triggered;
+		Uint32 key, input;
+		_Bool ctrl, alt, shift, caps;
+	}key_event = {0};
 
 	SDL_Event ev;
 	while (SDL_PollEvent(&ev)){
@@ -223,11 +249,29 @@ int guiProcess() {
 				gui_event.y = ev.button.y;
 			}
 			break;
+			case SDL_MOUSEWHEEL: {
+				_onMouseScroll(ev.wheel.x, ev.wheel.y);
+			}
+			break;
+			case SDL_TEXTINPUT: {
+				key_event.input = *(Uint32*)&ev.text.text;
+			}
+			break;
 			case SDL_KEYDOWN: {
-				_onKeyDown(ev.key.keysym.sym, (ev.key.keysym.mod&KMOD_CTRL) != 0, (ev.key.keysym.mod&KMOD_ALT) != 0, (ev.key.keysym.mod&KMOD_SHIFT) != 0, (ev.key.keysym.mod&KMOD_CAPS) != 0);
+				key_event.triggered = 1;
+				key_event.key = ev.key.keysym.sym;
+				//key_event.input = key_event.input? key_event.input: ev.key.keysym.sym;
+				key_event.ctrl = (ev.key.keysym.mod&KMOD_CTRL) != 0;
+				key_event.alt = (ev.key.keysym.mod&KMOD_ALT) != 0;
+				key_event.shift = (ev.key.keysym.mod&KMOD_SHIFT) != 0;
+				key_event.caps = (ev.key.keysym.mod&KMOD_CAPS) != 0;
 			}
 			break;
 		}
+	}
+
+	if (key_event.triggered){
+		_onKeyDown(key_event.key, key_event.input, key_event.ctrl, key_event.alt, key_event.shift, key_event.caps);
 	}
 
 	// Clear the background
@@ -245,6 +289,9 @@ int guiProcess() {
 					gui_event.y >= _elements[i].y && gui_event.y < (_elements[i].y+_elements[i].height)){
 					gui_event.type = EVENT_NONE;
 					_elements[i].holded = _elements[i].holdable;
+					if (_elements[i].onClickDown){
+						_elements[i].onClickDown((Element)i, gui_event.button, gui_event.x, gui_event.y);
+					}
 				}
 			}
 			break;
@@ -288,7 +335,7 @@ int guiProcess() {
 				// Render text only for labels
 				case TYPE_LABEL: {
 					text_color = _elements[i].text_color;
-					dwText(_elements[i].text, _elements[i].x, _elements[i].y, _elements[i].font_size);
+					dwText(_elements[i].text, _elements[i].x + _elements[i].pad_x, _elements[i].y + _elements[i].pad_y, _elements[i].font_size);
 				}
 				break;
 			}

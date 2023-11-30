@@ -114,12 +114,24 @@ struct {
 	char buffer[4];
 	Element entry;
 }mem[256];
+Uint32 _sp_mem_badr = 0;
 Element over_panel, over_text, over_value, caret;
 
 _Bool _sp_input_active = 0;
 int _sp_input_seek = 0;
 _Bool _sp_input_istext = 0;
 char _sp_input_buffer[256] = {0};
+void (*_sp_input_callback)(char* value, void* arg) = NULL;
+void* _sp_input_arg = NULL;
+
+
+//
+//	Util Functions
+//
+
+uint32 spUtilTAddress(uint32 logical_adr){
+	return logical_adr;
+}
 
 
 //
@@ -148,18 +160,25 @@ void spUpdate(){
 
 	// Memory inspector
 	for (int r = 0; r<16; r++){
-		sprintf_s(mem_adrs[r].buffer, sizeof(mem_adrs[r].buffer), "%.8X\0", 0 + r*16);
+		sprintf_s(mem_adrs[r].buffer, sizeof(mem_adrs[r].buffer), "%.8X\0", _sp_mem_badr + r*16);
 	}
 	for (int r = 0; r<16; r++){
 		for (int c = 0; c<16; c++){
-			Uint8 data = busRead(0 + r*16 + c);
+			Uint8 data = busRead(spUtilTAddress(_sp_mem_badr + r*16 + c));
 			sprintf_s(mem[r*16 + c].buffer, sizeof(mem[r*16 + c].buffer), "%.2X\0", data);
+
+			if (spUtilTAddress(g_cpu.reg_pc)==spUtilTAddress(_sp_mem_badr + r*16 + c)){
+				guiSetElementBackColor(mem[r*16 + c].entry, COLOR_GREEN);
+			}
+			else {
+				guiSetElementBackColor(mem[r*16 + c].entry, COLOR_YELLOW);
+			}
 		}
 	}
 }
 
-void spInputNumeric(void *default_value, int type, const char* format){
-	guiSetElementText(over_text, "Insert a Numeric value:");
+void spInputNumeric(void *default_value, int type, const char* format, const char* message, void (*callback)(char* value, void* arg), void* arg){
+	guiSetElementText(over_text, message);
 	guiSetElementVisible(over_panel, 1);
 	guiSetElementActive(over_panel, 1);
 	guiSetElementVisible(over_text, 1);
@@ -169,7 +188,6 @@ void spInputNumeric(void *default_value, int type, const char* format){
 	guiSetElementVisible(caret, 1);
 	_sp_input_active = 1;
 	_sp_input_istext = 0;
-	printf("0x%x\n", default_value);
 	if (default_value){
 		if (type==0){
 			sprintf_s(_sp_input_buffer, sizeof(_sp_input_buffer), format, (*((uint32*)default_value)));
@@ -189,10 +207,12 @@ void spInputNumeric(void *default_value, int type, const char* format){
 	}
 	_sp_input_seek = strlen(_sp_input_buffer);
 	memset(_sp_input_buffer+_sp_input_seek, 0, sizeof(_sp_input_buffer)-_sp_input_seek);
+	_sp_input_callback = callback;
+	_sp_input_arg = arg;
 }
 
-void spInputText(const char* default_value){
-	guiSetElementText(over_text, "Insert a Text value:");
+void spInputText(const char* default_value, const char* message, void (*callback)(char* value, void* arg), void* arg){
+	guiSetElementText(over_text, message);
 	guiSetElementVisible(over_panel, 1);
 	guiSetElementActive(over_panel, 1);
 	guiSetElementVisible(over_text, 1);
@@ -210,6 +230,8 @@ void spInputText(const char* default_value){
 	}
 	_sp_input_seek = strlen(_sp_input_buffer);
 	memset(_sp_input_buffer+_sp_input_seek, 0, sizeof(_sp_input_buffer)-_sp_input_seek);
+	_sp_input_callback = callback;
+	_sp_input_arg = arg;
 }
 
 void spCloseInput(){
@@ -221,6 +243,140 @@ void spCloseInput(){
 	guiSetElementVisible(over_value, 0);
 	guiSetElementActive(over_value, 0);
 	guiSetElementVisible(caret, 0);
+}
+
+void spInputGetI32(uint32* out){
+	if (_sp_input_buffer[0]==0){
+		*out = 0;
+		return;
+	}
+	if (_sp_input_buffer[0]=='0'){
+		if (_sp_input_buffer[1]=='x' || _sp_input_buffer[2]=='x'){
+			sscanf_s(_sp_input_buffer+2, "%x", out);
+			return;
+		}
+	}
+	sscanf_s(_sp_input_buffer, "%d", out);
+}
+
+void spInputGetF64(float64* out){
+	if (_sp_input_buffer[0]==0){
+		*out = 0;
+		return;
+	}
+	sscanf_s(_sp_input_buffer, "%lf", out);
+}
+
+
+//
+//	Callback Input Functions
+//
+
+void spIGreg(char* value, void* arg){
+	spInputGetI32(arg);
+	spUpdate();
+}
+
+void spIFreg(char* value, void* arg){
+	spInputGetF64(arg);
+	spUpdate();
+}
+
+void spIOreg(char* value, void* arg){
+	int idx = (int)arg;
+	if (idx<8){
+		spInputGetI32(&g_cpu.iregs[idx]);
+	}
+	else {
+		spInputGetI32(&g_cpu.sregs[idx].base);
+	}
+	spUpdate();
+}
+
+void spICreg(char* value, void* arg){
+	spInputGetI32(arg);
+	spUpdate();
+}
+
+void spIMadr(char* value, void* arg){
+	//_sp_mem_badr
+	spInputGetI32(&_sp_mem_badr);
+	spUpdate();
+}
+
+void spIVmem(char* value, void* arg){
+	//_sp_mem_badr
+	Uint32 data = 0;
+	spInputGetI32(&data);
+	busWrite(spUtilTAddress(_sp_mem_badr + (int)arg), (uint8)data);
+	spUpdate();
+}
+
+char sp_rom_path[256];
+Uint32 sp_rom_offset = 0;
+Uint32 sp_rom_size = 0;
+
+void spIMenuLoadOffset(char* value, void* arg){
+	spInputGetI32(&sp_rom_offset);
+
+	FILE *file;
+	errno_t err;
+	if ((err = fopen_s(&file, sp_rom_path, "rb"))){
+		printf("Error on loading file at path \"%s\", cause => %i\n", sp_rom_path, err);
+		return;
+	}
+	if (!file){
+		printf("File in path \"%s\" does not exists!\n", sp_rom_path);
+		return;
+	}
+
+	fseek(file, 0, SEEK_END);
+	long size = ftell(file);
+	fseek(file, 0, SEEK_SET);
+
+	while (size){
+		busWrite(sp_rom_offset, fgetc(file)&0xFF);
+		sp_rom_offset++;
+		size--;
+	}
+	fclose(file);
+}
+
+void spIMenuLoad(char* value, void* arg){
+	Uint32 data = 0;
+	sprintf_s(sp_rom_path, sizeof(sp_rom_path), "%s", value);
+	spInputNumeric(&data, 0, "0x%X\0", "Insert offset for ROM loading in memory:", spIMenuLoadOffset, NULL);
+}
+
+void spIMenuSaveSize(char* value, void* arg){
+	spInputGetI32(&sp_rom_size);
+
+	remove(sp_rom_path);
+	FILE *file;
+	errno_t err;
+	if ((err = fopen_s(&file, sp_rom_path, "wb"))){
+		printf("Error on loading file at path \"%s\", cause => %i\n", sp_rom_path, err);
+		return;
+	}
+
+	while (sp_rom_size){
+		fputc(busRead(sp_rom_offset), file);
+		sp_rom_offset++;
+		sp_rom_size--;
+	}
+	fclose(file);
+}
+
+void spIMenuSaveOffset(char* value, void* arg){
+	Uint32 data = 0;
+	spInputGetI32(&sp_rom_offset);
+	spInputNumeric(&data, 0, "0x%X\0", "Insert length for ROM saving:", spIMenuSaveSize, NULL);
+}
+
+void spIMenuSave(char* value, void* arg){
+	Uint32 data = 0;
+	sprintf_s(sp_rom_path, sizeof(sp_rom_path), "%s", value);
+	spInputNumeric(&data, 0, "0x%X\0", "Insert offset in memory to ROM saving:", spIMenuSaveOffset, NULL);
 }
 
 
@@ -240,22 +396,31 @@ void spHReset(Element el, int btn, Uint32 x, Uint32 y){
 
 void spHEditGreg(Element el, int btn, Uint32 x, Uint32 y){
 	int i = el-gregs[0].entry;
-	spInputNumeric(&g_cpu.gregs[i], 0, "0x%X\0");
+	static char msg[128];
+	sprintf_s(msg, sizeof(msg), "Insert value for register %s:", gregs[i].name);
+	spInputNumeric(&g_cpu.gregs[i], 0, "0x%X\0", msg, spIGreg, &g_cpu.gregs[i]);
 }
 
 void spHEditFreg(Element el, int btn, Uint32 x, Uint32 y){
 	int i = el-fregs[0].entry;
-	spInputNumeric(&g_cpu.fregs[i], 3, "%lf\0");
+	double one = 1.0;
+	static char msg[128];
+	sprintf_s(msg, sizeof(msg), "Insert value for register %s:", fregs[i].name);
+	spInputNumeric(&g_cpu.fregs[i], 3, modf(g_cpu.fregs[i], &one)? "%lg\0": "%lg.0\0", msg, spIFreg, &g_cpu.fregs[i]);
 }
 
 void spHEditOreg(Element el, int btn, Uint32 x, Uint32 y){
 	int i = el-oregs[0].entry;
-	spInputNumeric(i<8? &g_cpu.iregs[i]: &g_cpu.sregs[i-8].base, i<8? 0: 0, "0x%X\0");
+	static char msg[128];
+	sprintf_s(msg, sizeof(msg), "Insert value for register %s:", oregs[i].name);
+	spInputNumeric(i<8? &g_cpu.iregs[i]: &g_cpu.sregs[i-8].base, i<8? 0: 0, "0x%X\0", msg, spIOreg, (void*)i);
 }
 
 void spHEditCreg(Element el, int btn, Uint32 x, Uint32 y){
 	int i = el-cregs[0].entry;
-	spInputNumeric(cregs[i].reg, 0, "0x%X\0");
+	static char msg[128];
+	sprintf_s(msg, sizeof(msg), "Insert value for register %s:", cregs[i].name);
+	spInputNumeric(cregs[i].reg, 0, "0x%X\0", msg, spICreg, cregs[i].reg);
 }
 
 void spHToggleFlag(Element el, int btn, Uint32 x, Uint32 y){
@@ -271,18 +436,52 @@ void spHToggleFlag(Element el, int btn, Uint32 x, Uint32 y){
 
 void spHEditMAdr(Element el, int btn, Uint32 x, Uint32 y){
 	int i = el-mem_adrs[0].label;
-	uint32 data = 0;
-	spInputNumeric(&data, 0, "0x%X\0");
+	uint32 data = _sp_mem_badr;
+	spInputNumeric(&data, 0, "0x%X\0", "Insert value for memory address:", spIMadr, (void*)i);
 }
 
 void spHEditVMem(Element el, int btn, Uint32 x, Uint32 y){
 	int i = el-mem[0].entry;
-	uint32 data = busRead(i);
-	spInputNumeric(&data, 0, "0x%X\0");
+	static char msg[128];
+	sprintf_s(msg, sizeof(msg), "Insert value to memory in address 0x%X:", (_sp_mem_badr + i));
+	uint32 data = busRead(spUtilTAddress(_sp_mem_badr + i));
+	spInputNumeric(&data, 0, "0x%X\0", msg, spIVmem, (void*)i);
 }
 
-void spHOnKey(Uint32 key, _Bool ctrl, _Bool alt, _Bool shift, _Bool caps){
-	printf("=Key 0x%x ctrl=%d alt=%d shift=%d caps=%d\n", key, ctrl, alt, shift, caps);
+void spHMenuLoadRom(Element el, int btn, Uint32 x, Uint32 y){
+	spInputText("./tests/main.o", "Insert path for ROM loading from:", spIMenuLoad, NULL);
+}
+
+void spHMenuSaveRom(Element el, int btn, Uint32 x, Uint32 y){
+	spInputText("./tests/main.o", "Insert path for ROM saving to:", spIMenuSave, NULL);
+}
+
+void spHEditInput(Element el, int btn, Uint32 x, Uint32 y){
+	x = (x-50)/16;
+	if (x >= strlen(_sp_input_buffer)){
+		_sp_input_seek = strlen(_sp_input_buffer);
+	}
+	else if (x < 0){
+		_sp_input_seek = 0;
+	}
+	else {
+		_sp_input_seek = x;
+	}
+}
+
+void spHOnMouseScroll(int x, int y){
+	if (y > 0){
+		_sp_mem_badr -= 0x40;
+		spUpdate();
+	}
+	else {
+		_sp_mem_badr += 0x40;
+		spUpdate();
+	}
+}
+
+void spHOnKey(Uint32 key, Uint32 input, _Bool ctrl, _Bool alt, _Bool shift, _Bool caps){
+	//printf("=Key 0x%x ctrl=%d alt=%d shift=%d caps=%d\n", key, ctrl, alt, shift, caps);
 	if (_sp_input_active){
 		if (key==SDLK_LSHIFT || key==SDLK_RSHIFT || key==SDLK_LALT || key==SDLK_RALT ||
 			key==SDLK_LCTRL || key==SDLK_RCTRL || key==SDLK_CAPSLOCK){
@@ -290,32 +489,33 @@ void spHOnKey(Uint32 key, _Bool ctrl, _Bool alt, _Bool shift, _Bool caps){
 		}
 		else if (key == SDLK_RETURN && _sp_input_active){
 			spCloseInput();
+			_sp_input_callback(_sp_input_buffer, _sp_input_arg);
 		}
 		else if (key == SDLK_ESCAPE){
 			spCloseInput();
 		}
 		else if (key==SDLK_BACKSPACE){
 			if (shift){
-				for (int i = 0; i<(sizeof(_sp_input_buffer)-_sp_input_seek-1); i++){
+				for (int i = 0; i<(int)(sizeof(_sp_input_buffer)-_sp_input_seek-1); i++){
 					_sp_input_buffer[i] = _sp_input_buffer[i+_sp_input_seek];
 				}
 				_sp_input_seek = 0;
 			}
 			else if (_sp_input_seek > 0){
 				_sp_input_seek--;
-				for (int i = _sp_input_seek; i<(sizeof(_sp_input_buffer)-_sp_input_seek-1); i++){
+				for (int i = _sp_input_seek; i<(int)(sizeof(_sp_input_buffer)-_sp_input_seek-1); i++){
 					_sp_input_buffer[i] = _sp_input_buffer[i+1];
 				}
 			}
 		}
 		else if (key==SDLK_DELETE){
 			if (shift){
-				for (int i = _sp_input_seek; i<(sizeof(_sp_input_buffer)-1); i++){
+				for (int i = _sp_input_seek; i<(int)(sizeof(_sp_input_buffer)-1); i++){
 					_sp_input_buffer[i] = 0;
 				}
 			}
 			else {
-				for (int i = _sp_input_seek; i<(sizeof(_sp_input_buffer)-_sp_input_seek-1); i++){
+				for (int i = _sp_input_seek; i<(int)(sizeof(_sp_input_buffer)-_sp_input_seek-1); i++){
 					_sp_input_buffer[i] = _sp_input_buffer[i+1];
 				}
 			}
@@ -362,10 +562,10 @@ void spHOnKey(Uint32 key, _Bool ctrl, _Bool alt, _Bool shift, _Bool caps){
 
 		}
 		else {
-			char chr = key;
-			if ((chr>='a' && chr<='z') && (shift || caps)){
+			char chr = input;
+			/*if ((chr>='a' && chr<='z') && (shift || caps)){
 				chr -= 0x20;
-			}
+			}*/
 			if (_sp_input_seek < (sizeof(_sp_input_buffer)-1)){
 				for (int i = sizeof(_sp_input_buffer)-2; i>_sp_input_seek; i--){
 					_sp_input_buffer[i] = _sp_input_buffer[i-1];
@@ -374,20 +574,6 @@ void spHOnKey(Uint32 key, _Bool ctrl, _Bool alt, _Bool shift, _Bool caps){
 				_sp_input_seek++;
 			}
 		}
-		/*printf("=");
-		for (int i = 0; i<16; i++){
-			printf("%.2X, ", _sp_input_buffer[i]&0xFF);
-		}
-		printf("..\n ");
-		for (int i = 0; i<16; i++){
-			if (i==_sp_input_seek){
-				printf(" ^  ");
-			}
-			else {
-				printf("    ");
-			}
-		}
-		printf("\n");*/
 	}
 	else {
 		if (key == SDLK_F9){
@@ -396,6 +582,14 @@ void spHOnKey(Uint32 key, _Bool ctrl, _Bool alt, _Bool shift, _Bool caps){
 		}
 		if (key == SDLK_F1){
 			vmReset();
+			spUpdate();
+		}
+		if (key == SDLK_PAGEUP){
+			_sp_mem_badr -= 0x100;
+			spUpdate();
+		}
+		if (key == SDLK_PAGEDOWN){
+			_sp_mem_badr += 0x100;
 			spUpdate();
 		}
 	}
@@ -519,6 +713,31 @@ void spInit() {
 		}
 	}
 
+	// Menu panel
+	Element menu_load = guiCreateLabel("load ROM", 10, 10);
+	guiSetElementBackColor(menu_load, COLOR_WHITE);
+	guiSetElementHoverColor(menu_load, COLOR_LIGHTGRAY);
+	guiSetElementHoldColor(menu_load, COLOR_GRAY);
+	guiSetElementForeColor(menu_load, COLOR_BLACK);
+	guiSetElementWidth(menu_load, 70);
+	guiSetElementHeight(menu_load, 16);
+	guiSetElementPadX(menu_load, 2);
+	guiSetElementPadY(menu_load, 4);
+	guiSetElementForeWidth(menu_load, 1);
+	guiSetElementOnClick(menu_load, spHMenuLoadRom);
+
+	Element menu_save = guiCreateLabel("save ROM", 90, 10);
+	guiSetElementBackColor(menu_save, COLOR_WHITE);
+	guiSetElementHoverColor(menu_save, COLOR_LIGHTGRAY);
+	guiSetElementHoldColor(menu_save, COLOR_GRAY);
+	guiSetElementForeColor(menu_save, COLOR_BLACK);
+	guiSetElementWidth(menu_save, 70);
+	guiSetElementHeight(menu_save, 16);
+	guiSetElementPadX(menu_save, 2);
+	guiSetElementPadY(menu_save, 4);
+	guiSetElementForeWidth(menu_save, 1);
+	guiSetElementOnClick(menu_save, spHMenuSaveRom);
+
 	// Control panel
 	Element step_btn = guiCreateDiv(410, 50, 70, 30);
 	guiCreateLabel("Step", 420, 60);
@@ -551,16 +770,23 @@ void spInit() {
 	guiSetElementActive(over_text, 0);
 
 	over_value = guiCreateLabel(_sp_input_buffer, 50, 70);
+	guiSetElementBackColor(over_value, COLOR_BLACK);
+	guiSetElementHoverColor(over_value, COLOR_DARKGRAY);
+	guiSetElementHoldColor(over_value, COLOR_GRAY);
 	guiSetElementTextColor(over_value, COLOR_WHITE);
+	guiSetElementWidth(over_value, 700);
+	guiSetElementHeight(over_value, 20);
 	guiSetElementFontSize(over_value, 2);
 	guiSetElementVisible(over_value, 0);
 	guiSetElementActive(over_value, 0);
+	guiSetElementOnClickDown(over_value, spHEditInput);
 
 	caret = guiCreateDiv(50, 70, 12, 20);
 	guiSetElementBackColor(caret, COLOR_WHITE);
 	guiSetElementVisible(caret, 0);
 	guiSetElementActive(caret, 0);
 
+	guiSetOnMouseScroll(spHOnMouseScroll);
 	guiSetOnKeyDown(spHOnKey);
 
 	spUpdate();
