@@ -1,7 +1,16 @@
 #include "components/components.h"
 
 
+IniObject *config;
+
 int main(int args, char** argv) {
+	config = iniObjectLoad("config.ini");
+
+	if (!config){
+		config = iniObjectCreate();
+		iniObjectSetKeyAsBool(config, "initialized", INI_TRUE);
+	}
+
 	vmSetup();
 	spInit();
 
@@ -12,5 +21,7 @@ int main(int args, char** argv) {
 		}
 	}
 	spEnd();
+
+	cfgFlush();
 	return 0;
 }

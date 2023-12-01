@@ -6,6 +6,16 @@ Bus g_bus;
 Cpu g_cpu;
 Pci g_pci;
 
+
+/*
+	Functions for configuration
+*/
+
+void cfgFlush() {
+	iniObjectSave("config.ini", config);
+}
+
+
 /*
 	Functions for Access to BUS
 */
@@ -29,6 +39,7 @@ void busWrite(uint32 adr, uint8 data) {
 	}
 }
 
+
 /*
 	Setup Function
 */
@@ -36,6 +47,33 @@ void busWrite(uint32 adr, uint8 data) {
 void vmSetup() {
 	busSetup(&g_bus, busReset, busRead, busWrite);
 	emuSetup(&g_emu, &g_cpu, &g_pci, &g_bus);
+
+	// Preload rom
+	if (iniObjectHasKey(config, "rompath")){
+		char* path = iniObjectGetKeyAsText(config, "rompath");
+
+		FILE *file;
+		errno_t err;
+		if ((err = fopen_s(&file, path, "rb"))){
+			//printf("Error on loading rom file at path \"%s\", cause => %i\n", path, err);
+		}
+		if (!file){
+			printf("Rom in path \"%s\" does not exists!\n", path);
+		}
+		else {
+			fseek(file, 0, SEEK_END);
+			long size = ftell(file);
+			fseek(file, 0, SEEK_SET);
+
+			uint32 offset = iniObjectGetKeyAsNumber(config, "mountoffset");
+			while (size){
+				busWrite(offset, fgetc(file)&0xFF);
+				offset++;
+				size--;
+			}
+			fclose(file);
+		}
+	}
 }
 
 void vmReset() {

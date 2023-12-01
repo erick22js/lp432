@@ -130,6 +130,7 @@
     <ClCompile Include="src\components\common.c" />
     <ClCompile Include="src\components\display\font.c" />
     <ClCompile Include="src\components\display\inspector.c" />
+    <ClCompile Include="src\components\ini.c" />
     <ClCompile Include="src\main.c" />
   </ItemGroup>
   <ItemGroup>
@@ -138,6 +139,7 @@
     <ClInclude Include="src\components\display\draw.h" />
     <ClInclude Include="src\components\display\gui.h" />
     <ClInclude Include="src\components\display\inspector.h" />
+    <ClInclude Include="src\components\ini.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
