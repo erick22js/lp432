@@ -378,7 +378,20 @@ extern double iniObjectGetKeyAsNumber(IniObject *obj, const char* key) {
 	while (pair_key){
 		if (strcmp(pair_key->key, key)==0){
 			double number = 0;
-			sscanf_s(pair_key->value, "%lf", &number);
+			sscanf_s(pair_key->value, "%Lf", &number);
+			return number;
+		}
+		pair_key = pair_key->next;
+	}
+	return 0;
+}
+
+extern long iniObjectGetKeyAsHex(IniObject *obj, const char* key) {
+	IniPairKey *pair_key = obj->storager.first;
+	while (pair_key){
+		if (strcmp(pair_key->key, key)==0){
+			long number = 0;
+			sscanf_s(pair_key->value, "0x%x", &number);
 			return number;
 		}
 		pair_key = pair_key->next;
@@ -409,7 +422,17 @@ extern void iniObjectSetKeyAsBool(IniObject *obj, const char* key, _Bool value) 
 
 extern void iniObjectSetKeyAsNumber(IniObject *obj, const char* key, double number) {
 	iniCreateKey(obj->storager);
-	sprintf_s(pair_key->value, INI_MAX_VALUE_SIZE, "%lg", number);
+	sprintf_s(pair_key->value, INI_MAX_VALUE_SIZE, "%Lf", number);
+}
+
+extern void iniObjectSetKeyAsInteger(IniObject *obj, const char* key, long number) {
+	iniCreateKey(obj->storager);
+	sprintf_s(pair_key->value, INI_MAX_VALUE_SIZE, "%li", number);
+}
+
+extern void iniObjectSetKeyAsHex(IniObject *obj, const char* key, long number) {
+	iniCreateKey(obj->storager);
+	sprintf_s(pair_key->value, INI_MAX_VALUE_SIZE, "0x%X", number);
 }
 
 extern void iniObjectSetKeyAsText(IniObject *obj, const char* key, const char* text) {
@@ -546,7 +569,20 @@ extern double iniSectionGetKeyAsNumber(IniSection *section, const char* key) {
 	while (pair_key){
 		if (strcmp(pair_key->key, key)==0){
 			double number = 0;
-			sscanf_s(pair_key->value, "%lf", &number);
+			sscanf_s(pair_key->value, "%Lf", &number);
+			return number;
+		}
+		pair_key = pair_key->next;
+	}
+	return 0;
+};
+
+extern long iniSectionGetKeyAsHex(IniSection *section, const char* key) {
+	IniPairKey *pair_key = section->storager.first;
+	while (pair_key){
+		if (strcmp(pair_key->key, key)==0){
+			long number = 0;
+			sscanf_s(pair_key->value, "0x%x", &number);
 			return number;
 		}
 		pair_key = pair_key->next;
@@ -577,7 +613,17 @@ extern void iniSectionSetKeyAsBool(IniSection *section, const char* key, _Bool v
 
 extern void iniSectionSetKeyAsNumber(IniSection *section, const char* key, double number) {
 	iniCreateKey(section->storager);
-	sprintf_s(pair_key->value, INI_MAX_VALUE_SIZE, "%lg", number);
+	sprintf_s(pair_key->value, INI_MAX_VALUE_SIZE, "%Lf", number);
+};
+
+extern void iniSectionSetKeyAsInteger(IniSection *section, const char* key, long number) {
+	iniCreateKey(section->storager);
+	sprintf_s(pair_key->value, INI_MAX_VALUE_SIZE, "%li", number);
+};
+
+extern void iniSectionSetKeyAsHex(IniSection *section, const char* key, long number) {
+	iniCreateKey(section->storager);
+	sprintf_s(pair_key->value, INI_MAX_VALUE_SIZE, "0x%X", number);
 };
 
 extern void iniSectionSetKeyAsText(IniSection *section, const char* key, const char* text) {

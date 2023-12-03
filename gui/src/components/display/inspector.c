@@ -318,6 +318,8 @@ Uint32 sp_rom_size = 0;
 
 void spIMenuLoadOffset(char* value, void* arg){
 	spInputGetI32(&sp_rom_offset);
+	iniObjectSetKeyAsHex(config, "default_rom_offset", sp_rom_offset);
+	cfgFlush();
 
 	FILE *file;
 	errno_t err;
@@ -340,16 +342,21 @@ void spIMenuLoadOffset(char* value, void* arg){
 		size--;
 	}
 	fclose(file);
+
+	spUpdate();
 }
 
 void spIMenuLoad(char* value, void* arg){
-	Uint32 data = 0;
+	Uint32 data = iniObjectGetKeyAsHex(config, "default_rom_offset");
 	sprintf_s(sp_rom_path, sizeof(sp_rom_path), "%s", value);
+	iniObjectSetKeyAsText(config, "default_rom_path", value);
 	spInputNumeric(&data, 0, "0x%X\0", "Insert offset for ROM loading in memory:", spIMenuLoadOffset, NULL);
 }
 
 void spIMenuSaveSize(char* value, void* arg){
 	spInputGetI32(&sp_rom_size);
+	iniObjectSetKeyAsInteger(config, "default_rom_size", sp_rom_size);
+	cfgFlush();
 
 	remove(sp_rom_path);
 	FILE *file;
@@ -365,17 +372,21 @@ void spIMenuSaveSize(char* value, void* arg){
 		sp_rom_size--;
 	}
 	fclose(file);
+
+	spUpdate();
 }
 
 void spIMenuSaveOffset(char* value, void* arg){
-	Uint32 data = 0;
+	Uint32 data = (uint32)iniObjectGetKeyAsNumber(config, "default_rom_size");
 	spInputGetI32(&sp_rom_offset);
+	iniObjectSetKeyAsHex(config, "default_rom_offset", sp_rom_offset);
 	spInputNumeric(&data, 0, "0x%X\0", "Insert length for ROM saving:", spIMenuSaveSize, NULL);
 }
 
 void spIMenuSave(char* value, void* arg){
-	Uint32 data = 0;
+	Uint32 data = iniObjectGetKeyAsHex(config, "default_rom_offset");
 	sprintf_s(sp_rom_path, sizeof(sp_rom_path), "%s", value);
+	iniObjectSetKeyAsText(config, "default_rom_path", value);
 	spInputNumeric(&data, 0, "0x%X\0", "Insert offset in memory to ROM saving:", spIMenuSaveOffset, NULL);
 }
 
@@ -449,11 +460,11 @@ void spHEditVMem(Element el, int btn, Uint32 x, Uint32 y){
 }
 
 void spHMenuLoadRom(Element el, int btn, Uint32 x, Uint32 y){
-	spInputText("./tests/main.o", "Insert path for ROM loading from:", spIMenuLoad, NULL);
+	spInputText(iniObjectGetKeyAsText(config, "default_rom_path"), "Insert path for ROM loading from:", spIMenuLoad, NULL);
 }
 
 void spHMenuSaveRom(Element el, int btn, Uint32 x, Uint32 y){
-	spInputText("./tests/main.o", "Insert path for ROM saving to:", spIMenuSave, NULL);
+	spInputText(iniObjectGetKeyAsText(config, "default_rom_path"), "Insert path for ROM saving to:", spIMenuSave, NULL);
 }
 
 void spHEditInput(Element el, int btn, Uint32 x, Uint32 y){

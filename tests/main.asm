@@ -4,10 +4,15 @@
 .const oitenta 80
 .const dezesseis 16
 
+.macro add_one value:Word
+	add eax, value+5
+.endmacro
+
 .macro sums dest:Reg16, data
 	.byte 10, 20
 	adc dest, data
-	add eax, 1
+	add_one 1
+	add_one 2
 	.byte 30, 40
 .endmacro
 

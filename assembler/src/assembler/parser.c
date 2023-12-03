@@ -1031,7 +1031,13 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 						Value value;
 						value.type = macro->params[ai].type;
 						value.value = arg->value;
-						storeSymArg(macro->params[ai].name, value);
+
+						if (matchTypes(TYPE_IMM, arg->type)){
+							storeSymConst(macro->params[ai].name, value);
+						}
+						else {
+							storeSymArg(macro->params[ai].name, value);
+						}
 					}
 				}
 
@@ -1138,7 +1144,7 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 						throwError(ERROR_UNKNOWN);
 					}
 					macro.params[macro.params_len].name = textReuse(tk.value.string);
-					saveSeek();
+					const char* param_name = tk.value.string;
 
 					saveSeek();
 					tryCatchAndThrow(
@@ -1151,6 +1157,7 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 						DataName *data_type;
 						if ((tk.kind == TOKEN_IDENTIFIER) && (data_type = findDataByName(tk.value.string))){
 							macro.params[macro.params_len].type = data_type->type;
+							saveSeek();
 						}
 						else {
 							// TODO: Error => Expected Data type name

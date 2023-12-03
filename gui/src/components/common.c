@@ -20,21 +20,22 @@ void cfgFlush() {
 	Functions for Access to BUS
 */
 
-uint8 mem_ram[1024*1024*8];
+uint8* mem_ram = NULL;
+uint32 mem_ram_length = 0;
 
 void busReset() {
 	memset(mem_ram, 0, sizeof(mem_ram));
 }
 
 uint8 busRead(uint32 adr) {
-	if (adr < sizeof(mem_ram)){
+	if (adr < mem_ram_length){
 		return mem_ram[adr];
 	}
 	return 0;
 }
 
 void busWrite(uint32 adr, uint8 data) {
-	if (adr < sizeof(mem_ram)){
+	if (adr < mem_ram_length){
 		mem_ram[adr] = data;
 	}
 }
@@ -48,9 +49,14 @@ void vmSetup() {
 	busSetup(&g_bus, busReset, busRead, busWrite);
 	emuSetup(&g_emu, &g_cpu, &g_pci, &g_bus);
 
+	// Setup ram
+	mem_ram_length = iniObjectHasKey(setup, "ramsize")? iniObjectGetKeyAsNumber(setup, "ramsize"): 1024*256;
+	mem_ram = (uint8*)malloc(mem_ram_length);
+	memset(mem_ram, 0, mem_ram_length);
+
 	// Preload rom
-	if (iniObjectHasKey(config, "rompath")){
-		char* path = iniObjectGetKeyAsText(config, "rompath");
+	if (iniObjectHasKey(setup, "rompath")){
+		char* path = iniObjectGetKeyAsText(setup, "rompath");
 
 		FILE *file;
 		errno_t err;
@@ -65,7 +71,7 @@ void vmSetup() {
 			long size = ftell(file);
 			fseek(file, 0, SEEK_SET);
 
-			uint32 offset = iniObjectGetKeyAsNumber(config, "mountoffset");
+			uint32 offset = iniObjectGetKeyAsHex(setup, "romoffset");
 			while (size){
 				busWrite(offset, fgetc(file)&0xFF);
 				offset++;
@@ -74,6 +80,9 @@ void vmSetup() {
 			fclose(file);
 		}
 	}
+
+	// Setup cpu jump address
+	g_cpu.reg_pc = iniObjectGetKeyAsHex(setup, "startadr");
 }
 
 void vmReset() {

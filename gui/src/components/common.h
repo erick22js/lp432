@@ -6,6 +6,7 @@
 
 
 extern IniObject *config;
+extern IniObject *setup;
 
 extern Emu g_emu;
 extern Bus g_bus;
@@ -23,8 +24,6 @@ extern void cfgFlush();
 /*
 	Functions for Access to BUS
 */
-
-extern uint8 mem_ram[];
 
 extern void busReset();
 
