@@ -21,6 +21,7 @@
 #define charIsBreakLine(chr) (chr=='\n' || chr==EOF)
 #define charIsBlank(chr) (chr<=' ' && !charIsBreakLine(chr))
 #define charIsNumeric(chr) (chr>='0' && chr<='9')
+#define charIsHex(chr) (charIsNumeric(chr) || (chr>='a' && chr<='f') || (chr>='A' && chr<='F'))
 #define charIsLetter(chr) ((chr>='a' && chr<='z')||(chr>='A' && chr<='Z')||(chr=='_'))
 #define charIsAlpha(chr) (charIsLetter(chr)||charIsNumeric(chr))
 

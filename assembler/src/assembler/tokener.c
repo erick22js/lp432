@@ -67,9 +67,65 @@ int tkrFetchToken(Token *tk) {
 	else if (charIsNumeric(initial)){
 		uint32 value = 0;
 		uint32 chr = initial;
+		if (initial=='0'){
+			chr = lexerGet();
+			if (chr=='b' || chr=='B'){
+				chr = lexerGet();
+				while (chr=='0' || chr=='1'){
+					value = (value<<1) | (chr-'0');
+					chr = lexerGet();
+				}
+				if (charIsAlpha(chr)){
+					return ERROR_INVALID_NUMBER_POSFIX;
+				}
+				lexerSeekCur(-1);
+				tk->kind = TOKEN_INTEGER;
+				tk->value.integer = value;
+				return 0;
+			}
+			else if (chr=='o' || chr=='O'){
+				chr = lexerGet();
+				while (chr>='0' && chr<='7'){
+					value = (value<<3) | (chr-'0');
+					chr = lexerGet();
+				}
+				if (charIsAlpha(chr)){
+					return ERROR_INVALID_NUMBER_POSFIX;
+				}
+				lexerSeekCur(-1);
+				tk->kind = TOKEN_INTEGER;
+				tk->value.integer = value;
+				return 0;
+			}
+			else if (chr=='x' || chr=='X'){
+				chr = lexerGet();
+				while (charIsHex(chr)){
+					value = (value<<4) | (
+						chr>='0' && chr<='9'? chr-'0':
+						chr>='a' && chr<='f'? chr-'a'+10:
+						chr>='A' && chr<='F'? chr-'A'+10: 0
+						);
+					chr = lexerGet();
+				}
+				if (charIsAlpha(chr)){
+					return ERROR_INVALID_NUMBER_POSFIX;
+				}
+				lexerSeekCur(-1);
+				tk->kind = TOKEN_INTEGER;
+				tk->value.integer = value;
+				return 0;
+			}
+			else {
+				chr = '0';
+				lexerSeekCur(-1);
+			}
+		}
 		while (charIsNumeric(chr)){
 			value = (value*10) + (chr-'0');
 			chr = lexerGet();
+		}
+		if (charIsAlpha(chr)){
+			return ERROR_INVALID_NUMBER_POSFIX;
 		}
 		lexerSeekCur(-1);
 		tk->kind = TOKEN_INTEGER;
@@ -105,8 +161,7 @@ int tkrFetchToken(Token *tk) {
 		string[s] = 0;
 
 		if (chr == EOF){
-			// Error: Non-terminated string
-			return ERROR_UNKNOWN;
+			return ERROR_UNTERMINATED_STRING;
 		}
 
 		tk->kind = TOKEN_STRING;

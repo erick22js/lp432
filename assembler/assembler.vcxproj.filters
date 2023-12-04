@@ -45,6 +45,9 @@
     <ClCompile Include="src\assembler\instructions.c">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
+    <ClCompile Include="src\assembler\error.c">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\assembler\assembler.h">

@@ -1,4 +1,6 @@
-.byte 10, 20
+.text "LP432"
+
+.byte 0xE3, 20
 .include "include.asm"
 
 .const oitenta 80

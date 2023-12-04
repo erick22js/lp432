@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="src\assembler\assembler.c" />
     <ClCompile Include="src\assembler\base.c" />
+    <ClCompile Include="src\assembler\error.c" />
     <ClCompile Include="src\assembler\instructions.c" />
     <ClCompile Include="src\assembler\lexer.c" />
     <ClCompile Include="src\assembler\parser.c" />

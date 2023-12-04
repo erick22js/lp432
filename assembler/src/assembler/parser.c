@@ -240,8 +240,8 @@ int parserExpUnary(Value *out){
 			*out = *val;
 		}
 		else if(!parser.phase_one){
-			// TODO: Error => Symbol not found!
-			throwError(ERROR_UNKNOWN);
+			asm_error_v1 = tk.value.string;
+			throwError(ERROR_SYMBOL_NOT_DEFINED);
 		}
 		else {
 			out->type = TYPE_IMM;
@@ -266,8 +266,8 @@ int parserExpUnary(Value *out){
 				out->value.integer -= address;
 			}
 			else{
-				// TODO: Error => Symbol not found!
-				throwError(ERROR_UNKNOWN);
+				asm_error_v1 = tk.value.string;
+				throwError(ERROR_SYMBOL_NOT_DEFINED);
 			}
 		}
 		else {
@@ -316,13 +316,14 @@ int parserExpUnary(Value *out){
 			tkrFetchToken(&tk)
 		);
 		if (!tkIsSymbol(tk, ')')){
-			// TODO: Error => Expected closing paren
-			throwError(ERROR_UNKNOWN);
+			asm_error_v1 = ')';
+			throwError(ERROR_EXPECTED_CHAR);
 		}
 	}
 	// Unexpected token, expected expression
 	else {
-		throwError(ERROR_UNKNOWN);
+		asm_error_v1 = tk.kind;
+		throwError(ERROR_UNEXPECTED);
 	}
 
 	saveSeek();
@@ -343,15 +344,14 @@ int parserExpUnary(Value *out){
 				case TYPE_IMMS16: { out->value.integer = (sint32)((sint16)out->value.integer); } break;
 				case TYPE_IMMS32: { out->value.integer = (sint32)((sint32)out->value.integer); } break;
 				default: {
-					// TODO: Error => Invalid cast type
-					throwError(ERROR_UNKNOWN);
+					asm_error_v1 = tk.value.string;
+					throwError(ERROR_INVALID_CAST_TYPE);
 				}
 			}
 			out->type = data_type->type_imm;
 		}
 		else {
-			// TODO: Error => Expected Data type name
-			throwError(ERROR_UNKNOWN);
+			throwError(ERROR_EXPECTED_DATA_TYPE);
 		}
 	}
 	else {
@@ -383,15 +383,13 @@ int parserExpMul(Value *out) {
 		}
 		else if (tkIsSymbol(tk, '/')){
 			if (opr2.value.integer == 0){
-				// TODO: Error => Second operand is zero
-				throwError(ERROR_UNKNOWN);
+				throwError(ERROR_DIVISION_BY_ZERO);
 			}
 			opr1.value.integer /= opr2.value.integer;
 		}
 		else {
 			if (opr2.value.integer == 0){
-				// TODO: Error => Second operand is zero
-				throwError(ERROR_UNKNOWN);
+				throwError(ERROR_DIVISION_BY_ZERO);
 			}
 			opr1.value.integer %= opr2.value.integer;
 		}
@@ -751,8 +749,8 @@ int parserFetchArgs(Arg* args, int* count, int limit){
 						}
 						// Unexpected Error
 						else {
-							// TODO: Error
-							throwError(ERROR_UNKNOWN);
+							asm_error_v1 = tk.kind;
+							throwError(ERROR_UNEXPECTED);
 						}
 					}
 					// Adressing Mode => INDEXED
@@ -771,8 +769,8 @@ int parserFetchArgs(Arg* args, int* count, int limit){
 				}
 				// Unexpected Error
 				else {
-					// TODO: Error
-					throwError(ERROR_UNKNOWN);
+					asm_error_v1 = tk.kind;
+					throwError(ERROR_UNEXPECTED);
 				}
 			}
 			// Addressing Mode => ABSOLUTE
@@ -794,8 +792,8 @@ int parserFetchArgs(Arg* args, int* count, int limit){
 				tkrFetchToken(&tk)
 			);
 			if (!tkIsSymbol(tk, ']')){
-				// TODO: Error
-				throwError(ERROR_UNKNOWN);
+				asm_error_v1 = ']';
+				throwError(ERROR_EXPECTED_CHAR);
 			}
 		}
 		// The argument is a parameter reference
@@ -900,9 +898,7 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 						tkrFetchToken(&tk)
 					);
 					if (tk.kind != TOKEN_IDENTIFIER || (cond_desc = findJpCondByName(tk.value.string))==0xFF){
-						// TODO: Error => Expected a condition specifier
-						log("ERROR: Expected a condition specifier!\n");
-						throwError(ERROR_UNKNOWN);
+						throwError(ERROR_UNSUPPLIED_CONDITION_SPECIFIER);
 					}
 				}
 				else {
@@ -967,9 +963,7 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 					// The parser must detect no any character left in line
 					int offset = tkrConsumeLine();
 					if (offset != (-1)){
-						// TODO: Error => Expected end of line
-						throwError(ERROR_UNKNOWN);
-						log("ERROR: Has something more left in line!\n");
+						throwError(ERROR_EXPECTED_END_OF_LINE);
 					}
 					else {
 						tryCatchAndThrow(
@@ -978,8 +972,8 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 					}
 				}
 				else {
-					throwError(ERROR_UNKNOWN);
-					log("NOT MATCHED!\n");
+					asm_error_v1 = instruction->mne;
+					throwError(ERROR_NO_INSTRUCTION_PATTERN);
 				}
 			}
 			// May be a prefix declaration
@@ -989,8 +983,7 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 				);
 				if (!tkIsSymbol(tk, '.')){
 					// TODO: Error => Prefix may be followed by a dot marker
-					throwError(ERROR_UNKNOWN);
-					log("PREFIX MUST BE FOLLOWED BY A DOT MARKER!\n");
+					throwError(ERROR_PREFIX_POSTDOT_MISSING);
 				}
 				out8(prefix->code);
 				continue;
@@ -1007,16 +1000,14 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 
 				// The number of parameters and the arguments must match
 				if (macro->params_len != args_count){
-					// TODO: Error => Macro invoked with wrong number of arguments
-					throwError(ERROR_UNKNOWN);
+					asm_error_v1 = macro->name;
+					throwError(ERROR_MACRO_WRONG_ARGUMENTS);
 				}
 
 				// The parser must detect no any character left in line
 				int offset = tkrConsumeLine();
 				if (offset != (-1)){
-					// TODO: Error => Expected end of line
-					throwError(ERROR_UNKNOWN);
-					log("ERROR: Has something more left in line!\n");
+					throwError(ERROR_EXPECTED_END_OF_LINE);
 				}
 
 				// Compares with each parameter to verify wich the variant is acceptable
@@ -1024,8 +1015,8 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 					Arg *arg = &args[ai];
 
 					if (!matchTypes(macro->params[ai].type, arg->type)){
-						// TODO: Error => Argument in macro does not match the param
-						throwError(ERROR_UNKNOWN);
+						asm_error_v1 = macro->name;
+						throwError(ERROR_MACRO_WRONG_ARGUMENTS);
 					}
 					else {
 						Value value;
@@ -1054,14 +1045,14 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 					tkrFetchToken(&tk)
 				);
 				if (!tkIsSymbol(tk, ':')){
-					// TODO: Error => Expected solon sign
-					throwError(ERROR_UNKNOWN);
+					asm_error_v1 = ':';
+					throwError(ERROR_EXPECTED_CHAR);
 				}
 
 				if (parser.phase_one){
 					if (findSymbol(name)){
-						// TODO: Error => Already declarated symbol with name
-						throwError(ERROR_UNKNOWN);
+						asm_error_v1 = name;
+						throwError(ERROR_ALREADY_DECLARATED_SYMBOL);
 					}
 					Value v = {.type = TYPE_IMM, .value = {.integer = parser.pc}};
 					storeSymLabel(name, v);
@@ -1075,14 +1066,15 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 				tkrFetchToken(&tk)
 			);
 			if (tk.kind != TOKEN_IDENTIFIER){
-				// TODO: Error => Expected processor command
-				throwError(ERROR_UNKNOWN);
+				throwError(ERROR_EXPECTED_PROCESSOR_COMMAND);
 			}
 			const char* cmd = tk.value.string;
 
 			if (strcmp(cmd, "adr")==0){
 				Value val;
-				parserExpression(&val);
+				tryCatchAndThrow(
+					parserExpression(&val)
+				);
 				parser.pc = parser.bc = val.value.integer;
 			}
 			else if (strcmp(cmd, "scope")==0){
@@ -1096,8 +1088,8 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 
 					if (parser.phase_one){
 						if (findSymbol(name)){
-							// TODO: Error => Already declarated symbol with name
-							throwError(ERROR_UNKNOWN);
+							asm_error_v1 = name;
+							throwError(ERROR_ALREADY_DECLARATED_SYMBOL);
 						}
 						Value v = {.type = TYPE_IMM, .value = {.integer = parser.pc}};
 						storeSymLabel(name, v);
@@ -1118,8 +1110,7 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 				);
 
 				if (tk.kind != TOKEN_IDENTIFIER){
-					// TODO: Error => Expected identifier name for constant
-					throwError(ERROR_UNKNOWN);
+					throwError(ERROR_EXPECTED_MACRO_NAME);
 				}
 				const char *name = tk.value.string;
 				log("Declaring macro with name %s\n", name);
@@ -1140,8 +1131,7 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 						tkrFetchToken(&tk)
 					);
 					if (tk.kind != TOKEN_IDENTIFIER){
-						// TODO: Error => Expected identifier name for macro parameter
-						throwError(ERROR_UNKNOWN);
+						throwError(ERROR_EXPECTED_MACRO_PARAM_NAME);
 					}
 					macro.params[macro.params_len].name = textReuse(tk.value.string);
 					const char* param_name = tk.value.string;
@@ -1160,8 +1150,7 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 							saveSeek();
 						}
 						else {
-							// TODO: Error => Expected Data type name
-							throwError(ERROR_UNKNOWN);
+							throwError(ERROR_EXPECTED_DATA_TYPE);
 						}
 					}
 					else {
@@ -1210,8 +1199,8 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 
 				if (parser.phase_one){
 					if (findMacro(name)){
-						// TODO: Error => Already declarated macro with name
-						throwError(ERROR_UNKNOWN);
+						asm_error_v1 = name;
+						throwError(ERROR_ALREADY_DECLARATED_MACRO);
 					}
 					macro.start = start;
 					macro.end = end;
@@ -1225,8 +1214,7 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 				);
 
 				if (tk.kind != TOKEN_IDENTIFIER){
-					// TODO: Error => Expected identifier name for constant
-					throwError(ERROR_UNKNOWN);
+					throwError(ERROR_EXPECTED_CONSTANT_NAME);
 				}
 				const char *name = tk.value.string;
 
@@ -1280,14 +1268,28 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 				}
 				restoreSeek();
 			}
+			else if (strcmp(cmd, "text")==0){
+				tryCatchAndThrow(
+					tkrFetchToken(&tk)
+				);
+
+				if (tk.kind != TOKEN_STRING){
+					throwError(ERROR_EXPECTED_STRING);
+				}
+
+				char *chr = tk.value.string;
+				while (*chr){
+					out8(*chr);
+					chr++;
+				}
+			}
 			else if (strcmp(cmd, "include")==0){
 				tryCatchAndThrow(
 					tkrFetchToken(&tk)
 				);
 
 				if (tk.kind != TOKEN_STRING){
-					// TODO: Error => Expected a path string
-					throwError(ERROR_UNKNOWN);
+					throwError(ERROR_EXPECTED_PATH_STRING);
 				}
 
 				char path[512];
@@ -1297,34 +1299,29 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 				// The parser must detect no any character left in line
 				int offset = tkrConsumeLine();
 				if (offset != (-1)){
-					// TODO: Error => Expected end of line
-					throwError(ERROR_UNKNOWN);
-					log("ERROR: Has something more left in line!\n");
+					throwError(ERROR_EXPECTED_END_OF_LINE);
 				}
 				
 				if (!lexerOpenFile(path)) {
-					// TODO: Error => Can't open file in path
-					log("ERROR: File in path \"%s\" couldn't be opened!\n", path);
-					throwError(ERROR_UNKNOWN);
+					asm_error_v1 = path;
+					throwError(ERROR_FILE_DO_NOT_EXISTS);
 				}
 				continue;
 			}
 			else {
-				// TODO: Error => Invalid processor name
-				throwError(ERROR_UNKNOWN);
+				asm_error_v1 = cmd;
+				throwError(ERROR_ERROR_INVALID_PROCESSOR_NAME);
 			}
 
 			// The parser must detect no any character left in line
 			int offset = tkrConsumeLine();
 			if (offset != (-1)){
-				// TODO: Error => Expected end of line
-				throwError(ERROR_UNKNOWN);
-				log("ERROR: Has something more left in line!\n");
+				throwError(ERROR_EXPECTED_END_OF_LINE);
 			}
 		}
 		else {
-			// TODO: Error => Unexpected token
-			throwError(ERROR_UNKNOWN);
+			asm_error_v1 = tk.kind;
+			throwError(ERROR_UNEXPECTED);
 		}
 	}
 
