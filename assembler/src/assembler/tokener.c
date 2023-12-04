@@ -28,6 +28,42 @@ void tkrConsumeSpace() {
 			// The character is a space
 			saveSeek();
 		}
+		else if (chr==';'){
+			while (!charIsBreakLine(chr) && !lexerEnded()){
+				saveSeek();
+				chr = lexerGet();
+			}
+			restoreSeek();
+		}
+		else if (chr=='/'){
+			chr = lexerGet();
+			if (chr=='/'){
+				while (!charIsBreakLine(chr) && !lexerEnded()){
+					saveSeek();
+					chr = lexerGet();
+				}
+				restoreSeek();
+			}
+			else if (chr=='*'){
+				while (!lexerEnded()){
+					saveSeek();
+					chr = lexerGet();
+					if (chr=='*'){
+						saveSeek();
+						chr = lexerGet();
+						if (chr=='/'){
+							saveSeek();
+							break;
+						}
+						restoreSeek();
+					}
+				}
+			}
+			else {
+				restoreSeek();
+				break;
+			}
+		}
 		else{
 			restoreSeek();
 			break;
@@ -154,6 +190,9 @@ int tkrFetchToken(Token *tk) {
 		uint32 chr = lexerGet();
 		uint32 s = 0;
 		while (chr != EOF && chr != '"' && s<MAX_STRING_SIZE){
+			if (chr=='\\'){
+				chr = lexerGet();
+			}
 			string[s] = chr;
 			chr = lexerGet();
 			s++;

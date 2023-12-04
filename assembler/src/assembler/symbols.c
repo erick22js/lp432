@@ -150,6 +150,71 @@ void storeSymArg(const char* name, Value value){
 }
 
 
+// Mark
+Mark* mark_top = NULL;
+Mark* mark_first = NULL;
+
+bool hasMark(const char* name) {
+	Mark *cur_mark = mark_first;
+	while (cur_mark){
+		if (strcmp(cur_mark->name, name) == 0){
+			return true;
+		}
+		cur_mark = cur_mark->next;
+	}
+	return false;
+}
+
+bool setMark(const char* name) {
+	Mark *cur_mark = mark_first;
+	while (cur_mark){
+		if (strcmp(cur_mark->name, name) == 0){
+			return false;
+		}
+		cur_mark = cur_mark->next;
+	}
+	cur_mark = sym_alloc(Mark);
+	cur_mark->name = name;
+	cur_mark->next = null;
+
+	if (mark_top){
+		mark_top->next = cur_mark;
+		mark_top = cur_mark;
+	}
+	else {
+		mark_first = cur_mark;
+		mark_top = cur_mark;
+	}
+	return true;
+}
+
+bool unsetMark(const char* name) {
+	Mark *cur_mark = mark_first, *last_mark = null;
+	while (cur_mark){
+		if (strcmp(cur_mark->name, name) == 0){
+			if (last_mark){
+				last_mark->next = cur_mark->next;
+			}
+			else {
+				mark_first = cur_mark->next;
+			}
+			if (mark_top==cur_mark){
+				mark_top = last_mark;
+			}
+			return true;
+		}
+		last_mark = cur_mark;
+		cur_mark = cur_mark->next;
+	}
+	return false;
+}
+
+void resetMarks() {
+	mark_first = null;
+	mark_top = null;
+}
+
+
 // General
 Value *findSymbol(const char* name){
 	Scope *scope = scope_cur;

@@ -22,7 +22,9 @@ int asmAssembly(Lexer*(*opener)(const char*), const char* src, uint8** bin, uint
 	opener(src);
 	err = parserParse(false, bin, bin_size);
 	if (err){
-		log("\n\n\nCompilation FAILED!!!\n\n");
+		char msg[256];
+		asmErrorToString(msg, 255);
+		log("\n\n\nCompilation FAILED!!!\nreason => \"%s\"\n\n", msg);
 		return err;
 	}
 	

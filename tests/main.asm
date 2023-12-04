@@ -1,6 +1,8 @@
-.text "LP432"
+ZERO:
+.text "LP\\432"
 
 .byte 0xE3, 20
+.include "include.asm"
 .include "include.asm"
 
 .const oitenta 80

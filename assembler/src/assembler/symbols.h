@@ -90,6 +90,22 @@ extern void scopeEnter();
 extern bool scopeLeave();
 
 
+// Mark
+struct Mark;
+typedef struct Mark Mark;
+struct Mark {
+	const char* name;
+	Mark *next;
+};
+extern Mark* mark_top;
+extern Mark* mark_first;
+
+extern bool hasMark(const char* name);
+extern bool setMark(const char* name);
+extern bool unsetMark(const char* name);
+extern void resetMarks();
+
+
 // General
 extern SymLabel *findSymLabel(Scope *cur_scope, const char* name);
 extern Value *findSymbol(const char* name);

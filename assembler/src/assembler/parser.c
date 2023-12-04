@@ -382,16 +382,16 @@ int parserExpMul(Value *out) {
 			opr1.value.integer *= opr2.value.integer;
 		}
 		else if (tkIsSymbol(tk, '/')){
-			if (opr2.value.integer == 0){
+			if (opr2.value.integer == 0 && !parser.phase_one){
 				throwError(ERROR_DIVISION_BY_ZERO);
 			}
-			opr1.value.integer /= opr2.value.integer;
+			opr1.value.integer /= opr2.value.integer? opr2.value.integer: 1;
 		}
 		else {
-			if (opr2.value.integer == 0){
+			if (opr2.value.integer == 0 && !parser.phase_one){
 				throwError(ERROR_DIVISION_BY_ZERO);
 			}
-			opr1.value.integer %= opr2.value.integer;
+			opr1.value.integer %= opr2.value.integer? opr2.value.integer: 1;
 		}
 
 		tryCatchAndThrow(
@@ -845,6 +845,7 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 	//
 	parser.phase_one = first;
 	parser.pc = parser.bc = 0;
+	resetMarks();
 	if (first){
 		log("\n######## PARSER PHASE 1\n\n");
 	}
@@ -1307,6 +1308,84 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 					throwError(ERROR_FILE_DO_NOT_EXISTS);
 				}
 				continue;
+			}
+			else if (strcmp(cmd, "mark")==0){
+				createSeek();
+				tryCatchAndThrow(
+					tkrFetchToken(&tk)
+				);
+
+				if (tk.kind != TOKEN_IDENTIFIER && tk.kind != TOKEN_STRING && tk.kind != TOKEN_NEW_LINE && tk.kind != TOKEN_END_OF_FILE){
+					throwError(ERROR_EXPECTED_CONSTANT_NAME);
+				}
+
+				if (tk.kind == TOKEN_NEW_LINE || tk.kind == TOKEN_END_OF_FILE){
+					restoreSeek();
+					setMark(textReuse(lexerCurrent()->path));
+				}
+				else {
+					const char *mark_name = tk.value.string;
+					setMark(textReuse(tk.value.string));
+				}
+			}
+			else if (strcmp(cmd, "unmark")==0){
+				createSeek();
+				tryCatchAndThrow(
+					tkrFetchToken(&tk)
+				);
+
+				if (tk.kind != TOKEN_IDENTIFIER && tk.kind != TOKEN_STRING && tk.kind != TOKEN_NEW_LINE && tk.kind != TOKEN_END_OF_FILE){
+					throwError(ERROR_EXPECTED_CONSTANT_NAME);
+				}
+
+				if (tk.kind == TOKEN_NEW_LINE || tk.kind == TOKEN_END_OF_FILE){
+					restoreSeek();
+					unsetMark(textReuse(lexerCurrent()->path));
+				}
+				else {
+					const char *mark_name = tk.value.string;
+					unsetMark(textReuse(tk.value.string));
+				}
+			}
+			else if (strcmp(cmd, "onmark")==0 || strcmp(cmd, "nonmark")==0){
+				createSeek();
+				tryCatchAndThrow(
+					tkrFetchToken(&tk)
+				);
+
+				bool non = strcmp(cmd, "nonmark")==0;
+
+				if (tk.kind != TOKEN_IDENTIFIER && tk.kind != TOKEN_STRING && tk.kind != TOKEN_NEW_LINE && tk.kind != TOKEN_END_OF_FILE){
+					throwError(ERROR_EXPECTED_CONSTANT_NAME);
+				}
+
+				if (tk.kind == TOKEN_NEW_LINE || tk.kind == TOKEN_END_OF_FILE){
+					restoreSeek();
+					if (non ^ hasMark(textReuse(lexerCurrent()->path))){
+						lexerClose();
+						continue;
+					}
+				}
+				else {
+					const char *mark_name = tk.value.string;
+					if (non ^ hasMark(textReuse(mark_name))){
+						lexerClose();
+						continue;
+					}
+				}
+			}
+			else if (strcmp(cmd, "print")==0){
+				tryCatchAndThrow(
+					tkrFetchToken(&tk)
+				);
+
+				if (tk.kind != TOKEN_STRING){
+					throwError(ERROR_EXPECTED_STRING);
+				}
+
+				if (first){
+					printf("@@@ MESSAGE => %s\n", tk.value.string);
+				}
 			}
 			else {
 				asm_error_v1 = cmd;
