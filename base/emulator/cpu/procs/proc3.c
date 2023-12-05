@@ -147,6 +147,20 @@ cpuInterr proc3A(Cpu *cpu_s){
 	return 0;
 }
 
+cpuInterr proc3B(Cpu *cpu_s){
+	// Instruction: mvtpit sr:desc r8:regm
+	cpuFetchOS();
+	procEnsureNotInProtectedMode();
+
+	uint32 data = cpuReadReg32(cpu_s->os_regm);
+	cpu_s->reg_pit = data;
+
+	// Resets timer
+	cpu_s->reg_ctv = 0;
+	cpu_s->reg_utv = 0;
+	return 0;
+}
+
 cpuInterr proc3C(Cpu *cpu_s){
 	// Instruction: mvfisp r32:regm
 	cpuFetchOS();
@@ -160,6 +174,20 @@ cpuInterr proc3D(Cpu *cpu_s){
 	cpuFetchOS();
 	procEnsureNotInProtectedMode();
 	cpu_s->reg_isp = cpuReadReg32(cpu_s->os_regm);
+	return 0;
+}
+
+cpuInterr proc3E(Cpu *cpu_s){
+	// Instruction: sett
+	procEnsureNotInProtectedMode();
+	cpu_s->reg_st |= FLAG_TI;
+	return 0;
+}
+
+cpuInterr proc3F(Cpu *cpu_s){
+	// Instruction: clrt
+	procEnsureNotInProtectedMode();
+	cpu_s->reg_st &= ~FLAG_TI;
 	return 0;
 }
 

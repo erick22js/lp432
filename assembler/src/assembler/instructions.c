@@ -808,6 +808,16 @@ Ist isa[] = {
 		}
 	},
 	{
+		.mne = "clrt",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x3F, .desc = NO_DESC,
+				.params_length = 0
+			}
+		}
+	},
+	{
 		.mne = "clrv",
 		.encodes_length = 1,
 		.encodes = {
@@ -5278,6 +5288,16 @@ Ist isa[] = {
 		.encodes = {
 			{
 				.opcode = 0x1A, .desc = NO_DESC,
+				.params_length = 0
+			}
+		}
+	},
+	{
+		.mne = "sett",
+		.encodes_length = 1,
+		.encodes = {
+			{
+				.opcode = 0x3E, .desc = NO_DESC,
 				.params_length = 0
 			}
 		}

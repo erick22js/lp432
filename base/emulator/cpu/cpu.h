@@ -63,6 +63,7 @@
 #define FLAG_SE 0x00020000
 #define FLAG_PE 0x00040000
 #define FLAG_IE 0x00080000
+#define FLAG_TI 0x00100000
 
 typedef int cpuInterr;
 
@@ -85,11 +86,16 @@ struct Cpu{
 	uint32 reg_lpc; // Program Counter
 	uint32 reg_st; // Program State
 
-	// Control Registers
+	// MMU Control Registers
 	uint32 reg_std; // Segment Table Address
 	uint32 reg_ptd; // Pagining Table Address
 	uint32 reg_itd; // Interruption Table Address
 	uint32 reg_isp; // Interruption Stack Pointer
+
+	// Timer Control Registers
+	uint32 reg_pit; // Programmed Interval Timer
+	uint32 reg_ctv; // Current Timer Value
+	uint32 reg_utv; // Current Under Timer Value
 
 	// Segment Registers
 	CpuSegment sregs[SREG_TOTAL];
@@ -148,6 +154,9 @@ struct Cpu{
 #define cpuWriteReg16(reg, data) {cpu_s->gregs[reg] = (cpu_s->gregs[reg]&0xFFFF0000)|((data)&0xFFFF);}
 #define cpuReadReg32(reg) (cpu_s->gregs[reg])
 #define cpuWriteReg32(reg, data) {cpu_s->gregs[reg] = (uint32)(data);}
+
+// Timing Control
+#define emuCpuCycles(cycles) {uint32 c_cycles = cycles; cpu_s->reg_utv += c_cycles; emuCycles(cpu_s->emu, c_cycles);}
 
 // Program Flow Control
 #define cpuJumpTo(adr) {cpu_s->reg_pc = (adr);}

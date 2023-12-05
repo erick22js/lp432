@@ -104,6 +104,7 @@ struct {
 	{"SE", FLAG_SE},
 	{"PE", FLAG_PE},
 	{"IE", FLAG_IE},
+	{"TI", FLAG_TI},
 };
 
 struct {
@@ -116,6 +117,9 @@ struct {
 }mem[256];
 Uint32 _sp_mem_badr = 0;
 Element over_panel, over_text, over_value, caret;
+
+char timer_buffer[127];
+Element timer_label;
 
 _Bool _sp_input_active = 0;
 int _sp_input_seek = 0;
@@ -153,10 +157,13 @@ void spUpdate(){
 	}
 
 	// Program flags
-	for (int i = 0; i<10; i++){
+	for (int i = 0; i<11; i++){
 		guiSetElementBackColor(flags[i].entry, g_cpu.reg_st&flags[i].flag? COLOR_GREEN: COLOR_BLACK);
 		guiSetElementHoverColor(flags[i].entry, g_cpu.reg_st&flags[i].flag? COLOR_LIME: COLOR_GRAY);
 	}
+
+	// Timer status
+	sprintf_s(timer_buffer, sizeof(timer_buffer), "PIT: %.10d  CTV: %.10d.%.2d", g_cpu.reg_pit, g_cpu.reg_ctv, g_cpu.reg_utv);
 
 	// Memory inspector
 	for (int r = 0; r<16; r++){
@@ -178,7 +185,7 @@ void spUpdate(){
 }
 
 void spInputNumeric(void *default_value, int type, const char* format, const char* message, void (*callback)(char* value, void* arg), void* arg){
-	guiSetElementText(over_text, message);
+	guiSetElementText(over_text, (char*)message);
 	guiSetElementVisible(over_panel, 1);
 	guiSetElementActive(over_panel, 1);
 	guiSetElementVisible(over_text, 1);
@@ -212,7 +219,7 @@ void spInputNumeric(void *default_value, int type, const char* format, const cha
 }
 
 void spInputText(const char* default_value, const char* message, void (*callback)(char* value, void* arg), void* arg){
-	guiSetElementText(over_text, message);
+	guiSetElementText(over_text, (char*)message);
 	guiSetElementVisible(over_panel, 1);
 	guiSetElementActive(over_panel, 1);
 	guiSetElementVisible(over_text, 1);
@@ -678,10 +685,10 @@ void spInit() {
 	}
 
 	// Program flags
-	for (int i = 0; i<10; i++){
+	for (int i = 0; i<11; i++){
 		guiCreateLabel(flags[i].name, 20 + i*35, 430);
 	}
-	for (int i = 0; i<10; i++){
+	for (int i = 0; i<11; i++){
 		Element entry = guiCreateDiv(20 + i*35, 450, 15, 15);
 		guiSetElementBackColor(entry, COLOR_BLACK);
 		guiSetElementHoverColor(entry, COLOR_GRAY);
@@ -767,6 +774,9 @@ void spInit() {
 	guiSetElementForeColor(reset_btn, COLOR_BLACK);
 	guiSetElementForeWidth(reset_btn, 2);
 	guiSetElementOnClick(reset_btn, spHReset);
+
+	timer_label = guiCreateLabel(timer_buffer, 410, 90);
+	sprintf_s(timer_buffer, sizeof(timer_buffer), "PIT: %.10d  CTV: %.10d.%.2d", 0, 0, 0);
 
 	// Over-panel
 	over_panel = guiCreateDiv(0, 0, 800, 480);

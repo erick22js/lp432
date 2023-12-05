@@ -50,13 +50,13 @@ void vmSetup() {
 	emuSetup(&g_emu, &g_cpu, &g_pci, &g_bus);
 
 	// Setup ram
-	mem_ram_length = iniObjectHasKey(setup, "ramsize")? iniObjectGetKeyAsNumber(setup, "ramsize"): 1024*256;
+	mem_ram_length = iniObjectHasKey(setup, "ramsize")? (uint32)iniObjectGetKeyAsNumber(setup, "ramsize"): 1024*256;
 	mem_ram = (uint8*)malloc(mem_ram_length);
 	memset(mem_ram, 0, mem_ram_length);
 
 	// Preload rom
 	if (iniObjectHasKey(setup, "rompath")){
-		char* path = iniObjectGetKeyAsText(setup, "rompath");
+		const char* path = iniObjectGetKeyAsText(setup, "rompath");
 
 		FILE *file;
 		errno_t err;

@@ -1,4 +1,2 @@
 ﻿  inspector.c
-c:\users\erick\documents\meus-projetos\c\lp432\gui\src\components\display\inspector.c(181): warning C4090: 'função': qualificadores 'const' diferentes
-c:\users\erick\documents\meus-projetos\c\lp432\gui\src\components\display\inspector.c(215): warning C4090: 'função': qualificadores 'const' diferentes
   gui.vcxproj -> C:\Users\erick\Documents\meus-projetos\c\lp432\Debug\gui.exe

@@ -807,6 +807,17 @@
 			}
 		]
 	},
+	"clrt": {
+		"description": "Disables timer interruption",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x3F",
+				"args": []
+			}
+		]
+	},
 	"clrv": {
 		"description": "Disables flag Overflow",
 		"cycles": 1,
@@ -5319,6 +5330,17 @@
 		"encode": [
 			{
 				"opcode": "0x1A",
+				"args": []
+			}
+		]
+	},
+	"sett": {
+		"description": "Enables timer interruption",
+		"cycles": 1,
+		"flags": {},
+		"encode": [
+			{
+				"opcode": "0x3E",
 				"args": []
 			}
 		]

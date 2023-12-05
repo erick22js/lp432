@@ -66,42 +66,42 @@
 cpuInterr _cpuReadMem8(Cpu *cpu_s, uint32 adr){
 	cpuTrAdrReadData(adr);
 	cpu_s->data = cpuReadBus8(adr);
-	emuCycles(cpu_s->emu, 1);
+	emuCpuCycles(1);
 	return 0;
 }
 
 cpuInterr _cpuWriteMem8(Cpu *cpu_s, uint32 adr, uint8 data){
 	cpuTrAdrWriteData(adr);
 	cpuWriteBus8(adr, data);
-	emuCycles(cpu_s->emu, 1);
+	emuCpuCycles(1);
 	return 0;
 }
 
 cpuInterr _cpuReadMem16(Cpu *cpu_s, uint32 adr){
 	cpuTrAdrReadData(adr);
 	cpu_s->data = cpuReadBus16(adr);
-	emuCycles(cpu_s->emu, 1 + ((adr&0x3)==0x3?1:0));
+	emuCpuCycles(1 + ((adr&0x3)==0x3?1:0));
 	return 0;
 }
 
 cpuInterr _cpuWriteMem16(Cpu *cpu_s, uint32 adr, uint16 data){
 	cpuTrAdrWriteData(adr);
 	cpuWriteBus16(adr, data);
-	emuCycles(cpu_s->emu, 1 + ((adr&0x3)==0x3?1:0));
+	emuCpuCycles(1 + ((adr&0x3)==0x3?1:0));
 	return 0;
 }
 
 cpuInterr _cpuReadMem32(Cpu *cpu_s, uint32 adr){
 	cpuTrAdrReadData(adr);
 	cpu_s->data = cpuReadBus32(adr);
-	emuCycles(cpu_s->emu, 1 + (adr&0x3?1:0));
+	emuCpuCycles(1 + (adr&0x3?1:0));
 	return 0;
 }
 
 cpuInterr _cpuWriteMem32(Cpu *cpu_s, uint32 adr, uint32 data){
 	cpuTrAdrWriteData(adr);
 	cpuWriteBus32(adr, data);
-	emuCycles(cpu_s->emu, 1 + (adr&0x3?1:0));
+	emuCpuCycles(1 + (adr&0x3?1:0));
 	return 0;
 }
 
@@ -112,7 +112,7 @@ cpuInterr _cpuPop8(Cpu *cpu_s){
 	uint8 data = cpuReadBus8(adr);
 	cpu_s->gregs[GREG_ESP]++;
 	cpu_s->data = data;
-	emuCycles(cpu_s->emu, 1);
+	emuCpuCycles(1);
 	return 0;
 }
 
@@ -121,7 +121,7 @@ cpuInterr _cpuPush8(Cpu *cpu_s, uint8 data){
 	uint32 adr = cpu_s->gregs[GREG_ESP];
 	cpuTrAdrWriteStack(adr);
 	cpuWriteBus8(adr, data);
-	emuCycles(cpu_s->emu, 1);
+	emuCpuCycles(1);
 	return 0;
 }
 
@@ -131,7 +131,7 @@ cpuInterr _cpuPop16(Cpu *cpu_s){
 	uint16 data = cpuReadBus16(adr);
 	cpu_s->gregs[GREG_ESP] += 2;
 	cpu_s->data = data;
-	emuCycles(cpu_s->emu, 1 + ((adr&0x3)==0x3?1:0));
+	emuCpuCycles(1 + ((adr&0x3)==0x3?1:0));
 	return 0;
 }
 
@@ -140,7 +140,7 @@ cpuInterr _cpuPush16(Cpu *cpu_s, uint16 data){
 	uint32 adr = cpu_s->gregs[GREG_ESP];
 	cpuTrAdrWriteStack(adr);
 	cpuWriteBus16(adr, data);
-	emuCycles(cpu_s->emu, 1 + ((adr&0x3)==0x3?1:0));
+	emuCpuCycles(1 + ((adr&0x3)==0x3?1:0));
 	return 0;
 }
 
@@ -150,7 +150,7 @@ cpuInterr _cpuPop32(Cpu *cpu_s){
 	uint32 data = cpuReadBus32(adr);
 	cpu_s->gregs[GREG_ESP] += 4;
 	cpu_s->data = data;
-	emuCycles(cpu_s->emu, 1 + (adr&0x3?1:0));
+	emuCpuCycles(1 + (adr&0x3?1:0));
 	return 0;
 }
 
@@ -159,7 +159,7 @@ cpuInterr _cpuPush32(Cpu *cpu_s, uint32 data){
 	uint32 adr = cpu_s->gregs[GREG_ESP];
 	cpuTrAdrWriteStack(adr);
 	cpuWriteBus32(adr, data);
-	emuCycles(cpu_s->emu, 1 + (adr&0x3?1:0));
+	emuCpuCycles(1 + (adr&0x3?1:0));
 	return 0;
 }
 
@@ -170,7 +170,7 @@ cpuInterr _cpuFetch8(Cpu *cpu_s){
 	cpuTrAdrCode(adr);
 	uint8 code = cpuReadBus8(adr);
 	cpu_s->code = code;
-	emuCycles(cpu_s->emu, 1);
+	emuCpuCycles(1);
 	return 0;
 }
 
@@ -180,7 +180,7 @@ cpuInterr _cpuFetch16(Cpu *cpu_s){
 	cpuTrAdrCode(adr);
 	uint16 code = cpuReadBus16(adr);
 	cpu_s->code = code;
-	emuCycles(cpu_s->emu, 1 + ((adr&0x3)==0x3?1:0));
+	emuCpuCycles(1 + ((adr&0x3)==0x3?1:0));
 	return 0;
 }
 
@@ -190,7 +190,7 @@ cpuInterr _cpuFetch32(Cpu *cpu_s){
 	cpuTrAdrCode(adr);
 	uint32 code = cpuReadBus32(adr);
 	cpu_s->code = code;
-	emuCycles(cpu_s->emu, 1 + (adr&0x3?1:0));
+	emuCpuCycles(1 + (adr&0x3?1:0));
 	return 0;
 }
 
