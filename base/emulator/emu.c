@@ -15,7 +15,7 @@
 */
 
 void emuCycles(Emu *emu, uint32 cycles){
-	// TODO
+	emu->acu_cycles += cycles;
 }
 
 
@@ -40,6 +40,9 @@ void emuSetup(Emu *emu, Cpu *cpu_s, Pci *pci, Bus *bus) {
 
 	// Connect pci to main cpu
 	pci->cpu_s = cpu_s;
+
+	// Reset control properties
+	emu->acu_cycles = 0;
 }
 
 void emuReset(Emu *emu){
@@ -50,7 +53,8 @@ void emuReset(Emu *emu){
 
 void emuStep(Emu *emu){
 	cpuStep(emu->cpu_s);
-	pciStep(emu->pci, 0);
+	pciStep(emu->pci, emu->acu_cycles);
+	emu->acu_cycles = 0;
 }
 
 void emuRun(Emu *emu){

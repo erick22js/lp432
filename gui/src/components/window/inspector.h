@@ -1,4 +1,4 @@
-#ifndef COMPONENTS_DISPLAY_INSPECTOR_H
+#ifndef WINDOW_INSPECTOR_H
 
 extern void spInit();
 extern int spHandle();

@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #include "common.h"
-#include "display/inspector.h"
+#include "window/inspector.h"
 
 
 

@@ -15,6 +15,7 @@ struct Pci{
 	//	Set of Devices
 	//
 	Cpu *cpu_s; // The main connected CPU
+	Bus *bus; // The main connected BUS
 	Device *(devices[PCI_MAX_DEVICES]);
 	uint32 count_connected;
 	uint32 port_i;
@@ -41,6 +42,7 @@ extern bool pciRequestCpuInterruption(Pci *pci, Device *device);
 */
 extern bool pciPlugDevice(Pci *pci, Device *device);
 
+extern void pciSetup(Pci *pci, Bus *bus);
 extern void pciReset(Pci *pci);
 extern void pciStep(Pci *pci, uint32 cycles);
 

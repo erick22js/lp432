@@ -128,18 +128,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\components\common.c" />
-    <ClCompile Include="src\components\display\font.c" />
-    <ClCompile Include="src\components\display\inspector.c" />
+    <ClCompile Include="src\components\devices\display.c" />
+    <ClCompile Include="src\components\window\font.c" />
+    <ClCompile Include="src\components\window\inspector.c" />
     <ClCompile Include="src\components\ini.c" />
+    <ClCompile Include="src\components\window\monitor.c" />
+    <ClCompile Include="src\components\window\sdl_related.c" />
     <ClCompile Include="src\main.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\components\common.h" />
     <ClInclude Include="src\components\components.h" />
-    <ClInclude Include="src\components\display\draw.h" />
-    <ClInclude Include="src\components\display\gui.h" />
-    <ClInclude Include="src\components\display\inspector.h" />
+    <ClInclude Include="src\components\devices\display.h" />
+    <ClInclude Include="src\components\window\draw.h" />
+    <ClInclude Include="src\components\window\gui.h" />
+    <ClInclude Include="src\components\window\inspector.h" />
     <ClInclude Include="src\components\ini.h" />
+    <ClInclude Include="src\components\window\monitor.h" />
+    <ClInclude Include="src\components\window\sdl_related.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

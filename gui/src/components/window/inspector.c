@@ -115,11 +115,14 @@ struct {
 	char buffer[4];
 	Element entry;
 }mem[256];
-Uint32 _sp_mem_badr = 0;
+Uint32 _sp_mem_badr = 0, _sp_mem_size = 8;
+bool _sp_mem_mapped = false;
+Element chk_mem_tr;
 Element over_panel, over_text, over_value, caret;
 
 char timer_buffer[127];
 Element timer_label;
+
 
 _Bool _sp_input_active = 0;
 int _sp_input_seek = 0;
@@ -134,7 +137,12 @@ void* _sp_input_arg = NULL;
 //
 
 uint32 spUtilTAddress(uint32 logical_adr){
-	return logical_adr;
+	if (_sp_mem_mapped){
+		return logical_adr;
+	}
+	else {
+		return logical_adr;
+	}
 }
 
 
@@ -164,6 +172,10 @@ void spUpdate(){
 
 	// Timer status
 	sprintf_s(timer_buffer, sizeof(timer_buffer), "PIT: %.10d  CTV: %.10d.%.2d", g_cpu.reg_pit, g_cpu.reg_ctv, g_cpu.reg_utv);
+
+	// Mapped checkbox
+	guiSetElementBackColor(chk_mem_tr, _sp_mem_mapped? COLOR_GREEN: COLOR_BLACK);
+	guiSetElementHoverColor(chk_mem_tr, _sp_mem_mapped? COLOR_LIME: COLOR_GRAY);
 
 	// Memory inspector
 	for (int r = 0; r<16; r++){
@@ -305,6 +317,12 @@ void spICreg(char* value, void* arg){
 	spUpdate();
 }
 
+void spIPit(char* value, void* arg){
+	spInputGetI32(&g_cpu.reg_pit);
+	g_cpu.reg_ctv = g_cpu.reg_utv = 0;
+	spUpdate();
+}
+
 void spIMadr(char* value, void* arg){
 	//_sp_mem_badr
 	spInputGetI32(&_sp_mem_badr);
@@ -315,7 +333,19 @@ void spIVmem(char* value, void* arg){
 	//_sp_mem_badr
 	Uint32 data = 0;
 	spInputGetI32(&data);
-	busWrite(spUtilTAddress(_sp_mem_badr + (int)arg), (uint8)data);
+	if (_sp_mem_size==8){
+		busWrite(spUtilTAddress(_sp_mem_badr + (int)arg), (uint8)data);
+	}
+	else if (_sp_mem_size==16){
+		busWrite(spUtilTAddress(_sp_mem_badr + (int)arg), (uint8)data);
+		busWrite(spUtilTAddress(_sp_mem_badr + (int)arg + 1), (uint8)(data>>8));
+	}
+	else {
+		busWrite(spUtilTAddress(_sp_mem_badr + (int)arg), (uint8)data);
+		busWrite(spUtilTAddress(_sp_mem_badr + (int)arg + 1), (uint8)(data>>8));
+		busWrite(spUtilTAddress(_sp_mem_badr + (int)arg + 2), (uint8)(data>>16));
+		busWrite(spUtilTAddress(_sp_mem_badr + (int)arg + 3), (uint8)(data>>24));
+	}
 	spUpdate();
 }
 
@@ -452,6 +482,16 @@ void spHToggleFlag(Element el, int btn, Uint32 x, Uint32 y){
 	spUpdate();
 }
 
+void spHToggleMemTr(Element el, int btn, Uint32 x, Uint32 y){
+	_sp_mem_mapped = !_sp_mem_mapped;
+	spUpdate();
+}
+
+void spHEditPit(Element el, int btn, Uint32 x, Uint32 y){
+	uint32 data = g_cpu.reg_pit;
+	spInputNumeric(&data, 0, "%d\0", "Insert value for registers PIT:", spIPit, null);
+}
+
 void spHEditMAdr(Element el, int btn, Uint32 x, Uint32 y){
 	int i = el-mem_adrs[0].label;
 	uint32 data = _sp_mem_badr;
@@ -461,8 +501,18 @@ void spHEditMAdr(Element el, int btn, Uint32 x, Uint32 y){
 void spHEditVMem(Element el, int btn, Uint32 x, Uint32 y){
 	int i = el-mem[0].entry;
 	static char msg[128];
-	sprintf_s(msg, sizeof(msg), "Insert value to memory in address 0x%X:", (_sp_mem_badr + i));
-	uint32 data = busRead(spUtilTAddress(_sp_mem_badr + i));
+	_sp_mem_size = btn==1? 8: btn==2? 16: 32;
+	sprintf_s(msg, sizeof(msg), _sp_mem_size==8? "Insert 8-bit value to memory in address 0x%X:": _sp_mem_size==16? "Insert 16-bit value to memory in address 0x%X:": "Insert 32-bit value to memory in address 0x%X:", (_sp_mem_badr + i));
+	uint32 data = 0;
+	if (_sp_mem_size==8){
+		data = busRead(spUtilTAddress(_sp_mem_badr + i));
+	}
+	else if (_sp_mem_size==16){
+		data = busRead(spUtilTAddress(_sp_mem_badr + i)) | (busRead(spUtilTAddress(_sp_mem_badr + i + 1))<<8);
+	}
+	else {
+		data = busRead(spUtilTAddress(_sp_mem_badr + i)) | (busRead(spUtilTAddress(_sp_mem_badr + i + 1))<<8) | (busRead(spUtilTAddress(_sp_mem_badr + i + 2))<<16) | (busRead(spUtilTAddress(_sp_mem_badr + i + 3))<<24);
+	}
 	spInputNumeric(&data, 0, "0x%X\0", msg, spIVmem, (void*)i);
 }
 
@@ -559,6 +609,8 @@ void spHOnKey(Uint32 key, Uint32 input, _Bool ctrl, _Bool alt, _Bool shift, _Boo
 				char* content = SDL_GetClipboardText();
 				char* og = content;
 				int gap = strlen(content);
+				/**
+				// Inserting content: more dynamic
 				for (int i = sizeof(_sp_input_buffer)-2; i>_sp_input_seek; i--){
 					if (gap<=i){
 						_sp_input_buffer[i] = _sp_input_buffer[i-gap];
@@ -570,6 +622,16 @@ void spHOnKey(Uint32 key, Uint32 input, _Bool ctrl, _Bool alt, _Bool shift, _Boo
 				}
 				_sp_input_seek += gap;
 				_sp_input_seek = _sp_input_seek>=sizeof(_sp_input_buffer)? sizeof(_sp_input_buffer)-2: _sp_input_seek;
+				*/
+				// Replacing content: more intuitive (preferable)
+				_sp_input_buffer[0] = 0;
+				for (int i = 0; i<(sizeof(_sp_input_buffer)-1) && content[i]; i++){
+					_sp_input_buffer[i+1] = 0;
+					_sp_input_buffer[i] = content[i];
+				}
+				_sp_input_seek = gap;
+				/**/
+
 				SDL_free(og);
 			}
 			if (key=='c'){
@@ -701,6 +763,18 @@ void spInit() {
 		flags[i].entry = entry;
 	}
 
+	// Memory translator
+	guiCreateLabel("V.View", 400, 130);
+	chk_mem_tr = guiCreateDiv(450, 130, 15, 15);
+	guiSetElementBackColor(chk_mem_tr, COLOR_BLACK);
+	guiSetElementHoverColor(chk_mem_tr, COLOR_GRAY);
+	guiSetElementHoldColor(chk_mem_tr, COLOR_WHITE);
+	guiSetElementWidth(chk_mem_tr, 15);
+	guiSetElementHeight(chk_mem_tr, 15);
+	guiSetElementForeColor(chk_mem_tr, COLOR_BLACK);
+	guiSetElementForeWidth(chk_mem_tr, 3);
+	guiSetElementOnClick(chk_mem_tr, spHToggleMemTr);
+
 	// Memory inspector
 	for (int c = 0; c<16; c++){
 		static char* (offset[16]) = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"};
@@ -777,6 +851,12 @@ void spInit() {
 
 	timer_label = guiCreateLabel(timer_buffer, 410, 90);
 	sprintf_s(timer_buffer, sizeof(timer_buffer), "PIT: %.10d  CTV: %.10d.%.2d", 0, 0, 0);
+	guiSetElementBackColor(timer_label, COLOR_YELLOW);
+	guiSetElementHoverColor(timer_label, COLOR_ORANGE);
+	guiSetElementHoldColor(timer_label, COLOR_RED);
+	guiSetElementWidth(timer_label, 125);
+	guiSetElementHeight(timer_label, 20);
+	guiSetElementOnClick(timer_label, spHEditPit);
 
 	// Over-panel
 	over_panel = guiCreateDiv(0, 0, 800, 480);

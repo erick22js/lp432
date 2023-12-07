@@ -73,7 +73,7 @@ void cpuStep(Cpu *cpu_s){
 	proc(cpu_s);
 
 	// Timer handling
-	while (cpu_s->reg_utv>32){
+	while (cpu_s->reg_utv>=32){
 		cpu_s->reg_utv -= 32;
 		cpu_s->reg_ctv++;
 	}

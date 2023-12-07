@@ -16,6 +16,9 @@ struct Emu{
 	Cpu *cpu_s; // Main CPU of emulator
 	Pci *pci; // Main PCI
 	Bus *bus; // Main BUS connected
+
+	/* Timing Control */
+	uint32 acu_cycles;
 };
 //static Emu emu_s;
 

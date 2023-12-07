@@ -2,16 +2,23 @@
 #define GUI_COMMON_H
 
 #include "emulator/emulator.h"
+#include "window/monitor.h"
+#include "devices/display.h"
 #include "ini.h"
 
 
 extern IniObject *config;
 extern IniObject *setup;
 
+// Main components
 extern Emu g_emu;
 extern Bus g_bus;
 extern Cpu g_cpu;
 extern Pci g_pci;
+
+// Peripherals
+extern Device g_display;
+extern Device g_keyboard;
 
 
 /*

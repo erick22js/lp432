@@ -218,10 +218,16 @@ int guiProcess() {
 	}key_event = {0};
 
 	SDL_Event ev;
-	while (SDL_PollEvent(&ev)){
+	while (sdlPollEvent(sp_win, &ev)){
 		switch (ev.type){
 			case SDL_QUIT: {
 				return SDL_QUIT;
+			}
+			break;
+			case SDL_WINDOWEVENT: {
+				if (ev.window.event == SDL_WINDOWEVENT_CLOSE){
+					return SDL_QUIT;
+				}
 			}
 			break;
 			case SDL_MOUSEMOTION: {

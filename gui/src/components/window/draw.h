@@ -2,8 +2,8 @@
 #define GUI_DRAW_H
 
 #include <stdio.h>
-#include <SDL.h>
-#include <SDL_image.h>
+
+#include "sdl_related.h"
 
 
 // Global Control properties

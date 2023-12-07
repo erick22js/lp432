@@ -1,10 +1,17 @@
 #include "common.h"
 
 
+Monitor monitor;
+
+// Main components
 Emu g_emu;
 Bus g_bus;
 Cpu g_cpu;
 Pci g_pci;
+
+// Peripherals
+Device g_display;
+Device g_keyboard;
 
 
 /*
@@ -48,6 +55,7 @@ void busWrite(uint32 adr, uint8 data) {
 void vmSetup() {
 	busSetup(&g_bus, busReset, busRead, busWrite);
 	emuSetup(&g_emu, &g_cpu, &g_pci, &g_bus);
+	pciSetup(&g_pci, &g_bus);
 
 	// Setup ram
 	mem_ram_length = iniObjectHasKey(setup, "ramsize")? (uint32)iniObjectGetKeyAsNumber(setup, "ramsize"): 1024*256;
@@ -83,6 +91,13 @@ void vmSetup() {
 
 	// Setup cpu jump address
 	g_cpu.reg_pc = iniObjectGetKeyAsHex(setup, "startadr");
+
+	// Setup main monitor
+	mntrOpen(&monitor, "monitor", 640, 512, 320, 256);
+
+	// Setup peripheral devices
+	dsSetup(&g_display, &monitor);
+	pciPlugDevice(&g_pci, &g_display);
 }
 
 void vmReset() {
@@ -95,5 +110,6 @@ void vmRun() {
 
 void vmStep() {
 	emuStep(&g_emu);
+	mntrRender(&monitor);
 }
 
