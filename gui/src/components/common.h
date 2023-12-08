@@ -10,6 +10,8 @@
 extern IniObject *config;
 extern IniObject *setup;
 
+extern Monitor monitor;
+
 // Main components
 extern Emu g_emu;
 extern Bus g_bus;

@@ -123,6 +123,8 @@ Element over_panel, over_text, over_value, caret;
 char timer_buffer[127];
 Element timer_label;
 
+uint32 _sp_frame_index = 0;
+bool _sp_running = false;
 
 _Bool _sp_input_active = 0;
 int _sp_input_seek = 0;
@@ -198,8 +200,6 @@ void spUpdate(){
 
 void spInputNumeric(void *default_value, int type, const char* format, const char* message, void (*callback)(char* value, void* arg), void* arg){
 	guiSetElementText(over_text, (char*)message);
-	guiSetElementVisible(over_panel, 1);
-	guiSetElementActive(over_panel, 1);
 	guiSetElementVisible(over_text, 1);
 	guiSetElementActive(over_text, 1);
 	guiSetElementVisible(over_value, 1);
@@ -232,8 +232,6 @@ void spInputNumeric(void *default_value, int type, const char* format, const cha
 
 void spInputText(const char* default_value, const char* message, void (*callback)(char* value, void* arg), void* arg){
 	guiSetElementText(over_text, (char*)message);
-	guiSetElementVisible(over_panel, 1);
-	guiSetElementActive(over_panel, 1);
 	guiSetElementVisible(over_text, 1);
 	guiSetElementActive(over_text, 1);
 	guiSetElementVisible(over_value, 1);
@@ -255,8 +253,6 @@ void spInputText(const char* default_value, const char* message, void (*callback
 
 void spCloseInput(){
 	_sp_input_active = 0;
-	guiSetElementVisible(over_panel, 0);
-	guiSetElementActive(over_panel, 0);
 	guiSetElementVisible(over_text, 0);
 	guiSetElementActive(over_text, 0);
 	guiSetElementVisible(over_value, 0);
@@ -434,6 +430,7 @@ void spIMenuSave(char* value, void* arg){
 
 void spHStep(Element el, int btn, Uint32 x, Uint32 y){
 	vmStep();
+	mntrRender(&monitor);
 	spUpdate();
 }
 
@@ -550,6 +547,12 @@ void spHOnMouseScroll(int x, int y){
 
 void spHOnKey(Uint32 key, Uint32 input, _Bool ctrl, _Bool alt, _Bool shift, _Bool caps){
 	//printf("=Key 0x%x ctrl=%d alt=%d shift=%d caps=%d\n", key, ctrl, alt, shift, caps);
+	if (key == SDLK_F5 && !_sp_input_active){
+		_sp_running = !_sp_running;
+		if (!_sp_running){
+			spUpdate();
+		}
+	}
 	if (_sp_input_active){
 		if (key==SDLK_LSHIFT || key==SDLK_RSHIFT || key==SDLK_LALT || key==SDLK_RALT ||
 			key==SDLK_LCTRL || key==SDLK_RCTRL || key==SDLK_CAPSLOCK){
@@ -655,9 +658,10 @@ void spHOnKey(Uint32 key, Uint32 input, _Bool ctrl, _Bool alt, _Bool shift, _Boo
 			}
 		}
 	}
-	else {
+	else if (!_sp_running){
 		if (key == SDLK_F9){
 			vmStep();
+			mntrRender(&monitor);
 			spUpdate();
 		}
 		if (key == SDLK_F1){
@@ -683,7 +687,7 @@ void spInit() {
 	guiStart();
 
 	// Decorative text
-	guiCreateLabel("LP432 Virtual Machine - Inspector", 250, 20);
+	guiCreateLabel("LP432 Virtual Machine - Inspector (F5 to start running)", 250, 20);
 
 	// Registers
 	for (int i = 0; i<16; i++){
@@ -861,8 +865,6 @@ void spInit() {
 	// Over-panel
 	over_panel = guiCreateDiv(0, 0, 800, 480);
 	guiSetElementAlpha(over_panel, 0.75f);
-	guiSetElementVisible(over_panel, 0);
-	guiSetElementActive(over_panel, 0);
 
 	over_text = guiCreateLabel("Insert a Input value:", 20, 20);
 	guiSetElementTextColor(over_text, COLOR_WHITE);
@@ -898,6 +900,21 @@ void spInit() {
 int spHandle() {
 	guiSetElementX(caret, 52 + _sp_input_seek*16);
 	guiSetElementAlpha(caret, SDL_GetTicks()&0x100? 1.0f: 0.0f);
+
+	if (_sp_running){
+		guiSetElementVisible(over_panel, true);
+		guiSetElementActive(over_panel, true);
+
+		while (_sp_frame_index == g_display.api_data[15]){
+			vmStep();
+		}
+		mntrRender(&monitor);
+		_sp_frame_index = g_display.api_data[15];
+	}
+	else {
+		guiSetElementVisible(over_panel, _sp_input_active);
+		guiSetElementActive(over_panel, _sp_input_active);
+	}
 
 	return guiProcess();
 }

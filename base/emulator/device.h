@@ -20,7 +20,7 @@ struct Device{
 	//
 	//	IO Ports and Registers Access
 	//
-	uint8 regs[32];
+	uint8 regs[256];
 	uint8 (*read)(Device* self, uint8 reg);
 	void (*write)(Device* self, uint8 reg, uint8 data);
 
@@ -32,8 +32,8 @@ struct Device{
 	//
 	//	State Properties for Custom devices design
 	//
-	uint32 api_data[8];
-	void* api_refs[8];
+	uint32 api_data[16];
+	void* api_refs[16];
 };
 
 

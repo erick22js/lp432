@@ -110,6 +110,5 @@ void vmRun() {
 
 void vmStep() {
 	emuStep(&g_emu);
-	mntrRender(&monitor);
 }
 

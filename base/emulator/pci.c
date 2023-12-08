@@ -13,8 +13,8 @@
 	Internal Control Functions for PCI
 */
 
-#define IOA_TO_PORT_SHIFT 5
-#define IOA_TO_REG_MASK 0x1F
+#define IOA_TO_PORT_SHIFT 8
+#define IOA_TO_REG_MASK 0xFF
 
 bool pciReadDevice8(Pci *pci, uint16 reg, uint8 *data){
 	uint16 port = reg>>IOA_TO_PORT_SHIFT;
