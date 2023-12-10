@@ -10,6 +10,7 @@ Cpu g_cpu;
 Pci g_pci;
 
 // Peripherals
+Device g_serial;
 Device g_display;
 Device g_keyboard;
 
@@ -93,11 +94,15 @@ void vmSetup() {
 	g_cpu.reg_pc = iniObjectGetKeyAsHex(setup, "startadr");
 
 	// Setup main monitor
-	mntrOpen(&monitor, "monitor", 640, 512, 320, 256);
+	mntrOpen(&monitor, "monitor", 640, 512, 320, 256, false, false, true);
 
 	// Setup peripheral devices
+	srlSetup(&g_serial, &monitor);
+	pciPlugDevice(&g_pci, &g_serial);
 	dsSetup(&g_display, &monitor);
 	pciPlugDevice(&g_pci, &g_display);
+	keySetup(&g_keyboard, &monitor);
+	pciPlugDevice(&g_pci, &g_keyboard);
 }
 
 void vmReset() {

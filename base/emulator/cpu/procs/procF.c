@@ -2,15 +2,13 @@
 #include "../../pci.h"
 
 
-#define ioAdr8To16(adr) ((adr&0x3)|((adr&0xFC)<<8))
+#define procIn8(adr, dest) {if (!pciReadDevice8(cpu_s->pci, adr, &dest)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
+#define procIn16(adr, dest) {if (!pciReadDevice16(cpu_s->pci, adr, &dest)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
+#define procIn32(adr, dest) {if (!pciReadDevice32(cpu_s->pci, adr, &dest)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
 
-#define procIn8(adr, dest) {if (pciReadDevice8(cpu_s->pci, adr, &dest)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
-#define procIn16(adr, dest) {if (pciReadDevice16(cpu_s->pci, adr, &dest)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
-#define procIn32(adr, dest) {if (pciReadDevice32(cpu_s->pci, adr, &dest)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
-
-#define procOut8(adr, src) {if (pciWriteDevice8(cpu_s->pci, adr, src)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
-#define procOut16(adr, src) {if (pciWriteDevice16(cpu_s->pci, adr, src)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
-#define procOut32(adr, src) {if (pciWriteDevice32(cpu_s->pci, adr, src)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
+#define procOut8(adr, src) {if (!pciWriteDevice8(cpu_s->pci, adr, src)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
+#define procOut16(adr, src) {if (!pciWriteDevice16(cpu_s->pci, adr, src)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
+#define procOut32(adr, src) {if (!pciWriteDevice32(cpu_s->pci, adr, src)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
 
 #define portWideAdr8To16(adr) ((adr&0x7)|((adr&0xF8)<<5))
 
@@ -51,9 +49,8 @@ cpuInterr procF3(Cpu *cpu_s){
 		case 0x0: {
 			// Instruction: in r8:regm, imm8:MV
 			cpuFetchMV8();
-			uint16 adr = ioAdr8To16(cpu_s->mv);
+			uint16 adr = portWideAdr8To16(cpu_s->mv);
 			uint8 data = 0;
-			adr = portWideAdr8To16(adr);
 			procIn8(adr, data);
 			cpuWriteReg8(cpu_s->os_regm, data);
 		}
@@ -61,9 +58,8 @@ cpuInterr procF3(Cpu *cpu_s){
 		case 0x1: {
 			// Instruction: in r16:regm, imm8:MV
 			cpuFetchMV8();
-			uint16 adr = ioAdr8To16(cpu_s->mv);
+			uint16 adr = portWideAdr8To16(cpu_s->mv);
 			uint16 data = 0;
-			adr = portWideAdr8To16(adr);
 			procIn16(adr, data);
 			cpuWriteReg16(cpu_s->os_regm, data);
 		}
@@ -71,9 +67,8 @@ cpuInterr procF3(Cpu *cpu_s){
 		case 0x2: {
 			// Instruction: in r32:regm, imm8:MV
 			cpuFetchMV8();
-			uint16 adr = ioAdr8To16(cpu_s->mv);
+			uint16 adr = portWideAdr8To16(cpu_s->mv);
 			uint32 data = 0;
-			adr = portWideAdr8To16(adr);
 			procIn32(adr, data);
 			cpuWriteReg32(cpu_s->os_regm, data);
 		}
@@ -143,27 +138,24 @@ cpuInterr procF7(Cpu *cpu_s){
 		case 0x0: {
 			// Instruction: out imm8:MV, r8:regm
 			cpuFetchMV8();
-			uint16 adr = ioAdr8To16(cpu_s->mv);
+			uint16 adr = portWideAdr8To16(cpu_s->mv);
 			uint8 data = cpuReadReg8(cpu_s->os_regm);
-			adr = portWideAdr8To16(adr);
 			procOut8(adr, data);
 		}
 		break;
 		case 0x1: {
 			// Instruction: out imm8:MV, r16:regm
 			cpuFetchMV8();
-			uint16 adr = ioAdr8To16(cpu_s->mv);
+			uint16 adr = portWideAdr8To16(cpu_s->mv);
 			uint16 data = cpuReadReg16(cpu_s->os_regm);
-			adr = portWideAdr8To16(adr);
 			procOut16(adr, data);
 		}
 		break;
 		case 0x2: {
-			// Instruction: out imm8:MV, r16:regm
+			// Instruction: out imm8:MV, r32:regm
 			cpuFetchMV8();
-			uint16 adr = ioAdr8To16(cpu_s->mv);
+			uint16 adr = portWideAdr8To16(cpu_s->mv);
 			uint32 data = cpuReadReg32(cpu_s->os_regm);
-			adr = portWideAdr8To16(adr);
 			procOut32(adr, data);
 		}
 		break;

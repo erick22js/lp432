@@ -10,6 +10,7 @@ struct Device{
 	//	Device Internal Properties
 	//
 	bool active;
+	Pci *pci;
 	uint16 port;
 
 	//
@@ -47,6 +48,14 @@ struct Device{
 #define devBusWrite16(dev, adr, data) {dev->bus->write(adr, data); dev->bus->write(adr+1, data>>8);}
 #define devBusRead32(dev, adr) (dev->bus->read(adr)|(dev->bus->read(adr+1)<<8)|(dev->bus->read(adr+2)<<16)|(dev->bus->read(adr+3)<<24))
 #define devBusWrite32(dev, adr, data) {dev->bus->write(adr, data); dev->bus->write(adr+1, data>>8); dev->bus->write(adr+2, data>>16); dev->bus->write(adr+3, data>>24);}
+
+
+//
+//	Device Pci and Cpu Communication
+//
+
+bool devRequestCpuInterruption(Device *device);
+
 
 
 #endif

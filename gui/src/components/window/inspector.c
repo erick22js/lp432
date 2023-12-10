@@ -892,6 +892,8 @@ void spInit() {
 	guiSetOnMouseScroll(spHOnMouseScroll);
 	guiSetOnKeyDown(spHOnKey);
 
+	_sp_mem_badr = g_cpu.reg_pc;
+
 	spUpdate();
 
 	printf("GUI Loaded!\n");
@@ -909,9 +911,11 @@ int spHandle() {
 			vmStep();
 		}
 		mntrRender(&monitor);
+		mntrListen(&monitor);
 		_sp_frame_index = g_display.api_data[15];
 	}
 	else {
+		mntrUnlisten(&monitor);
 		guiSetElementVisible(over_panel, _sp_input_active);
 		guiSetElementActive(over_panel, _sp_input_active);
 	}

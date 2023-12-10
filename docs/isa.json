@@ -3246,21 +3246,24 @@
 				]
 			},
 			{
-				"opcode": "0x74",
+				"opcode": "0x73",
+				"desc": "0x0",
 				"args": [
 					["dest", "r8", "regm"],
 					["source", "imm8", "mv8"]
 				]
 			},
 			{
-				"opcode": "0x75",
+				"opcode": "0x73",
+				"desc": "0x1",
 				"args": [
 					["dest", "r16", "regm"],
 					["source", "imm16", "mv16"]
 				]
 			},
 			{
-				"opcode": "0x76",
+				"opcode": "0x73",
+				"desc": "0x2",
 				"args": [
 					["dest", "r32", "regm"],
 					["source", "imm32", "mv32"]
@@ -3268,7 +3271,7 @@
 			},
 			{
 				"opcode": "0x73",
-				"desc": "0x0",
+				"desc": "0x3",
 				"args": [
 					["dest", "r32", "regm"],
 					["source", "imms8", "mv8"]
@@ -3276,7 +3279,7 @@
 			},
 			{
 				"opcode": "0x73",
-				"desc": "0x1",
+				"desc": "0x4",
 				"args": [
 					["dest", "r32", "regm"],
 					["source", "imms16", "mv16"]
@@ -3284,7 +3287,7 @@
 			},
 			{
 				"opcode": "0x73",
-				"desc": "0x2",
+				"desc": "0x5",
 				"args": [
 					["dest", "r16", "regm"],
 					["source", "imms8", "mv8"]
@@ -3292,7 +3295,7 @@
 			},
 			{
 				"opcode": "0x73",
-				"desc": "0x3",
+				"desc": "0x6",
 				"args": [
 					["dest", "r8", "regm"],
 					["source", "mem8", "mem"]
@@ -3300,7 +3303,7 @@
 			},
 			{
 				"opcode": "0x73",
-				"desc": "0x4",
+				"desc": "0x7",
 				"args": [
 					["dest", "r16", "regm"],
 					["source", "mem16", "mem"]
@@ -3308,7 +3311,7 @@
 			},
 			{
 				"opcode": "0x73",
-				"desc": "0x5",
+				"desc": "0x8",
 				"args": [
 					["dest", "r32", "regm"],
 					["source", "mem32", "mem"]
@@ -3316,34 +3319,10 @@
 			},
 			{
 				"opcode": "0x73",
-				"desc": "0x6",
-				"args": [
-					["dest", "r16", "regm"],
-					["source", "imm8", "mv8"]
-				]
-			},
-			{
-				"opcode": "0x73",
-				"desc": "0x7",
-				"args": [
-					["dest", "r32", "regm"],
-					["source", "imm8", "mv8"]
-				]
-			},
-			{
-				"opcode": "0x73",
-				"desc": "0x8",
-				"args": [
-					["dest", "r32", "regm"],
-					["source", "imm16", "mv16"]
-				]
-			},
-			{
-				"opcode": "0x73",
 				"desc": "0x9",
 				"args": [
 					["dest", "r16", "regm"],
-					["source", "mem8", "mem"]
+					["source", "imm8", "mv8"]
 				]
 			},
 			{
@@ -3351,12 +3330,36 @@
 				"desc": "0xA",
 				"args": [
 					["dest", "r32", "regm"],
-					["source", "mem8", "mem"]
+					["source", "imm8", "mv8"]
 				]
 			},
 			{
 				"opcode": "0x73",
 				"desc": "0xB",
+				"args": [
+					["dest", "r32", "regm"],
+					["source", "imm16", "mv16"]
+				]
+			},
+			{
+				"opcode": "0x73",
+				"desc": "0xC",
+				"args": [
+					["dest", "r16", "regm"],
+					["source", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x73",
+				"desc": "0xD",
+				"args": [
+					["dest", "r32", "regm"],
+					["source", "mem8", "mem"]
+				]
+			},
+			{
+				"opcode": "0x73",
+				"desc": "0xE",
 				"args": [
 					["dest", "r32", "regm"],
 					["source", "mem16", "mem"]

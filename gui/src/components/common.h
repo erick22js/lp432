@@ -3,7 +3,9 @@
 
 #include "emulator/emulator.h"
 #include "window/monitor.h"
+#include "devices/serial.h"
 #include "devices/display.h"
+#include "devices/keyboard.h"
 #include "ini.h"
 
 
@@ -19,6 +21,7 @@ extern Cpu g_cpu;
 extern Pci g_pci;
 
 // Peripherals
+extern Device g_serial;
 extern Device g_display;
 extern Device g_keyboard;
 

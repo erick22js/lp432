@@ -304,7 +304,7 @@ int guiProcess() {
 			case EVENT_MOUSE_UP: {
 				if (_elements[i].active && _elements[i].holded){
 					gui_event.type = EVENT_NONE;
-					printf("Element: x=%d; y=%d; w=%d; h=%d\n", _elements[i].x, _elements[i].y, _elements[i].width, _elements[i].height);
+					//printf("Element: x=%d; y=%d; w=%d; h=%d\n", _elements[i].x, _elements[i].y, _elements[i].width, _elements[i].height);
 					if (_elements[i].onClick){
 						_elements[i].onClick((Element)i, gui_event.button, gui_event.x, gui_event.y);
 					}

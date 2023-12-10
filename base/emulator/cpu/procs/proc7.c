@@ -27,77 +27,95 @@ cpuInterr proc73(Cpu *cpu_s){
 
 	switch (cpu_s->os_desc){
 		case 0x0:{
+			// Instruction: mov r8:regm, imm8:MV
+			cpuFetchMV8();
+			cpuWriteReg8(cpu_s->os_regm, cpu_s->code);
+		}
+		break;
+		case 0x1:{
+			// Instruction: mov r16:regm, imm16:MV
+			cpuFetchMV16();
+			cpuWriteReg16(cpu_s->os_regm, cpu_s->code);
+		}
+		break;
+		case 0x2:{
+			// Instruction: mov r32:regm, imm32:MV
+			cpuFetchMV32();
+			cpuWriteReg32(cpu_s->os_regm, cpu_s->code);
+		}
+		break;
+		case 0x3:{
 			// Instruction: mov r32:regm, imms8:MV
 			cpuFetchMV8();
 			cpuWriteReg32(cpu_s->os_regm, u8ToInt(cpu_s->code));
 		}
 		break;
-		case 0x1:{
+		case 0x4:{
 			// Instruction: mov r32:regm, imms16:MV
 			cpuFetchMV16();
 			cpuWriteReg32(cpu_s->os_regm, u16ToInt(cpu_s->code));
 		}
 		break;
-		case 0x2:{
+		case 0x5:{
 			// Instruction: mov r16:regm, imms8:MV
 			cpuFetchMV32();
 			cpuWriteReg16(cpu_s->os_regm, u8ToInt(cpu_s->code));
 		}
 		break;
-		case 0x3:{
+		case 0x6:{
 			// Instruction: mov r8:regm, mem8
 			cpuFetchMemIndex();
 			cpuReadMem8(cpu_s->mem_adr);
 			cpuWriteReg8(cpu_s->os_regm, cpu_s->data);
 		}
 		break;
-		case 0x4:{
+		case 0x7:{
 			// Instruction: mov r16:regm, mem16
 			cpuFetchMemIndex();
 			cpuReadMem16(cpu_s->mem_adr);
 			cpuWriteReg16(cpu_s->os_regm, cpu_s->data);
 		}
 		break;
-		case 0x5:{
+		case 0x8:{
 			// Instruction: mov r32:regm, mem32
 			cpuFetchMemIndex();
 			cpuReadMem32(cpu_s->mem_adr);
 			cpuWriteReg32(cpu_s->os_regm, cpu_s->data);
 		}
 		break;
-		case 0x6:{
+		case 0x9:{
 			// Instruction: mov r16:regm, imm8:MV
 			cpuFetchMV8();
 			cpuWriteReg16(cpu_s->os_regm, cpu_s->code);
 		}
 		break;
-		case 0x7:{
+		case 0xA:{
 			// Instruction: mov r32:regm, imm8:MV
 			cpuFetchMV8();
 			cpuWriteReg32(cpu_s->os_regm, cpu_s->code);
 		}
 		break;
-		case 0x8:{
+		case 0xB:{
 			// Instruction: mov r32:regm, imm16:MV
 			cpuFetchMV16();
 			cpuWriteReg32(cpu_s->os_regm, cpu_s->code);
 		}
 		break;
-		case 0x9:{
+		case 0xC:{
 			// Instruction: mov r16:regm, mem8
 			cpuFetchMemIndex();
 			cpuReadMem8(cpu_s->mem_adr);
 			cpuWriteReg16(cpu_s->os_regm, cpu_s->data);
 		}
 		break;
-		case 0xA:{
+		case 0xD:{
 			// Instruction: mov r32:regm, mem8
 			cpuFetchMemIndex();
 			cpuReadMem8(cpu_s->mem_adr);
 			cpuWriteReg32(cpu_s->os_regm, cpu_s->data);
 		}
 		break;
-		case 0xB:{
+		case 0xE:{
 			// Instruction: mov r32:regm, mem16
 			cpuFetchMemIndex();
 			cpuReadMem16(cpu_s->mem_adr);

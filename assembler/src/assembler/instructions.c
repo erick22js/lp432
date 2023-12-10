@@ -3201,7 +3201,7 @@ Ist isa[] = {
 				}
 			},
 			{
-				.opcode = 0x74, .desc = NO_DESC,
+				.opcode = 0x73, .desc = 0x0,
 				.params_length = 2,
 				.params = {
 					{ .type = TYPE_R8, .encode = ENCODE_REGM },
@@ -3209,7 +3209,7 @@ Ist isa[] = {
 				}
 			},
 			{
-				.opcode = 0x75, .desc = NO_DESC,
+				.opcode = 0x73, .desc = 0x1,
 				.params_length = 2,
 				.params = {
 					{ .type = TYPE_R16, .encode = ENCODE_REGM },
@@ -3217,7 +3217,7 @@ Ist isa[] = {
 				}
 			},
 			{
-				.opcode = 0x76, .desc = NO_DESC,
+				.opcode = 0x73, .desc = 0x2,
 				.params_length = 2,
 				.params = {
 					{ .type = TYPE_R32, .encode = ENCODE_REGM },
@@ -3225,7 +3225,7 @@ Ist isa[] = {
 				}
 			},
 			{
-				.opcode = 0x73, .desc = 0x0,
+				.opcode = 0x73, .desc = 0x3,
 				.params_length = 2,
 				.params = {
 					{ .type = TYPE_R32, .encode = ENCODE_REGM },
@@ -3233,7 +3233,7 @@ Ist isa[] = {
 				}
 			},
 			{
-				.opcode = 0x73, .desc = 0x1,
+				.opcode = 0x73, .desc = 0x4,
 				.params_length = 2,
 				.params = {
 					{ .type = TYPE_R32, .encode = ENCODE_REGM },
@@ -3241,7 +3241,7 @@ Ist isa[] = {
 				}
 			},
 			{
-				.opcode = 0x73, .desc = 0x2,
+				.opcode = 0x73, .desc = 0x5,
 				.params_length = 2,
 				.params = {
 					{ .type = TYPE_R16, .encode = ENCODE_REGM },
@@ -3249,7 +3249,7 @@ Ist isa[] = {
 				}
 			},
 			{
-				.opcode = 0x73, .desc = 0x3,
+				.opcode = 0x73, .desc = 0x6,
 				.params_length = 2,
 				.params = {
 					{ .type = TYPE_R8, .encode = ENCODE_REGM },
@@ -3257,7 +3257,7 @@ Ist isa[] = {
 				}
 			},
 			{
-				.opcode = 0x73, .desc = 0x4,
+				.opcode = 0x73, .desc = 0x7,
 				.params_length = 2,
 				.params = {
 					{ .type = TYPE_R16, .encode = ENCODE_REGM },
@@ -3265,7 +3265,7 @@ Ist isa[] = {
 				}
 			},
 			{
-				.opcode = 0x73, .desc = 0x5,
+				.opcode = 0x73, .desc = 0x8,
 				.params_length = 2,
 				.params = {
 					{ .type = TYPE_R32, .encode = ENCODE_REGM },
@@ -3273,35 +3273,11 @@ Ist isa[] = {
 				}
 			},
 			{
-				.opcode = 0x73, .desc = 0x6,
-				.params_length = 2,
-				.params = {
-					{ .type = TYPE_R16, .encode = ENCODE_REGM },
-					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 }
-				}
-			},
-			{
-				.opcode = 0x73, .desc = 0x7,
-				.params_length = 2,
-				.params = {
-					{ .type = TYPE_R32, .encode = ENCODE_REGM },
-					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 }
-				}
-			},
-			{
-				.opcode = 0x73, .desc = 0x8,
-				.params_length = 2,
-				.params = {
-					{ .type = TYPE_R32, .encode = ENCODE_REGM },
-					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 }
-				}
-			},
-			{
 				.opcode = 0x73, .desc = 0x9,
 				.params_length = 2,
 				.params = {
 					{ .type = TYPE_R16, .encode = ENCODE_REGM },
-					{ .type = TYPE_MEM8, .encode = ENCODE_MEM }
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 }
 				}
 			},
 			{
@@ -3309,11 +3285,35 @@ Ist isa[] = {
 				.params_length = 2,
 				.params = {
 					{ .type = TYPE_R32, .encode = ENCODE_REGM },
-					{ .type = TYPE_MEM8, .encode = ENCODE_MEM }
+					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 }
 				}
 			},
 			{
 				.opcode = 0x73, .desc = 0xB,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_IMM16, .encode = ENCODE_MV16 }
+				}
+			},
+			{
+				.opcode = 0x73, .desc = 0xC,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R16, .encode = ENCODE_REGM },
+					{ .type = TYPE_MEM8, .encode = ENCODE_MEM }
+				}
+			},
+			{
+				.opcode = 0x73, .desc = 0xD,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_MEM8, .encode = ENCODE_MEM }
+				}
+			},
+			{
+				.opcode = 0x73, .desc = 0xE,
 				.params_length = 2,
 				.params = {
 					{ .type = TYPE_R32, .encode = ENCODE_REGM },

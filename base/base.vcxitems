@@ -35,6 +35,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)emulator\cpu\procs\procE.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)emulator\cpu\procs\procedures.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)emulator\cpu\procs\procF.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)emulator\device.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)emulator\emu.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)emulator\pci.c" />
   </ItemGroup>

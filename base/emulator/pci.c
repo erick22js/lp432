@@ -28,6 +28,9 @@ bool pciReadDevice8(Pci *pci, uint16 reg, uint8 *data){
 	if (dev->read){
 		data[0] = dev->read(dev, (uint8)reg);
 	}
+	else {
+		data[0] = 0;
+	}
 
 	return true;
 }
@@ -44,6 +47,10 @@ bool pciReadDevice16(Pci *pci, uint16 reg, uint16 *data){
 	if (dev->read){
 		((uint8*)data)[0] = dev->read(dev, (uint8)reg);
 		((uint8*)data)[1] = dev->read(dev, (uint8)reg+1);
+	}
+	else {
+		((uint8*)data)[0] = 0;
+		((uint8*)data)[1] = 0;
 	}
 
 	return true;
@@ -64,6 +71,12 @@ bool pciReadDevice32(Pci *pci, uint16 reg, uint32 *data){
 		((uint8*)data)[2] = dev->read(dev, (uint8)reg+2);
 		((uint8*)data)[3] = dev->read(dev, (uint8)reg+3);
 	}
+	else {
+		((uint8*)data)[0] = 0;
+		((uint8*)data)[1] = 0;
+		((uint8*)data)[2] = 0;
+		((uint8*)data)[3] = 0;
+	}
 
 	return true;
 }
@@ -77,7 +90,7 @@ bool pciWriteDevice8(Pci *pci, uint16 reg, uint8 data){
 	}
 
 	Device *dev = pci->devices[port];
-	if (dev->read){
+	if (dev->write){
 		dev->write(dev, (uint8)reg, data);
 	}
 
@@ -93,7 +106,7 @@ bool pciWriteDevice16(Pci *pci, uint16 reg, uint16 data){
 	}
 
 	Device *dev = pci->devices[port];
-	if (dev->read){
+	if (dev->write){
 		dev->write(dev, (uint8)reg, (data)&0xFF);
 		dev->write(dev, (uint8)reg+1, (data>>8)&0xFF);
 	}
@@ -110,7 +123,7 @@ bool pciWriteDevice32(Pci *pci, uint16 reg, uint32 data){
 	}
 
 	Device *dev = pci->devices[port];
-	if (dev->read){
+	if (dev->write){
 		dev->write(dev, (uint8)reg, (data)&0xFF);
 		dev->write(dev, (uint8)reg+1, (data>>8)&0xFF);
 		dev->write(dev, (uint8)reg+2, (data>>16)&0xFF);
@@ -134,6 +147,7 @@ bool pciPlugDevice(Pci *pci, Device *device){
 		if (pci->devices[pci->port_i] == null){
 			pci->count_connected++;
 			pci->devices[pci->port_i] = device;
+			device->pci = pci;
 			device->port = pci->port_i;
 			device->bus = pci->bus;
 			pci->port_i++;

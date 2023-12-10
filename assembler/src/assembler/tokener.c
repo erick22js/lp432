@@ -5,19 +5,6 @@
 	Common Fetch Functions
 */
 
-// Consume the left line, returns the index where the character is not blank, -1 otherwise
-int tkrConsumeLine() {
-	uint32 chr = lexerGet();
-	int offset = -1;
-	while (!charIsBreakLine(chr) && !lexerEnded()){
-		if (!charIsBlank(chr) && offset==(-1)) {
-			offset = lexerTell()-1;
-		}
-		chr = lexerGet();
-	}
-	return offset;
-}
-
 // Consume any detected space
 void tkrConsumeSpace() {
 	createSeek();
@@ -70,6 +57,20 @@ void tkrConsumeSpace() {
 		}
 		chr = lexerGet();
 	}
+}
+
+// Consume the left line, returns the index where the character is not blank, -1 otherwise
+int tkrConsumeLine() {
+	tkrConsumeSpace();
+	uint32 chr = lexerGet();
+	int offset = -1;
+	while (!charIsBreakLine(chr) && !lexerEnded()){
+		if (!charIsBlank(chr) && offset==(-1)) {
+			offset = lexerTell()-1;
+		}
+		chr = lexerGet();
+	}
+	return offset;
 }
 
 // Detect the tokener ended fetch
@@ -182,6 +183,28 @@ int tkrFetchToken(Token *tk) {
 		lexerSeekCur(-1);
 		tk->kind = TOKEN_IDENTIFIER;
 		tk->value.string = textReuse(identifier);
+		return 0;
+	}
+	// Detect if precursor is a numerical string
+	else if (initial == '\''){
+		uint32 value = 0;
+		uint32 chr = lexerGet();
+		uint32 s = 0;
+		while (chr != EOF && chr != '\'' && s<MAX_STRING_SIZE){
+			if (chr=='\\'){
+				chr = lexerGet();
+			}
+			value <<= 8;
+			value |= chr;
+			chr = lexerGet();
+			s++;
+		}
+
+		if (chr == EOF){
+			return ERROR_UNTERMINATED_STRING;
+		}
+		tk->kind = TOKEN_INTEGER;
+		tk->value.integer = value;
 		return 0;
 	}
 	// Detect if precursor is a string

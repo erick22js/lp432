@@ -26,7 +26,7 @@ void cpuDebug(Cpu *cpu_s){
 // Program Flow Control
 
 bool cpuRequestInterrupt(Cpu *cpu_s, uint16 port){
-	if (!cpu_s->request_external){
+	if (!cpu_s->request_external && cpu_s->reg_st&FLAG_IE){
 		cpu_s->request_external = true;
 		cpu_s->request_port = port;
 		return true;
@@ -150,7 +150,7 @@ void cpuStep(Cpu *cpu_s){
 			cpu_s->interrupt = INTR_NONE;
 		}
 		// Check for external available interruption
-		else if (cpu_s->request_external && cpu_s->reg_st&FLAG_IE){
+		else if (cpu_s->request_external){
 			cpu_s->interrupt = INTR_HARDWARE_INTERRUPTION;
 			//log("Cpu Interruption: Hardware Interruption\n");
 			cpuInterrupt(cpu_s);

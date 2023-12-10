@@ -43,8 +43,31 @@ void dsStep(Device* self, uint32 cycles){
 	}
 	CTRL_CYCLES -= PIXELS_PER_TICK;
 
+
+	// INIT STATE
+	if (CTRL_STATE==-1){
+		// Try to request the cpu interruption
+		if (devRequestCpuInterruption(self)){
+			printf("Display interruption solved!\n");
+			CTRL_X_POS = CTRL_Y_POS = 0;
+			CTRL_STATE = 1;
+		}
+
+		// Update frame info
+		CTRL_X_POS += PIXELS_PER_TICK;
+		if (CTRL_X_POS >= REG_WIDTH){
+			CTRL_X_POS -= REG_WIDTH;
+			CTRL_Y_POS++;
+
+			if (CTRL_Y_POS >= REG_HEIGHT*2){
+				CTRL_Y_POS = 0;
+				self->api_data[15]++; // Index change used as indicator for frame update refresh
+			}
+		}
+		return;
+	}
 	// STOP STATE
-	if (CTRL_STATE==0){
+	else if (CTRL_STATE==0){
 		return;
 	}
 	// PLOT STATE
@@ -114,7 +137,7 @@ void dsSetup(Device *self, Monitor *mntr) {
 	self->active = true;
 
 	// Configure Control Properties
-	CTRL_STATE = 1; // State
+	CTRL_STATE = -1; // State
 	CTRL_CYCLES = 0; // Cycles Counter
 	CTRL_X_POS = 0; // X counter
 	CTRL_X_POS = 0; // Y counter

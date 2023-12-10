@@ -1,39 +1,20 @@
-ZERO:
-.text "LP\\432"
+; Map the address of program ROM in memory
+.program_adr 0x8000
 
-.byte 0xE3, 20
-.include "include.asm"
-.include "include.asm"
+sys_start:
+	mov ecx, hello_world_end-hello_world
+	mov ebx, hello_world
+	print_letter:
+		mov al, [ebx]
+		out 0xB, al
+		inc ebx
+		dec ecx
+		jr.gtz ecx, @print_letter
+	ja sys_loop
 
-.const oitenta 80
-.const dezesseis 16
+sys_consts:
+hello_world: .text "Hello World!"
+hello_world_end:
 
-.macro add_one value:Word
-	add eax, value+5
-.endmacro
-
-.macro sums dest:Reg16, data
-	.byte 10, 20
-	adc dest, data
-	add_one 1
-	add_one 2
-	.byte 30, 40
-.endmacro
-
-.scope
-	.byte 30, 40 
-	teste:
-		.byte 50, 60
-		adc eax, @+teste2
-	teste2:
-.endscope
-.byte 70, dezesseis
-
-.scope
-	sums bx, 99
-
-	etiqueta:
-	ja.eqz eax, etiqueta
-.endscope
-final:
-.byte 90, 100
+sys_loop:
+	ja sys_loop

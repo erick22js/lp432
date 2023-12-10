@@ -613,6 +613,12 @@ int parserExpression(Value* out){
 */
 
 bool matchTypes(DataType base, DataType given){
+	if (base == TYPE_MEM8 || base == TYPE_MEM16 || base == TYPE_MEM32 || base == TYPE_MEM64){
+		return given == base || given == TYPE_MEM;
+	}
+	if (base == TYPE_MEM){
+		return given == TYPE_MEM8 || given == TYPE_MEM16 || given == TYPE_MEM32 || given == TYPE_MEM64;
+	}
 	if (base == TYPE_IMM8 || base == TYPE_IMM16 || base == TYPE_IMM32){
 		return given == base || given == TYPE_IMM;
 	}
@@ -684,7 +690,7 @@ int parserFetchArgs(Arg* args, int* count, int limit){
 						tryCatchAndThrow(
 							tkrFetchToken(&tk)
 						);
-						args[*count].value.mem.reg1 = regi->code;
+						args[*count].value.mem.reg1 = reg1->code;
 
 						// Adressing Mode => INDEXED IMPLICIT
 						if (tkIsSymbol(tk, ']')){
@@ -1077,6 +1083,20 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 					parserExpression(&val)
 				);
 				parser.pc = parser.bc = val.value.integer;
+			}
+			else if (strcmp(cmd, "program_adr")==0){
+				Value val;
+				tryCatchAndThrow(
+					parserExpression(&val)
+				);
+				parser.pc = val.value.integer;
+			}
+			else if (strcmp(cmd, "binary_adr")==0){
+				Value val;
+				tryCatchAndThrow(
+					parserExpression(&val)
+				);
+				parser.bc = val.value.integer;
 			}
 			else if (strcmp(cmd, "scope")==0){
 				createSeek();
