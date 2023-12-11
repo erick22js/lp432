@@ -265,9 +265,13 @@ int parserExpUnary(Value *out){
 				*out = *val;
 				out->value.integer -= address;
 			}
-			else{
+			else if(!parser.phase_one){
 				asm_error_v1 = tk.value.string;
 				throwError(ERROR_SYMBOL_NOT_DEFINED);
+			}
+			else {
+				out->type = TYPE_IMM;
+				out->value.integer -= address;
 			}
 		}
 		else {

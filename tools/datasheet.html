@@ -1,0 +1,638 @@
+<html><head></head><style>td{border:1px solid black; padding: 5px;}
+.content{width:70px; height:30px; font-size:10pt; overflow:hidden; user-select:none;}</style><body><table line="10px"><tr><td>-</td><td style="background-color:green; font-weight:bold; color:white;">0x_0</td><td style="background-color:green; font-weight:bold; color:white;">0x_1</td><td style="background-color:green; font-weight:bold; color:white;">0x_2</td><td style="background-color:green; font-weight:bold; color:white;">0x_3</td><td style="background-color:green; font-weight:bold; color:white;">0x_4</td><td style="background-color:green; font-weight:bold; color:white;">0x_5</td><td style="background-color:green; font-weight:bold; color:white;">0x_6</td><td style="background-color:green; font-weight:bold; color:white;">0x_7</td><td style="background-color:green; font-weight:bold; color:white;">0x_8</td><td style="background-color:green; font-weight:bold; color:white;">0x_9</td><td style="background-color:green; font-weight:bold; color:white;">0x_A</td><td style="background-color:green; font-weight:bold; color:white;">0x_B</td><td style="background-color:green; font-weight:bold; color:white;">0x_C</td><td style="background-color:green; font-weight:bold; color:white;">0x_D</td><td style="background-color:green; font-weight:bold; color:white;">0x_E</td><td style="background-color:green; font-weight:bold; color:white;">0x_F</td></tr><tr><td style="background-color:green; font-weight:bold; color:white;">0x0_</td><td title="nop
+"><div class="content">nop</div></td><td title="pnop
+"><div class="content">pnop</div></td><td title="debug
+"><div class="content">debug</div></td><td title=""><div class="content"></div></td><td title="jaes address:imm32
+"><div class="content">jaes address:imm32</div></td><td title="jaes address:r32
+"><div class="content">jaes address:r32</div></td><td title="jads address:imm32
+"><div class="content">jads address:imm32</div></td><td title="jads address:r32
+"><div class="content">jads address:r32</div></td><td title="jaep address:imm32
+"><div class="content">jaep address:imm32</div></td><td title="jaep address:r32
+"><div class="content">jaep address:r32</div></td><td title="jadp address:imm32
+"><div class="content">jadp address:imm32</div></td><td title="jadp address:r32
+"><div class="content">jadp address:r32</div></td><td title="jasp address:imm32
+"><div class="content">jasp address:imm32</div></td><td title="jasp address:r32
+"><div class="content">jasp address:r32</div></td><td title="seti
+"><div class="content">seti</div></td><td title="clri
+"><div class="content">clri</div></td></tr><tr><td style="background-color:green; font-weight:bold; color:white;">0x1_</td><td title="setc
+"><div class="content">setc</div></td><td title="clrc
+"><div class="content">clrc</div></td><td title="setb
+"><div class="content">setb</div></td><td title="clrb
+"><div class="content">clrb</div></td><td title="setv
+"><div class="content">setv</div></td><td title="clrv
+"><div class="content">clrv</div></td><td title="setn
+"><div class="content">setn</div></td><td title="clrn
+"><div class="content">clrn</div></td><td title="setz
+"><div class="content">setz</div></td><td title="clrz
+"><div class="content">clrz</div></td><td title="seto
+"><div class="content">seto</div></td><td title="clro
+"><div class="content">clro</div></td><td title="togc
+"><div class="content">togc</div></td><td title="togn
+"><div class="content">togn</div></td><td title="togz
+"><div class="content">togz</div></td><td title="togo
+"><div class="content">togo</div></td></tr><tr><td style="background-color:green; font-weight:bold; color:white;">0x2_</td><td title="jr offset:imm16
+"><div class="content">jr offset:imm16</div></td><td title="jr.cf offset:imm16
+"><div class="content">jr.cf offset:imm16</div></td><td title="jr.co comparator:r32 offset:imm16
+"><div class="content">jr.co comparator:r32 offset:imm16</div></td><td title="ja offset:r32
+"><div class="content">ja offset:r32</div></td><td title="ja offset:imm32
+"><div class="content">ja offset:imm32</div></td><td title="ja.cf offset:imm32
+"><div class="content">ja.cf offset:imm32</div></td><td title="ja.co comparator:r32 offset:imm32
+"><div class="content">ja.co comparator:r32 offset:imm32</div></td><td title="xjmp operand:r32
+"><div class="content">xjmp operand:r32</div></td><td title="br offset:imm16
+"><div class="content">br offset:imm16</div></td><td title="br.cf offset:imm16
+"><div class="content">br.cf offset:imm16</div></td><td title="br.co comparator:r32 offset:imm16
+"><div class="content">br.co comparator:r32 offset:imm16</div></td><td title="ba offset:r32
+"><div class="content">ba offset:r32</div></td><td title="ba offset:imm32
+"><div class="content">ba offset:imm32</div></td><td title="ba.cf offset:imm32
+"><div class="content">ba.cf offset:imm32</div></td><td title="ba.co comparator:r32 offset:imm32
+"><div class="content">ba.co comparator:r32 offset:imm32</div></td><td title="xbch operand:r32
+"><div class="content">xbch operand:r32</div></td></tr><tr><td style="background-color:green; font-weight:bold; color:white;">0x3_</td><td title="ret
+"><div class="content">ret</div></td><td title="iret
+"><div class="content">iret</div></td><td title="int
+"><div class="content">int</div></td><td title=""><div class="content"></div></td><td title="enter
+"><div class="content">enter</div></td><td title="enter size:imm16
+"><div class="content">enter size:imm16</div></td><td title="enter size:r16
+"><div class="content">enter size:r16</div></td><td title="leave
+"><div class="content">leave</div></td><td title="mvtsr dest:sr source:r8
+"><div class="content">mvtsr dest:sr source:r8</div></td><td title="mvtitd source:r32
+mvtptd source:r32
+mvtstd source:r32
+"><div class="content">mvtitd source:r32</div></td><td title="mvfir dest:r32 source:ir
+"><div class="content">mvfir dest:r32 source:ir</div></td><td title=""><div class="content"></div></td><td title="mvfisp dest:r32
+"><div class="content">mvfisp dest:r32</div></td><td title="mvtisp source:r32
+"><div class="content">mvtisp source:r32</div></td><td title="sett
+"><div class="content">sett</div></td><td title="clrt
+"><div class="content">clrt</div></td></tr><tr><td style="background-color:green; font-weight:bold; color:white;">0x4_</td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title="mvab dest:r8 data:imm8 reg1:r32 reg2:r32
+mvae dest:r8 data:imm8 reg1:r32 reg2:r32
+mvbe dest:r8 data:imm8 reg1:r32 reg2:r32
+mvbl dest:r8 data:imm8 reg1:r32 reg2:r32
+mveq dest:r8 data:imm8 reg1:r32 reg2:r32
+mveqz dest:r8 data:imm8 reg1:r32
+mvge dest:r8 data:imm8 reg1:r32 reg2:r32
+mvgez dest:r8 data:imm8 reg1:r32
+mvgt dest:r8 data:imm8 reg1:r32 reg2:r32
+mvgtz dest:r8 data:imm8 reg1:r32
+mvle dest:r8 data:imm8 reg1:r32 reg2:r32
+mvlez dest:r8 data:imm8 reg1:r32
+mvlt dest:r8 data:imm8 reg1:r32 reg2:r32
+mvltz dest:r8 data:imm8 reg1:r32
+mvne dest:r8 data:imm8 reg1:r32 reg2:r32
+mvnez dest:r8 data:imm8 reg1:r32
+"><div class="content">mvab dest:r8 data:imm8 reg1:r32 reg2:r32</div></td><td title="mvab dest:r16 data:imm16 reg1:r32 reg2:r32
+mvae dest:r16 data:imm16 reg1:r32 reg2:r32
+mvbe dest:r16 data:imm16 reg1:r32 reg2:r32
+mvbl dest:r16 data:imm16 reg1:r32 reg2:r32
+mveq dest:r16 data:imm16 reg1:r32 reg2:r32
+mveqz dest:r16 data:imm16 reg1:r32
+mvge dest:r16 data:imm16 reg1:r32 reg2:r32
+mvgez dest:r16 data:imm16 reg1:r32
+mvgt dest:r16 data:imm16 reg1:r32 reg2:r32
+mvgtz dest:r16 data:imm16 reg1:r32
+mvle dest:r16 data:imm16 reg1:r32 reg2:r32
+mvlez dest:r16 data:imm16 reg1:r32
+mvlt dest:r16 data:imm16 reg1:r32 reg2:r32
+mvltz dest:r16 data:imm16 reg1:r32
+mvne dest:r16 data:imm16 reg1:r32 reg2:r32
+mvnez dest:r16 data:imm16 reg1:r32
+"><div class="content">mvab dest:r16 data:imm16 reg1:r32 reg2:r32</div></td><td title="mvab dest:r32 data:imm32 reg1:r32 reg2:r32
+mvae dest:r32 data:imm32 reg1:r32 reg2:r32
+mvbe dest:r32 data:imm32 reg1:r32 reg2:r32
+mvbl dest:r32 data:imm32 reg1:r32 reg2:r32
+mveq dest:r32 data:imm32 reg1:r32 reg2:r32
+mveqz dest:r32 data:imm32 reg1:r32
+mvge dest:r32 data:imm32 reg1:r32 reg2:r32
+mvgez dest:r32 data:imm32 reg1:r32
+mvgt dest:r32 data:imm32 reg1:r32 reg2:r32
+mvgtz dest:r32 data:imm32 reg1:r32
+mvle dest:r32 data:imm32 reg1:r32 reg2:r32
+mvlez dest:r32 data:imm32 reg1:r32
+mvlt dest:r32 data:imm32 reg1:r32 reg2:r32
+mvltz dest:r32 data:imm32 reg1:r32
+mvne dest:r32 data:imm32 reg1:r32 reg2:r32
+mvnez dest:r32 data:imm32 reg1:r32
+"><div class="content">mvab dest:r32 data:imm32 reg1:r32 reg2:r32</div></td><td title=""><div class="content"></div></td><td title="cvbtw dest:r32 src:r8
+"><div class="content">cvbtw dest:r32 src:r8</div></td><td title="cvbtw dest:r32 src:imm8
+cvbtw dest:r32 src:mem8
+"><div class="content">cvbtw dest:r32 src:imm8</div></td><td title="cvhtw dest:r32 src:r16
+"><div class="content">cvhtw dest:r32 src:r16</div></td><td title="cvhtw dest:r32 src:imm16
+cvhtw dest:r32 src:mem16
+"><div class="content">cvhtw dest:r32 src:imm16</div></td><td title="cvbth dest:r16 src:r8
+"><div class="content">cvbth dest:r16 src:r8</div></td><td title="cvbth dest:r16 src:imm8
+cvbth dest:r16 src:mem8
+"><div class="content">cvbth dest:r16 src:imm8</div></td><td title=""><div class="content"></div></td><td title="stab dest:r32 reg1:r32 reg2:r32
+stae dest:r32 reg1:r32 reg2:r32
+stbe dest:r32 reg1:r32 reg2:r32
+stbl dest:r32 reg1:r32 reg2:r32
+steq dest:r32 reg1:r32 reg2:r32
+steqz dest:r32 reg1:r32
+stge dest:r32 reg1:r32 reg2:r32
+stgez dest:r32 reg1:r32
+stgt dest:r32 reg1:r32 reg2:r32
+stgtz dest:r32 reg1:r32
+stle dest:r32 reg1:r32 reg2:r32
+stlez dest:r32 reg1:r32
+stlt dest:r32 reg1:r32 reg2:r32
+stltz dest:r32 reg1:r32
+stne dest:r32 reg1:r32 reg2:r32
+stnez dest:r32 reg1:r32
+"><div class="content">stab dest:r32 reg1:r32 reg2:r32</div></td></tr><tr><td style="background-color:green; font-weight:bold; color:white;">0x5_</td><td title="pop dest:r8
+"><div class="content">pop dest:r8</div></td><td title="pop dest:r16
+"><div class="content">pop dest:r16</div></td><td title="pop dest:r32
+"><div class="content">pop dest:r32</div></td><td title="pop dest:mem8
+pop dest:mem16
+pop dest:mem32
+"><div class="content">pop dest:mem8</div></td><td title="psh source:r8
+"><div class="content">psh source:r8</div></td><td title="psh source:r16
+"><div class="content">psh source:r16</div></td><td title="psh source:r32
+"><div class="content">psh source:r32</div></td><td title="psh source:mem8
+psh source:mem16
+psh source:mem32
+"><div class="content">psh source:mem8</div></td><td title="psh source:imm8
+"><div class="content">psh source:imm8</div></td><td title="psh source:imm16
+"><div class="content">psh source:imm16</div></td><td title="psh source:imm32
+"><div class="content">psh source:imm32</div></td><td title="poplst
+"><div class="content">poplst</div></td><td title="popst
+"><div class="content">popst</div></td><td title="pshlst
+"><div class="content">pshlst</div></td><td title="pshst
+"><div class="content">pshst</div></td><td title="updfp
+"><div class="content">updfp</div></td></tr><tr><td style="background-color:green; font-weight:bold; color:white;">0x6_</td><td title="lea dest:r8 base:r32
+"><div class="content">lea dest:r8 base:r32</div></td><td title="lea dest:r16 base:r32
+"><div class="content">lea dest:r16 base:r32</div></td><td title="lea dest:r32 base:r32
+"><div class="content">lea dest:r32 base:r32</div></td><td title="lea dest:r8 base:mem8
+lea dest:r16 base:mem16
+lea dest:r32 base:mem32
+"><div class="content">lea dest:r8 base:mem8</div></td><td title="lea dest:r8 base:r32 offset:imms16
+"><div class="content">lea dest:r8 base:r32 offset:imms16</div></td><td title="lea dest:r16 base:r32 offset:imms16
+"><div class="content">lea dest:r16 base:r32 offset:imms16</div></td><td title="lea dest:r32 base:r32 offset:imms16
+"><div class="content">lea dest:r32 base:r32 offset:imms16</div></td><td title="lea dest:r32 base:r32 offset:imms32
+sea base:r32 offset:imms32 dest:r32
+"><div class="content">lea dest:r32 base:r32 offset:imms32</div></td><td title="sea base:r32 dest:r8
+"><div class="content">sea base:r32 dest:r8</div></td><td title="sea base:r32 dest:r16
+"><div class="content">sea base:r32 dest:r16</div></td><td title="sea base:r32 dest:r32
+"><div class="content">sea base:r32 dest:r32</div></td><td title="sea base:mem8 dest:r8
+sea base:mem16 dest:r16
+sea base:mem32 dest:r32
+"><div class="content">sea base:mem8 dest:r8</div></td><td title="sea base:r32 offset:imms16 dest:r8
+"><div class="content">sea base:r32 offset:imms16 dest:r8</div></td><td title="sea base:r32 offset:imms16 dest:r16
+"><div class="content">sea base:r32 offset:imms16 dest:r16</div></td><td title="sea base:r32 offset:imms16 dest:r32
+"><div class="content">sea base:r32 offset:imms16 dest:r32</div></td><td title=""><div class="content"></div></td></tr><tr><td style="background-color:green; font-weight:bold; color:white;">0x7_</td><td title="mov dest:r8 source:r8
+"><div class="content">mov dest:r8 source:r8</div></td><td title="mov dest:r16 source:r16
+"><div class="content">mov dest:r16 source:r16</div></td><td title="mov dest:r32 source:r32
+"><div class="content">mov dest:r32 source:r32</div></td><td title="mov dest:r8 source:imm8
+mov dest:r16 source:imm16
+mov dest:r32 source:imm32
+mov dest:r32 source:imms8
+mov dest:r32 source:imms16
+mov dest:r16 source:imms8
+mov dest:r8 source:mem8
+mov dest:r16 source:mem16
+mov dest:r32 source:mem32
+mov dest:r16 source:imm8
+mov dest:r32 source:imm8
+mov dest:r32 source:imm16
+mov dest:r16 source:mem8
+mov dest:r32 source:mem8
+mov dest:r32 source:mem16
+"><div class="content">mov dest:r8 source:imm8</div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title="mov dest:mem8 source:r8
+mov dest:mem16 source:r16
+mov dest:mem32 source:r32
+"><div class="content">mov dest:mem8 source:r8</div></td><td title="xchg opr1:r8 opr2:r8
+"><div class="content">xchg opr1:r8 opr2:r8</div></td><td title="xchg opr1:r16 opr2:r16
+"><div class="content">xchg opr1:r16 opr2:r16</div></td><td title="xchg opr1:r32 opr2:r32
+"><div class="content">xchg opr1:r32 opr2:r32</div></td><td title="xchg opr1:mem8 opr2:r8
+xchg opr1:mem16 opr2:r16
+xchg opr1:mem32 opr2:r32
+"><div class="content">xchg opr1:mem8 opr2:r8</div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td></tr><tr><td style="background-color:green; font-weight:bold; color:white;">0x8_</td><td title="adc dest:r8 src:r8
+"><div class="content">adc dest:r8 src:r8</div></td><td title="adc dest:r16 src:r16
+"><div class="content">adc dest:r16 src:r16</div></td><td title="adc dest:r32 src:r32
+"><div class="content">adc dest:r32 src:r32</div></td><td title="adc dest:r8 src:imm8
+adc dest:r16 src:imm16
+adc dest:r32 src:imm32
+adc dest:r8 src:mem8
+adc dest:r16 src:mem16
+adc dest:r32 src:mem32
+adc dest:r16 src:imm8
+adc dest:r32 src:imm8
+adc dest:r32 src:imm16
+adc dest:r16 src:mem8
+adc dest:r32 src:mem8
+adc dest:r32 src:mem16
+adc dest:r32 src:imms8
+adc dest:r32 src:imms16
+adc dest:r32 src:mems8
+adc dest:r32 src:mems16
+"><div class="content">adc dest:r8 src:imm8</div></td><td title="add dest:r8 src:r8
+"><div class="content">add dest:r8 src:r8</div></td><td title="add dest:r16 src:r16
+"><div class="content">add dest:r16 src:r16</div></td><td title="add dest:r32 src:r32
+"><div class="content">add dest:r32 src:r32</div></td><td title="add dest:r8 src:imm8
+add dest:r16 src:imm16
+add dest:r32 src:imm32
+add dest:r8 src:mem8
+add dest:r16 src:mem16
+add dest:r32 src:mem32
+add dest:r16 src:imm8
+add dest:r32 src:imm8
+add dest:r32 src:imm16
+add dest:r16 src:mem8
+add dest:r32 src:mem8
+add dest:r32 src:mem16
+add dest:r32 src:imms8
+add dest:r32 src:imms16
+add dest:r32 src:mems8
+add dest:r32 src:mems16
+"><div class="content">add dest:r8 src:imm8</div></td><td title="sbb dest:r8 src:r8
+"><div class="content">sbb dest:r8 src:r8</div></td><td title="sbb dest:r16 src:r16
+"><div class="content">sbb dest:r16 src:r16</div></td><td title="sbb dest:r32 src:r32
+"><div class="content">sbb dest:r32 src:r32</div></td><td title="sbb dest:r8 src:imm8
+sbb dest:r16 src:imm16
+sbb dest:r32 src:imm32
+sbb dest:r8 src:mem8
+sbb dest:r16 src:mem16
+sbb dest:r32 src:mem32
+sbb dest:r16 src:imm8
+sbb dest:r32 src:imm8
+sbb dest:r32 src:imm16
+sbb dest:r16 src:mem8
+sbb dest:r32 src:mem8
+sbb dest:r32 src:mem16
+sbb dest:r32 src:imms8
+sbb dest:r32 src:imms16
+sbb dest:r32 src:mems8
+sbb dest:r32 src:mems16
+"><div class="content">sbb dest:r8 src:imm8</div></td><td title="sub dest:r8 src:r8
+"><div class="content">sub dest:r8 src:r8</div></td><td title="sub dest:r16 src:r16
+"><div class="content">sub dest:r16 src:r16</div></td><td title="sub dest:r32 src:r32
+"><div class="content">sub dest:r32 src:r32</div></td><td title="sub dest:r8 src:imm8
+sub dest:r16 src:imm16
+sub dest:r32 src:imm32
+sub dest:r8 src:mem8
+sub dest:r16 src:mem16
+sub dest:r32 src:mem32
+sub dest:r16 src:imm8
+sub dest:r32 src:imm8
+sub dest:r32 src:imm16
+sub dest:r16 src:mem8
+sub dest:r32 src:mem8
+sub dest:r32 src:mem16
+sub dest:r32 src:imms8
+sub dest:r32 src:imms16
+sub dest:r32 src:mems8
+sub dest:r32 src:mems16
+"><div class="content">sub dest:r8 src:imm8</div></td></tr><tr><td style="background-color:green; font-weight:bold; color:white;">0x9_</td><td title="mul dest:r8 src:r8
+"><div class="content">mul dest:r8 src:r8</div></td><td title="mul dest:r16 src:r16
+"><div class="content">mul dest:r16 src:r16</div></td><td title="mul dest:r32 src:r32
+"><div class="content">mul dest:r32 src:r32</div></td><td title="mul dest:r8 src:imm8
+mul dest:r16 src:imm16
+mul dest:r32 src:imm32
+mul dest:r8 src:mem8
+mul dest:r16 src:mem16
+mul dest:r32 src:mem32
+mul dest:r16 src:imm8
+mul dest:r32 src:imm8
+mul dest:r32 src:imm16
+mul dest:r16 src:mem8
+mul dest:r32 src:mem8
+mul dest:r32 src:mem16
+mul dest:r32 src:imms8
+mul dest:r32 src:imms16
+mul dest:r32 src:mems8
+mul dest:r32 src:mems16
+"><div class="content">mul dest:r8 src:imm8</div></td><td title="hmul dest:r32 high:r32 src:r32
+"><div class="content">hmul dest:r32 high:r32 src:r32</div></td><td title="hmul dest:r32 high:r32 src:mem32
+"><div class="content">hmul dest:r32 high:r32 src:mem32</div></td><td title="hsmul dest:r32 high:r32 src:r32
+"><div class="content">hsmul dest:r32 high:r32 src:r32</div></td><td title="hsmul dest:r32 high:r32 src:mem32
+"><div class="content">hsmul dest:r32 high:r32 src:mem32</div></td><td title="div dest:r8 src:r8
+"><div class="content">div dest:r8 src:r8</div></td><td title="div dest:r16 src:r16
+"><div class="content">div dest:r16 src:r16</div></td><td title="div dest:r32 src:r32
+"><div class="content">div dest:r32 src:r32</div></td><td title="div dest:r8 src:imm8
+div dest:r16 src:imm16
+div dest:r32 src:imm32
+div dest:r8 src:mem8
+div dest:r16 src:mem16
+div dest:r32 src:mem32
+div dest:r16 src:imm8
+div dest:r32 src:imm8
+div dest:r32 src:imm16
+div dest:r16 src:mem8
+div dest:r32 src:mem8
+div dest:r32 src:mem16
+div dest:r32 src:imms8
+div dest:r32 src:imms16
+div dest:r32 src:mems8
+div dest:r32 src:mems16
+"><div class="content">div dest:r8 src:imm8</div></td><td title="sdiv dest:r8 src:r8
+"><div class="content">sdiv dest:r8 src:r8</div></td><td title="sdiv dest:r16 src:r16
+"><div class="content">sdiv dest:r16 src:r16</div></td><td title="sdiv dest:r32 src:r32
+"><div class="content">sdiv dest:r32 src:r32</div></td><td title="sdiv dest:r8 src:imm8
+sdiv dest:r16 src:imm16
+sdiv dest:r32 src:imm32
+sdiv dest:r8 src:mem8
+sdiv dest:r16 src:mem16
+sdiv dest:r32 src:mem32
+sdiv dest:r16 src:imm8
+sdiv dest:r32 src:imm8
+sdiv dest:r32 src:imm16
+sdiv dest:r16 src:mem8
+sdiv dest:r32 src:mem8
+sdiv dest:r32 src:mem16
+sdiv dest:r32 src:imms8
+sdiv dest:r32 src:imms16
+sdiv dest:r32 src:mems8
+sdiv dest:r32 src:mems16
+"><div class="content">sdiv dest:r8 src:imm8</div></td></tr><tr><td style="background-color:green; font-weight:bold; color:white;">0xA_</td><td title="mod dest:r8 src:r8
+"><div class="content">mod dest:r8 src:r8</div></td><td title="mod dest:r16 src:r16
+"><div class="content">mod dest:r16 src:r16</div></td><td title="mod dest:r32 src:r32
+"><div class="content">mod dest:r32 src:r32</div></td><td title="mod dest:r8 src:imm8
+mod dest:r16 src:imm16
+mod dest:r32 src:imm32
+mod dest:r8 src:mem8
+mod dest:r16 src:mem16
+mod dest:r32 src:mem32
+mod dest:r16 src:imm8
+mod dest:r32 src:imm8
+mod dest:r32 src:imm16
+mod dest:r16 src:mem8
+mod dest:r32 src:mem8
+mod dest:r32 src:mem16
+mod dest:r32 src:imms8
+mod dest:r32 src:imms16
+mod dest:r32 src:mems8
+mod dest:r32 src:mems16
+"><div class="content">mod dest:r8 src:imm8</div></td><td title="smod dest:r8 src:r8
+"><div class="content">smod dest:r8 src:r8</div></td><td title="smod dest:r16 src:r16
+"><div class="content">smod dest:r16 src:r16</div></td><td title="smod dest:r32 src:r32
+"><div class="content">smod dest:r32 src:r32</div></td><td title="smod dest:r8 src:imm8
+smod dest:r16 src:imm16
+smod dest:r32 src:imm32
+smod dest:r8 src:mem8
+smod dest:r16 src:mem16
+smod dest:r32 src:mem32
+smod dest:r16 src:imm8
+smod dest:r32 src:imm8
+smod dest:r32 src:imm16
+smod dest:r16 src:mem8
+smod dest:r32 src:mem8
+smod dest:r32 src:mem16
+smod dest:r32 src:imms8
+smod dest:r32 src:imms16
+smod dest:r32 src:mems8
+smod dest:r32 src:mems16
+"><div class="content">smod dest:r8 src:imm8</div></td><td title="cmp dest:r8 src:r8
+"><div class="content">cmp dest:r8 src:r8</div></td><td title="cmp dest:r16 src:r16
+"><div class="content">cmp dest:r16 src:r16</div></td><td title="cmp dest:r32 src:r32
+"><div class="content">cmp dest:r32 src:r32</div></td><td title="cmp dest:r8 src:imm8
+cmp dest:r16 src:imm16
+cmp dest:r32 src:imm32
+cmp dest:r8 src:mem8
+cmp dest:r16 src:mem16
+cmp dest:r32 src:mem32
+cmp dest:r16 src:imm8
+cmp dest:r32 src:imm8
+cmp dest:r32 src:imm16
+cmp dest:r16 src:mem8
+cmp dest:r32 src:mem8
+cmp dest:r32 src:mem16
+cmp dest:r32 src:imms8
+cmp dest:r32 src:imms16
+cmp dest:r32 src:mems8
+cmp dest:r32 src:mems16
+"><div class="content">cmp dest:r8 src:imm8</div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td></tr><tr><td style="background-color:green; font-weight:bold; color:white;">0xB_</td><td title="and dest:r8 src:r8
+"><div class="content">and dest:r8 src:r8</div></td><td title="and dest:r16 src:r16
+"><div class="content">and dest:r16 src:r16</div></td><td title="and dest:r32 src:r32
+"><div class="content">and dest:r32 src:r32</div></td><td title="and dest:r8 src:imm8
+and dest:r16 src:imm16
+and dest:r32 src:imm32
+and dest:r8 src:mem8
+and dest:r16 src:mem16
+and dest:r32 src:mem32
+and dest:r16 src:imm8
+and dest:r32 src:imm8
+and dest:r32 src:imm16
+and dest:r16 src:mem8
+and dest:r32 src:mem8
+and dest:r32 src:mem16
+and dest:r32 src:imms8
+and dest:r32 src:imms16
+and dest:r32 src:mems8
+and dest:r32 src:mems16
+"><div class="content">and dest:r8 src:imm8</div></td><td title="or dest:r8 src:r8
+"><div class="content">or dest:r8 src:r8</div></td><td title="or dest:r16 src:r16
+"><div class="content">or dest:r16 src:r16</div></td><td title="or dest:r32 src:r32
+"><div class="content">or dest:r32 src:r32</div></td><td title="or dest:r8 src:imm8
+or dest:r16 src:imm16
+or dest:r32 src:imm32
+or dest:r8 src:mem8
+or dest:r16 src:mem16
+or dest:r32 src:mem32
+or dest:r16 src:imm8
+or dest:r32 src:imm8
+or dest:r32 src:imm16
+or dest:r16 src:mem8
+or dest:r32 src:mem8
+or dest:r32 src:mem16
+or dest:r32 src:imms8
+or dest:r32 src:imms16
+or dest:r32 src:mems8
+or dest:r32 src:mems16
+"><div class="content">or dest:r8 src:imm8</div></td><td title="xor dest:r8 src:r8
+"><div class="content">xor dest:r8 src:r8</div></td><td title="xor dest:r16 src:r16
+"><div class="content">xor dest:r16 src:r16</div></td><td title="xor dest:r32 src:r32
+"><div class="content">xor dest:r32 src:r32</div></td><td title="xor dest:r8 src:imm8
+xor dest:r16 src:imm16
+xor dest:r32 src:imm32
+xor dest:r8 src:mem8
+xor dest:r16 src:mem16
+xor dest:r32 src:mem32
+xor dest:r16 src:imm8
+xor dest:r32 src:imm8
+xor dest:r32 src:imm16
+xor dest:r16 src:mem8
+xor dest:r32 src:mem8
+xor dest:r32 src:mem16
+xor dest:r32 src:imms8
+xor dest:r32 src:imms16
+xor dest:r32 src:mems8
+xor dest:r32 src:mems16
+"><div class="content">xor dest:r8 src:imm8</div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title="bt operand:r8
+bt operand:r16
+bt operand:r32
+bt operand:mem8
+bt operand:mem16
+bt operand:mem32
+btc operand:r8 bit:imm8
+bts operand:r8 bit:imm8
+btt operand:r8 bit:imm8
+"><div class="content">bt operand:r8</div></td><td title="bsb bits:r8 operand:r32
+bsb bits:r16 operand:r32
+bsb bits:r32 operand:r32
+bsb bits:mem8 operand:r32
+bsb bits:mem16 operand:r32
+bsb bits:mem32 operand:r32
+bsf bits:r8 operand:r32
+bsf bits:r16 operand:r32
+bsf bits:r32 operand:r32
+bsf bits:mem8 operand:r32
+bsf bits:mem16 operand:r32
+bsf bits:mem32 operand:r32
+"><div class="content">bsb bits:r8 operand:r32</div></td></tr><tr><td style="background-color:green; font-weight:bold; color:white;">0xC_</td><td title="lsh dest:r8 src:r8
+"><div class="content">lsh dest:r8 src:r8</div></td><td title="lsh dest:r16 src:r16
+"><div class="content">lsh dest:r16 src:r16</div></td><td title="lsh dest:r32 src:r32
+"><div class="content">lsh dest:r32 src:r32</div></td><td title="lsh dest:r8 src:imm8
+lsh dest:r16 src:imm8
+lsh dest:r32 src:imm8
+lsh dest:r8 src:mem8
+lsh dest:r16 src:mem16
+lsh dest:r32 src:mem32
+lsh dest:r16 src:mem8
+lsh dest:r32 src:mem8
+lsh dest:r32 src:mem16
+rrot dest:r16 src:mem8
+"><div class="content">lsh dest:r8 src:imm8</div></td><td title="rsh dest:r8 src:r8
+"><div class="content">rsh dest:r8 src:r8</div></td><td title="rsh dest:r16 src:r16
+"><div class="content">rsh dest:r16 src:r16</div></td><td title="rsh dest:r32 src:r32
+"><div class="content">rsh dest:r32 src:r32</div></td><td title="rsh dest:r8 src:imm8
+rsh dest:r16 src:imm8
+rsh dest:r32 src:imm8
+rsh dest:r8 src:mem8
+rsh dest:r16 src:mem16
+rsh dest:r32 src:mem32
+rsh dest:r16 src:mem8
+rsh dest:r32 src:mem8
+rsh dest:r32 src:mem16
+"><div class="content">rsh dest:r8 src:imm8</div></td><td title="lrot dest:r8 src:r8
+"><div class="content">lrot dest:r8 src:r8</div></td><td title="lrot dest:r16 src:r16
+"><div class="content">lrot dest:r16 src:r16</div></td><td title="lrot dest:r32 src:r32
+"><div class="content">lrot dest:r32 src:r32</div></td><td title="lrot dest:r8 src:imm8
+lrot dest:r16 src:imm8
+lrot dest:r32 src:imm8
+lrot dest:r8 src:mem8
+lrot dest:r16 src:mem16
+lrot dest:r32 src:mem32
+lrot dest:r16 src:mem8
+lrot dest:r32 src:mem8
+lrot dest:r32 src:mem16
+"><div class="content">lrot dest:r8 src:imm8</div></td><td title="rrot dest:r8 src:r8
+"><div class="content">rrot dest:r8 src:r8</div></td><td title="rrot dest:r16 src:r16
+"><div class="content">rrot dest:r16 src:r16</div></td><td title="rrot dest:r32 src:r32
+"><div class="content">rrot dest:r32 src:r32</div></td><td title="rrot dest:r8 src:imm8
+rrot dest:r16 src:imm8
+rrot dest:r32 src:imm8
+rrot dest:r8 src:mem8
+rrot dest:r16 src:mem16
+rrot dest:r32 src:mem32
+rrot dest:r32 src:mem8
+rrot dest:r32 src:mem16
+"><div class="content">rrot dest:r8 src:imm8</div></td></tr><tr><td style="background-color:green; font-weight:bold; color:white;">0xD_</td><td title="fmvd desthi:r32 destlo:r32 source:fpr
+fmvd dest:fpr sourcehi:r32 sourcelo:r32
+fmvd dest:mem64 source:fpr
+fmvd dest:fpr source:mem64
+fmvs dest:r32 source:fpr
+fmvs dest:fpr source:r32
+fmvs dest:fpr source:imm32
+fmvs dest:mem32 source:fpr
+fmvs dest:fpr source:mem32
+fpopd dest:fpr
+fpops dest:fpr
+fpshd source:fpr
+fpshs source:fpr
+xchg opr1:fpr opr2:fpr
+"><div class="content">fmvd desthi:r32 destlo:r32 source:fpr</div></td><td title="fadc dest:fpr opr1:fpr opr2:fpr
+fadd dest:fpr opr1:fpr opr2:fpr
+faddi dest:fpr opr1:fpr opr2:r32
+fdec operand:fpr
+fdiv dest:fpr opr1:fpr opr2:fpr
+fdsbb dest:fpr opr1:fpr opr2:fpr opr3:fpr
+fdsub dest:fpr opr1:fpr opr2:fpr opr3:fpr
+finc operand:fpr
+fmadc dest:fpr opr1:fpr opr2:fpr opr3:fpr
+fmadd dest:fpr opr1:fpr opr2:fpr opr3:fpr
+fmod dest:fpr opr1:fpr opr2:fpr
+fmul dest:fpr opr1:fpr opr2:fpr
+fneg operand:fpr
+fsbb dest:fpr opr1:fpr opr2:fpr
+fsub dest:fpr opr1:fpr opr2:fpr
+fsubi dest:fpr opr1:fpr opr2:r32
+"><div class="content">fadc dest:fpr opr1:fpr opr2:fpr</div></td><td title="f2xm1 dest:fpr x:fpr
+facos dest:fpr source:fpr
+fasin dest:fpr source:fpr
+fatan dest:fpr source:fpr
+fatan2 dest:fpr y:fpr x:fpr
+fcbrt dest:fpr source:fpr
+fcmp dest:r32 opr1:fpr opr2:fpr
+fcmpi dest:r32 opr1:fpr opr2:r32
+fcos dest:fpr source:fpr
+flog dest:fpr source:fpr
+flog2 dest:fpr source:fpr
+flog2x dest:fpr source:fpr x:fpr
+fsin dest:fpr source:fpr
+fsqrt dest:fpr source:fpr
+ftan dest:fpr source:fpr
+fxam dest:r32 operand:fpr
+"><div class="content">f2xm1 dest:fpr x:fpr</div></td><td title="fceil dest:fpr source:fpr
+fcvfb dest:fpr source:r8
+fcvfh dest:fpr source:r16
+fcvfsb dest:fpr source:r8
+fcvfsh dest:fpr source:r16
+fcvfsw dest:fpr source:r32
+fcvfw dest:fpr source:r32
+fcvtb dest:r8 source:fpr
+fcvth dest:r16 source:fpr
+fcvtsb dest:r8 source:fpr
+fcvtsh dest:r16 source:fpr
+fcvtsw dest:r32 source:fpr
+fcvtw dest:r32 source:fpr
+ffloor dest:fpr source:fpr
+fround dest:fpr source:fpr
+ftrunc dest:fpr source:fpr
+"><div class="content">fceil dest:fpr source:fpr</div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title="fsteq dest:r32 reg1:fpr reg2:fpr
+fsteqz dest:r32 operand:fpr
+fstreqz dest:r32 reg1:fpr reg2:fpr
+fstes dest:r32 operand:fpr
+fstge dest:r32 reg1:fpr reg2:fpr
+fstgez dest:r32 operand:fpr
+fstgt dest:r32 reg1:fpr reg2:fpr
+fstgtz dest:r32 operand:fpr
+fstle dest:r32 reg1:fpr reg2:fpr
+fstlez dest:r32 operand:fpr
+fstlt dest:r32 reg1:fpr reg2:fpr
+fstltz dest:r32 operand:fpr
+fstne dest:r32 reg1:fpr reg2:fpr
+fstnez dest:r32 operand:fpr
+fstns dest:r32 operand:fpr
+fstrnez dest:r32 reg1:fpr reg2:fpr
+"><div class="content">fsteq dest:r32 reg1:fpr reg2:fpr</div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title="bswap operand:r16
+"><div class="content">bswap operand:r16</div></td><td title="bswap operand:r32
+"><div class="content">bswap operand:r32</div></td><td title=""><div class="content"></div></td></tr><tr><td style="background-color:green; font-weight:bold; color:white;">0xE_</td><td title="inc operand:r8
+"><div class="content">inc operand:r8</div></td><td title="inc operand:r16
+"><div class="content">inc operand:r16</div></td><td title="inc operand:r32
+"><div class="content">inc operand:r32</div></td><td title=""><div class="content"></div></td><td title="dec operand:r8
+"><div class="content">dec operand:r8</div></td><td title="dec operand:r16
+"><div class="content">dec operand:r16</div></td><td title="dec operand:r32
+"><div class="content">dec operand:r32</div></td><td title=""><div class="content"></div></td><td title="neg operand:r8
+"><div class="content">neg operand:r8</div></td><td title="neg operand:r16
+"><div class="content">neg operand:r16</div></td><td title="neg operand:r32
+"><div class="content">neg operand:r32</div></td><td title=""><div class="content"></div></td><td title="not operand:r8
+"><div class="content">not operand:r8</div></td><td title="not operand:r16
+"><div class="content">not operand:r16</div></td><td title="not operand:r32
+"><div class="content">not operand:r32</div></td><td title=""><div class="content"></div></td></tr><tr><td style="background-color:green; font-weight:bold; color:white;">0xF_</td><td title="in dest:r8 port:r16
+"><div class="content">in dest:r8 port:r16</div></td><td title="in dest:r16 port:r16
+"><div class="content">in dest:r16 port:r16</div></td><td title="in dest:r32 port:r16
+"><div class="content">in dest:r32 port:r16</div></td><td title="in dest:r8 port:imm8
+in dest:r16 port:imm8
+in dest:r32 port:imm8
+in dest:r8 port:imm16
+in dest:r16 port:imm16
+in dest:r32 port:imm16
+"><div class="content">in dest:r8 port:imm8</div></td><td title="out port:r16 source:r8
+"><div class="content">out port:r16 source:r8</div></td><td title="out port:r16 source:r16
+"><div class="content">out port:r16 source:r16</div></td><td title="out port:r16 source:r32
+"><div class="content">out port:r16 source:r32</div></td><td title="out port:imm8 source:r8
+out port:imm8 source:r16
+out port:imm8 source:r32
+out port:imm16 source:r8
+out port:imm16 source:r16
+out port:imm16 source:r32
+"><div class="content">out port:imm8 source:r8</div></td><td title="halt
+"><div class="content">halt</div></td><td title="wait
+"><div class="content">wait</div></td><td title="stop
+"><div class="content">stop</div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td><td title=""><div class="content"></div></td></tr></table></body></html>
