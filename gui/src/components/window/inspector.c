@@ -27,7 +27,7 @@ struct {
 	{"EX3"},
 	{"EX2"},
 	{"EX1"},
-	{"EDS"},
+	{"ESS"},
 	{"ESD"},
 	{"ESP"},
 	{"EFP"},
@@ -429,6 +429,7 @@ void spIMenuSave(char* value, void* arg){
 //
 
 void spHStep(Element el, int btn, Uint32 x, Uint32 y){
+	g_cpu.halted = false;
 	vmStep();
 	mntrRender(&monitor);
 	spUpdate();
@@ -552,6 +553,9 @@ void spHOnKey(Uint32 key, Uint32 input, _Bool ctrl, _Bool alt, _Bool shift, _Boo
 		if (!_sp_running){
 			spUpdate();
 		}
+		else {
+			g_cpu.halted = false;
+		}
 	}
 	if (_sp_input_active){
 		if (key==SDLK_LSHIFT || key==SDLK_RSHIFT || key==SDLK_LALT || key==SDLK_RALT ||
@@ -660,6 +664,7 @@ void spHOnKey(Uint32 key, Uint32 input, _Bool ctrl, _Bool alt, _Bool shift, _Boo
 	}
 	else if (!_sp_running){
 		if (key == SDLK_F9){
+			g_cpu.halted = false;
 			vmStep();
 			mntrRender(&monitor);
 			spUpdate();

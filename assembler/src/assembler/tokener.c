@@ -193,6 +193,15 @@ int tkrFetchToken(Token *tk) {
 		while (chr != EOF && chr != '\'' && s<MAX_STRING_SIZE){
 			if (chr=='\\'){
 				chr = lexerGet();
+				if (chr=='n'){
+					chr = '\n';
+				}
+				else if (chr=='t'){
+					chr = '\t';
+				}
+				else if (chr=='r'){
+					chr = '\r';
+				}
 			}
 			value <<= 8;
 			value |= chr;
@@ -215,6 +224,15 @@ int tkrFetchToken(Token *tk) {
 		while (chr != EOF && chr != '"' && s<MAX_STRING_SIZE){
 			if (chr=='\\'){
 				chr = lexerGet();
+				if (chr=='n'){
+					chr = '\n';
+				}
+				else if (chr=='t'){
+					chr = '\t';
+				}
+				else if (chr=='r'){
+					chr = '\r';
+				}
 			}
 			string[s] = chr;
 			chr = lexerGet();

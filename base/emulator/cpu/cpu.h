@@ -21,7 +21,7 @@
 #define GREG_EX1 0x9
 #define GREG_EX2 0xA
 #define GREG_EX3 0xB
-#define GREG_EDS 0xC
+#define GREG_ESS 0xC
 #define GREG_ESD 0xD
 #define GREG_ESP 0xE
 #define GREG_EFP 0xF

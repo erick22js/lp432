@@ -46,6 +46,7 @@ int main(int args, char** argv) {
 	}
 
 	// Dump hex code to preview
+	/*
 	log("\nOutput Binary\n");
 	for (int l = 0; l<(int)bin_size; l += 16){
 		for (int r = 0; (l+r)<(int)bin_size && r<16; r++){
@@ -53,7 +54,7 @@ int main(int args, char** argv) {
 		}
 		log("\n");
 	}
-
+	*/
 	system("pause");
 	return 0;
 }

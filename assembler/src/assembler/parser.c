@@ -746,6 +746,7 @@ int parserFetchArgs(Arg* args, int* count, int limit){
 							}
 							// Adressing Mode => STRUCT
 							else {
+								restoreSeek();
 								Value in;
 								tryCatchAndThrow(
 									parserExpression(&in)
@@ -804,6 +805,26 @@ int parserFetchArgs(Arg* args, int* count, int limit){
 			if (!tkIsSymbol(tk, ']')){
 				asm_error_v1 = ']';
 				throwError(ERROR_EXPECTED_CHAR);
+			}
+
+			saveSeek();
+			tryCatchAndThrow(
+				tkrFetchToken(&tk)
+			);
+			if (tkIsSymbol(tk, ':')){
+				tryCatchAndThrow(
+					tkrFetchToken(&tk)
+				);
+				DataName *data_type;
+				if ((tk.kind == TOKEN_IDENTIFIER) && (data_type = findDataByName(tk.value.string))){
+					args[*count].type = data_type->type_mem;
+				}
+				else {
+					throwError(ERROR_EXPECTED_DATA_TYPE);
+				}
+			}
+			else {
+				restoreSeek();
 			}
 		}
 		// The argument is a parameter reference
@@ -1293,7 +1314,7 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 				}
 				restoreSeek();
 			}
-			else if (strcmp(cmd, "text")==0){
+			else if (strcmp(cmd, "text")==0 || strcmp(cmd, "ascii")==0){
 				tryCatchAndThrow(
 					tkrFetchToken(&tk)
 				);
@@ -1306,6 +1327,9 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 				while (*chr){
 					out8(*chr);
 					chr++;
+				}
+				if (strcmp(cmd, "text")==0){
+					out8(0);
 				}
 			}
 			else if (strcmp(cmd, "include")==0){

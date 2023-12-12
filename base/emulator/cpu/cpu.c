@@ -53,6 +53,12 @@ void cpuReset(Cpu *cpu_s){
 }
 
 void cpuStep(Cpu *cpu_s){
+	// Skip execution if halted or waiting
+	if (cpu_s->halted || cpu_s->waiting){
+		emuCpuCycles(1);
+		return;
+	}
+
 	// Disable prefixing for next fetch
 	if (cpu_s->prefix){
 		cpu_s->prefix = false;

@@ -32,12 +32,12 @@ Reg regs[] = {
 	{"eax", TYPE_R32, 0}, {"edx", TYPE_R32, 1}, {"ecx", TYPE_R32, 2}, {"ebx", TYPE_R32, 3},
 	{"eex", TYPE_R32, 4}, {"ehx", TYPE_R32, 5}, {"egx", TYPE_R32, 6}, {"efx", TYPE_R32, 7},
 	{"ex0", TYPE_R32, 8}, {"ex1", TYPE_R32, 9}, {"ex2", TYPE_R32, 10}, {"ex3", TYPE_R32, 11},
-	{"eds", TYPE_R32, 12}, {"esd", TYPE_R32, 13}, {"esp", TYPE_R32, 14}, {"efp", TYPE_R32, 15},
+	{"ess", TYPE_R32, 12}, {"esd", TYPE_R32, 13}, {"esp", TYPE_R32, 14}, {"efp", TYPE_R32, 15},
 
 	{"ax", TYPE_R16, 0}, {"dx", TYPE_R16, 1}, {"cx", TYPE_R16, 2}, {"bx", TYPE_R16, 3},
 	{"ex", TYPE_R16, 4}, {"hx", TYPE_R16, 5}, {"gx", TYPE_R16, 6}, {"fx", TYPE_R16, 7},
 	{"x0", TYPE_R16, 8}, {"x1", TYPE_R16, 9}, {"x2", TYPE_R16, 10}, {"x3", TYPE_R16, 11},
-	{"ds", TYPE_R16, 12}, {"sd", TYPE_R16, 13}, {"sp", TYPE_R16, 14}, {"fp", TYPE_R16, 15},
+	{"ss", TYPE_R16, 12}, {"sd", TYPE_R16, 13}, {"sp", TYPE_R16, 14}, {"fp", TYPE_R16, 15},
 	
 	{"al", TYPE_R8, 0}, {"dl", TYPE_R8, 1}, {"cl", TYPE_R8, 2}, {"bl", TYPE_R8, 3},
 	{"el", TYPE_R8, 4}, {"hl", TYPE_R8, 5}, {"gl", TYPE_R8, 6}, {"fl", TYPE_R8, 7},
