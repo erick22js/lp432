@@ -144,6 +144,7 @@
     <ClInclude Include="src\components\devices\display.h" />
     <ClInclude Include="src\components\devices\keyboard.h" />
     <ClInclude Include="src\components\devices\serial.h" />
+    <ClInclude Include="src\components\devices\sli.h" />
     <ClInclude Include="src\components\devices\vga_font.h" />
     <ClInclude Include="src\components\window\draw.h" />
     <ClInclude Include="src\components\window\gui.h" />

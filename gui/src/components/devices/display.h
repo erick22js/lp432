@@ -3,6 +3,7 @@
 
 #include "emulator/device.h"
 #include "../window/monitor.h"
+#include "sli.h"
 
 
 /*

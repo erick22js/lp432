@@ -7,6 +7,7 @@ text_test_regs_movs: .text "Test 1: Data \"mov\" to and between regs..."
 text_test_movs_adrm: .text "Test 2: Data \"mov\" in memory..."
 text_test_mem_wides: .text "Test 3: Memory different wides access..."
 text_test_conv_xchg: .text "Test 4: Differents wides extension and data exchanges..."
+text_test_stack: .text "Test 5: Stack pushes and pops..."
 text_passed: .text "Passed!\n"
 text_failed: .text "Failed!\n"
 text_tests_done: .text "All tests done!\n"
@@ -504,12 +505,112 @@ text_tests_done: .text "All tests done!\n"
 	ret
 .endscope
 
+.scope test_stack
+	mov ebx, text_test_stack
+	ba print_serial
+	
+	// Resets the registers
+	mov eax, 0
+	mov edx, 0
+	mov ecx, 0
+	mov ebx, 0
+	mov eex, 0
+	mov ehx, 0
+	mov egx, 0
+	mov efx, 0
+	mov ex0, 0
+	mov ex1, 0
+	mov ex2, 0
+	mov ex3, 0
+	mov ess, 0
+	mov esd, 0
+	mov efp, 0
+	
+	// Test every push and pop
+	mov al, 0x9E
+	psh al
+	pop dl
+	cmp al, dl
+	jr.ne @failed
+	
+	mov ax, 0x459E
+	psh ax
+	pop dx
+	cmp ax, dx
+	jr.ne @failed
+	
+	mov eax, 0xABAB459E
+	psh eax
+	pop edx
+	cmp eax, edx
+	jr.ne @failed
+	
+	mov al, [0x60]:Byte
+	psh [0x60]:Byte
+	pop dl
+	cmp al, dl
+	jr.ne @failed
+	
+	mov ax, [0x60]:Half
+	psh [0x60]:Half
+	pop dx
+	cmp ax, dx
+	jr.ne @failed
+	
+	mov eax, [0x60]:Word
+	psh [0x60]:Word
+	pop edx
+	cmp eax, edx
+	jr.ne @failed
+	
+	psh 0x95:Byte
+	pop [0x70]:Byte
+	mov al, [0x70]:Byte
+	cmp al, 0x95:Byte
+	jr.ne @failed
+	
+	psh 0x7395:Half
+	pop [0x71]:Half
+	mov ax, [0x71]:Half
+	cmp ax, 0x7395:Half
+	jr.ne @failed
+	
+	psh 0xB3847395:Word
+	pop [0x73]:Word
+	mov eax, [0x73]:Word
+	cmp eax, 0xB3847395:Word
+	jr.ne @failed
+	
+	psh 0x80009000:Word
+	popst
+	pshlst
+	pop ax
+	cmp ax, 0x9000:Half
+	jr.ne @failed
+	pshst
+	pop eax
+	cmp eax, 0x80009010:Word
+	jr.ne @failed
+	
+	// If the test has passed
+	mov ebx, text_passed
+	ba print_serial
+	ret
+	
+	// If the test has failed
+	failed:
+	mov ebx, text_failed
+	ba print_serial
+	ret
+.endscope
+
 // Execute all the tests
 .scope do_tests
 	ba test_regs_movs
 	ba test_movs_addresses
 	ba test_movs_mem_wides
 	ba test_conv_xchg
+	ba test_stack
 	
 	mov ebx, text_tests_done
 	ba print_serial

@@ -113,21 +113,21 @@ cpuInterr proc57(Cpu *cpu_s){
 cpuInterr proc58(Cpu *cpu_s){
 	// Instruction: psh imm8:MV
 	cpuFetchMV8();
-	cpuPush8(cpu_s->data);
+	cpuPush8(cpu_s->mv);
 	return 0;
 }
 
 cpuInterr proc59(Cpu *cpu_s){
 	// Instruction: psh imm16:MV
 	cpuFetchMV16();
-	cpuPush16(cpu_s->data);
+	cpuPush16(cpu_s->mv);
 	return 0;
 }
 
 cpuInterr proc5A(Cpu *cpu_s){
 	// Instruction: psh imm32:MV
 	cpuFetchMV32();
-	cpuPush32(cpu_s->data);
+	cpuPush32(cpu_s->mv);
 	return 0;
 }
 

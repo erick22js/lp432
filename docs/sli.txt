@@ -1,0 +1,18 @@
+SLI -Standard Limp Interfacing
+
+@Periphericals
+
+1 - Serial
+2 - Disk Drive
+3 - Flash Drive
+4 - Keyboard
+5 - Mouse
+6 - Controller
+7 - Display/Monitor
+8 - Sound Card
+9 - Network Card
+10 - Graphical Card
+
+@Vendors
+
+1 - Standard Device

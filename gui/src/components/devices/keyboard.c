@@ -3,6 +3,16 @@
 
 
 /*
+	Device Info
+*/
+
+#define DEVICE_TYPE SLI_TYPE_KEYBOARD
+#define DEVICE_VARYATION 1 // Main
+#define DEVICE_VERSION 1 // First
+#define DEVICE_VENDOR SLI_VENDOR_STANDARD
+
+
+/*
 	Symbols Definition
 */
 
@@ -73,12 +83,12 @@ void keySetup(Device *self, Monitor *mntr) {
 	CTRL_CYCLES = 0; // Cycles Counter
 
 	// Configure Registers
-	self->regs[0] = 1; // Device Type
-	self->regs[1] = 0;
-	self->regs[2] = 0; // Device Version
-	self->regs[3] = 0;
-	self->regs[4] = 0; // Device Varyation
-	self->regs[5] = 0; // Device Vendor
+	self->regs[0] = DEVICE_TYPE; // Device Type
+	self->regs[1] = DEVICE_TYPE>>8;
+	self->regs[2] = DEVICE_VERSION; // Device Version
+	self->regs[3] = DEVICE_VERSION>>8;
+	self->regs[4] = DEVICE_VARYATION; // Device Varyation
+	self->regs[5] = DEVICE_VENDOR; // Device Vendor
 	self->regs[6] = 0; // Device Control Flags
 	self->regs[7] = 0; // Ready State
 }
