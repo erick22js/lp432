@@ -1,6 +1,7 @@
 const fs = require("fs");
 let isa_j = JSON.parse(fs.readFileSync("../docs/isa.json", {"encoding": "utf-8"}));
 let table = new Array(256);
+let ordered = [];
 
 let c_code = '#include "base.h"\n\n\nIst isa[] = {';
 let mnes = '';
@@ -9,6 +10,7 @@ let first = true;
 for (let name in isa_j){
 	let mne = isa_j[name];
 	mne.name = name;
+	ordered.push(mne);
 	mnes += name+' ';
 	
 	if (first){
@@ -116,7 +118,53 @@ for (let h=-1; h<16; h++){
 	}
 	datasheet += '</tr>';
 }
-datasheet += '</table>';
+datasheet += '</table><br/><br/>';
+
+// Write info for each instruction mnemonic
+ordered.sort(function(a, b){return a.name-b.name;});
+for (let mi=0; mi<ordered.length; mi++){
+	let mne = ordered[mi];
+	datasheet += '<h1>'+mne.name+'</h1>';
+	datasheet += '<table><tr><td><b>Opcode</b></td><td><b>Encode</b></td><td><b>Instruction</b></td><td><b>Clocks</b></td><td><b>Description</b></td></tr>';
+	for (let vi=0; vi<mne.encode.length; vi++){
+		let enc = mne.encode[vi];
+		let opcode = enc.opcode.substr(2, 2);
+		let encode = '';
+		let instruction = mne.name;
+		let clocks = mne.cycles;
+		let description = '';
+		
+		if (enc.desc=="cond"){
+			opcode += " /c";
+		}
+		else if (enc.desc=="condo"){
+			opcode += " /co";
+		}
+		else if (enc.desc){
+			opcode += " "+enc.desc.substr(2, 1)+"_";
+		}
+		
+		for (let ai=0; ai<enc.args.length; ai++){
+			let arg = enc.args[ai];
+			encode += ' '+arg[0]+':'+arg[2]+(ai==(enc.args.length-1)? '': ',');
+			instruction += ' '+arg[0]+':'+arg[1]+(ai==(enc.args.length-1)? '': ',');
+		}
+		
+		datasheet += '<tr><td>'+opcode+'</td><td>'+encode+'</td><td>'+instruction+'</td><td>'+clocks+'</td><td>'+description+'</td></tr>';
+	}
+	datasheet += '</table>';
+	
+	datasheet += '<h3>Description</h3>'+mne.description+'<br/>';
+	
+	let flags = '';
+	for (let fn in mne.flags){
+		flags += fn+' ';
+	}
+	datasheet += '<h3>Flags Affected</h3>'+(flags==''? 'None': flags)+'<br/>';
+	
+	datasheet += '<br/><hr/>';
+}
+
 datasheet += '</body></html>';
 fs.writeFileSync('./datasheet.html', datasheet, {"encoding": "utf-8"});
 console.log('Done!');

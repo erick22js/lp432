@@ -8,6 +8,10 @@ text_test_movs_adrm: .text "Test 2: Data \"mov\" in memory..."
 text_test_mem_wides: .text "Test 3: Memory different wides access..."
 text_test_conv_xchg: .text "Test 4: Differents wides extension and data exchanges..."
 text_test_stack: .text "Test 5: Stack pushes and pops..."
+text_test_interruption: .text "Test 6: System interruption..."
+text_test_software_flags: .text "Test 7: Software flags changes and integrity..."
+text_test_jumps: .text "Test 8: Program jumps and branches..."
+text_test_adds_subs: .text "Test 9: Instructions \"adc\", \"add\", \"sbb\" and \"sub\"..."
 text_passed: .text "Passed!\n"
 text_failed: .text "Failed!\n"
 text_tests_done: .text "All tests done!\n"
@@ -505,6 +509,7 @@ text_tests_done: .text "All tests done!\n"
 	ret
 .endscope
 
+// Test the all the related stack access instructions
 .scope test_stack
 	mov ebx, text_test_stack
 	ba print_serial
@@ -604,6 +609,399 @@ text_tests_done: .text "All tests done!\n"
 	ret
 .endscope
 
+// Test the interruption system
+.scope test_interruption
+	mov ebx, text_test_interruption
+	ba print_serial
+	
+	mov ebx, 0x100
+	mov ecx, 16
+	fill_table:
+		mov eax, callback:Word
+		mov [ebx]:Word, eax
+		add ebx, 4
+		dec ecx
+		jr.gtz ecx, @fill_table
+	
+	mov edx, 0x100:Word
+	mvtitd edx
+	mov edx, 0x1000:Word
+	mvtisp edx
+	
+	wait_loop:
+		int
+		mov eax, [0xFF]:Byte
+		jr.eqz eax, @wait_loop
+	jr @passed
+	
+	.scope callback
+		mov l0, 1
+		mov [0xFF]:Byte, l0
+		iret
+	.endscope
+	
+	// If the test has passed
+	passed:
+	mov ebx, text_passed
+	ba print_serial
+	ret
+	
+	// If the test has failed
+	failed:
+	mov ebx, text_failed
+	ba print_serial
+	ret
+.endscope
+
+// Test all software flags change
+.scope test_software_flags
+	mov ebx, text_test_software_flags
+	ba print_serial
+	
+	psh 0x00000000:Word
+	popst
+	setc
+	setb
+	setv
+	setn
+	setz
+	seto
+	pshst
+	pop edx
+	cmp edx, 0x0000003F
+	jr.ne @failed
+	
+	psh 0x0000003F:Word
+	popst
+	clrc
+	clrb
+	clrv
+	clrn
+	clrz
+	clro
+	pshst
+	pop edx
+	cmp edx, 0x00000000
+	jr.ne @failed
+	
+	// If the test has passed
+	mov ebx, text_passed
+	ba print_serial
+	ret
+	
+	// If the test has failed
+	failed:
+	mov ebx, text_failed
+	ba print_serial
+	ret
+.endscope
+
+// Test all jumps and branches
+.scope test_jumps
+	mov ebx, text_test_jumps
+	ba print_serial
+	
+	.scope
+		mov eax, 37
+		mov edx, 19
+		cmp eax, edx
+		jr.lt @failed
+		jr.le @failed
+		jr.bl @failed
+		jr.be @failed
+		jr.eq @failed
+		jr.gt @t1
+		jr @failed
+		t1:
+		jr.ge @t2
+		jr @failed
+		t2:
+		jr.ab @t3
+		jr @failed
+		t3:
+		jr.ae @t4
+		jr @failed
+		t4:
+		jr.ne @t5
+		jr @failed
+		t5:
+	.endscope
+	
+	.scope
+		mov eax, 10
+		mov edx, 79
+		cmp eax, edx
+		jr.gt @failed
+		jr.ge @failed
+		jr.ab @failed
+		jr.ae @failed
+		jr.eq @failed
+		jr.lt @t1
+		jr @failed
+		t1:
+		jr.le @t2
+		jr @failed
+		t2:
+		jr.bl @t3
+		jr @failed
+		t3:
+		jr.be @t4
+		jr @failed
+		t4:
+		jr.ne @t5
+		jr @failed
+		t5:
+	.endscope
+	
+	.scope
+		mov eax, 973
+		mov edx, 973
+		cmp eax, edx
+		jr.lt @failed
+		jr.gt @failed
+		jr.bl @failed
+		jr.ab @failed
+		jr.ne @failed
+		jr.ge @t1
+		jr @failed
+		t1:
+		jr.le @t2
+		jr @failed
+		t2:
+		jr.ae @t3
+		jr @failed
+		t3:
+		jr.be @t4
+		jr @failed
+		t4:
+		jr.eq @t5
+		jr @failed
+		t5:
+	.endscope
+	
+	.scope
+		mov eax, 95
+		mov edx, -39
+		cmp eax, edx
+		jr.lt @failed
+		jr.le @failed
+		jr.ab @failed
+		jr.ae @failed
+		jr.eq @failed
+		jr.gt @t1
+		jr @failed
+		t1:
+		jr.ge @t2
+		jr @failed
+		t2:
+		jr.bl @t3
+		jr @failed
+		t3:
+		jr.be @t4
+		jr @failed
+		t4:
+		jr.ne @t5
+		jr @failed
+		t5:
+	.endscope
+	
+	.scope
+		mov eax, -102
+		mov edx, 86
+		cmp eax, edx
+		jr.gt @failed
+		jr.ge @failed
+		jr.bl @failed
+		jr.be @failed
+		jr.eq @failed
+		jr.lt @t1
+		jr @failed
+		t1:
+		jr.le @t2
+		jr @failed
+		t2:
+		jr.ab @t3
+		jr @failed
+		t3:
+		jr.ae @t4
+		jr @failed
+		t4:
+		jr.ne @t5
+		jr @failed
+		t5:
+	.endscope
+	
+	.scope
+		mov eax, -35
+		mov edx, -126
+		cmp eax, edx
+		jr.lt @failed
+		jr.le @failed
+		jr.bl @failed
+		jr.be @failed
+		jr.eq @failed
+		jr.gt @t1
+		jr @failed
+		t1:
+		jr.ge @t2
+		jr @failed
+		t2:
+		jr.ab @t3
+		jr @failed
+		t3:
+		jr.ae @t4
+		jr @failed
+		t4:
+		jr.ne @t5
+		jr @failed
+		t5:
+	.endscope
+	
+	.scope
+		mov eax, -195
+		mov edx, -150
+		cmp eax, edx
+		jr.gt @failed
+		jr.ge @failed
+		jr.ab @failed
+		jr.ae @failed
+		jr.eq @failed
+		jr.lt @t1
+		jr @failed
+		t1:
+		jr.le @t2
+		jr @failed
+		t2:
+		jr.bl @t3
+		jr @failed
+		t3:
+		jr.be @t4
+		jr @failed
+		t4:
+		jr.ne @t5
+		jr @failed
+		t5:
+	.endscope
+	
+	.scope
+		mov eax, -973
+		mov edx, -973
+		cmp eax, edx
+		jr.lt @failed
+		jr.gt @failed
+		jr.bl @failed
+		jr.ab @failed
+		jr.ne @failed
+		jr.ge @t1
+		jr @failed
+		t1:
+		jr.le @t2
+		jr @failed
+		t2:
+		jr.ae @t3
+		jr @failed
+		t3:
+		jr.be @t4
+		jr @failed
+		t4:
+		jr.eq @t5
+		jr @failed
+		t5:
+	.endscope
+	
+	mov eax, xflow1:Word
+	xjmp eax
+	bef1:
+	jr @failed
+	bef2:
+	
+	mov eax, xflow2:Word
+	xbch eax
+	bef3:
+	ja eax
+	jr @failed
+	bef4:
+	
+	// If the test has passed
+	passed:
+	mov ebx, text_passed
+	ba print_serial
+	ret
+	
+	xflow1:
+	add eax, bef2-bef1
+	ja eax
+	
+	xflow2:
+	add eax, bef4-bef3
+	ret
+	
+	// If the test has failed
+	failed:
+	mov ebx, text_failed
+	ba print_serial
+	ret
+.endscope
+
+// Test all adds and subs instructions
+.scope test_adds_subs
+	mov ebx, text_test_adds_subs
+	ba print_serial
+	
+	mov ex0, 0x274389D1
+	mov ex1, 0x75984726
+	mov ex2, 0x35218932
+	mov ex3, 0x598AB12E
+	
+	// Testing adds behaviors
+	clrc
+	mov eax, ex0
+	add eax, ex1
+	cmp eax, 0x9CDBD0F7
+	jr.ne @failed
+	
+	add eax, ex1
+	cmp eax, 0x1274181D
+	jr.ne @failed
+	
+	adc eax, ex2
+	adc eax, ex3
+	adc eax, 0xFFFFFFFF
+	cmp eax, 0xA120527D
+	jr.ne @failed
+	jr.cc @failed
+	
+	// Testing subs behaviors
+	clrb
+	mov eax, ex1
+	sub eax, ex0
+	cmp eax, 0x4E54BD55
+	jr.ne @failed
+	
+	sub eax, ex3
+	cmp eax, 0xF4CA0C27
+	jr.ne @failed
+	
+	sbb eax, ex2
+	sbb eax, ex1
+	sbb eax, 0xFFFFFFFF
+	clrz
+	jr.ae @failed
+	cmp eax, 0x4A103BD0
+	jr.ne @failed
+	
+	// If the test has passed
+	mov ebx, text_passed
+	ba print_serial
+	ret
+	
+	// If the test has failed
+	failed:
+	mov ebx, text_failed
+	ba print_serial
+	ret
+.endscope
+
 // Execute all the tests
 .scope do_tests
 	ba test_regs_movs
@@ -611,6 +1009,10 @@ text_tests_done: .text "All tests done!\n"
 	ba test_movs_mem_wides
 	ba test_conv_xchg
 	ba test_stack
+	ba test_interruption
+	ba test_software_flags
+	ba test_jumps
+	ba test_adds_subs
 	
 	mov ebx, text_tests_done
 	ba print_serial

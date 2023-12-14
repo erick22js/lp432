@@ -127,11 +127,13 @@ cpuInterr proc39(Cpu *cpu_s){
 			uint32 data = cpuReadReg32(cpu_s->os_regm);
 			cpu_s->reg_ptd = data;
 		}
+		break;
 		case 0x2:{
 			// Instruction: mvtitd r32:regm
 			uint32 data = cpuReadReg32(cpu_s->os_regm);
 			cpu_s->reg_itd = data;
 		}
+		break;
 		default: {
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}

@@ -24,9 +24,9 @@ struct {
 	{"EGX"},
 	{"EFX"},
 	{"EX0"},
-	{"EX3"},
-	{"EX2"},
 	{"EX1"},
+	{"EX2"},
+	{"EX3"},
 	{"ESS"},
 	{"ESD"},
 	{"ESP"},
@@ -914,6 +914,12 @@ int spHandle() {
 
 		while (_sp_frame_index == g_display.api_data[15]){
 			vmStep();
+			// Break the emulator execution on cpu halt
+			if (g_cpu.halted){
+				_sp_running = false;
+				spUpdate();
+				break;
+			}
 		}
 		mntrRender(&monitor);
 		mntrListen(&monitor);
