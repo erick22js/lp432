@@ -28,7 +28,7 @@ void cpuInterrupt(Cpu *cpu_s){
 	}
 	// Set some flags
 	cpu_s->reg_st &= ~FLAG_PM; // Disable protected mode
-	cpu_s->reg_st = (cpu_s->reg_st&0xF0FFFFFF) | ((cpu_s->interrupt&0xF) << 24); // Signalize in Flags the current interruption
+	cpu_s->reg_st = (cpu_s->reg_st&0xF0FF00FF) | ((cpu_s->interrupt&0xF) << 24); // Signalize in Flags the current interruption
 
 	// Retrieve IR Address and jump to it
 	uint32 intr_ptr = cpu_s->reg_itd + (cpu_s->interrupt*4);

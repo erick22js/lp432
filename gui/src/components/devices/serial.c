@@ -11,6 +11,15 @@
 #define DEVICE_VERSION 1 // First
 #define DEVICE_VENDOR SLI_VENDOR_STANDARD
 
+#define STATUS_TYPE self->regs[0]
+#define STATUS_TYPEH self->regs[1]
+#define STATUS_VERSION self->regs[2]
+#define STATUS_VERSIONH self->regs[3]
+#define STATUS_VARYATION self->regs[4]
+#define STATUS_VENDOR self->regs[5]
+#define STATUS_FLAGS self->regs[6]
+#define STATUS_OUTPUT self->regs[7]
+
 
 /*
 	Symbols Definition
@@ -87,14 +96,14 @@ void srlSetup(Device *self, Monitor *mntr) {
 	CTRL_CYCLES = 0; // Cycles Counter
 
 	// Configure Registers
-	self->regs[0] = DEVICE_TYPE; // Device Type #Input data
-	self->regs[1] = DEVICE_TYPE>>8; // #Input data (also show in host console as decimal value)
-	self->regs[2] = DEVICE_VERSION; // Device Version #Input data (also show in host console as hexadecimal value)
-	self->regs[3] = DEVICE_VERSION>>8; // #Input data (also show in host console as character value)
-	self->regs[4] = DEVICE_VARYATION; // Device Varyation
-	self->regs[5] = DEVICE_VENDOR; // Device Vendor
-	self->regs[6] = 0; // Device Control Flags
-	self->regs[7] = 0; // #Output data from Serial Device
+	STATUS_TYPE = DEVICE_TYPE; // Device Type #Input data
+	STATUS_TYPEH = DEVICE_TYPE>>8; // #Input data (also show in host console as decimal value)
+	STATUS_VERSION = DEVICE_VERSION; // Device Version #Input data (also show in host console as hexadecimal value)
+	STATUS_VERSIONH = DEVICE_VERSION>>8; // #Input data (also show in host console as character value)
+	STATUS_VARYATION = DEVICE_VARYATION; // Device Varyation
+	STATUS_VENDOR = DEVICE_VENDOR; // Device Vendor
+	STATUS_FLAGS = 0; // Device Control Flags
+	STATUS_OUTPUT = 0; // #Output data from Serial Device
 }
 
 void srlDestroy(Device *dev) {

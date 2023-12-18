@@ -177,6 +177,9 @@ cpuInterr procC3(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}
@@ -317,6 +320,9 @@ cpuInterr procC7(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}
@@ -457,6 +463,9 @@ cpuInterr procCB(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}
@@ -597,6 +606,9 @@ cpuInterr procCF(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}

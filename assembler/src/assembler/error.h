@@ -47,7 +47,9 @@ extern intptr_t asm_error_v2;
 extern intptr_t asm_error_v3;
 extern intptr_t asm_error_v4;
 
-#define throwError(error) {asm_error_code = error; log("@@@ ERROR Throwed at \"%s\" in line %d, in src file \"%s\" at offset %d with code 0x%X!\n", __FILE__, __LINE__, lexerCurrent()->path, lexerTell(), asm_error_code); return asm_error_code;}
+extern void errException();
+
+#define throwError(error) {asm_error_code = error; log("@@@ ERROR Throwed at \"%s\" in line %d, in src file \"%s\" at offset %d with code 0x%X!\n", __FILE__, __LINE__, lexerCurrent()->path, lexerTell(), asm_error_code); errException(); return asm_error_code;}
 #define tryCatchAndThrow(func) {int err_code = asm_error_code = func; if (err_code) {log("%% ERROR CATCHED at \"%s\" in line %d with code 0x%X and Throwed!\n", __FILE__, __LINE__, err_code); return err_code;}}
 
 extern void asmErrorToString(char* buffer, int buffer_size);

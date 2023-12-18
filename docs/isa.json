@@ -716,8 +716,16 @@
 				"opcode": "0xBE",
 				"desc": "0x7",
 				"args": [
-					["operand", "r8", "regm"],
+					["operand", "r32", "regm"],
 					["bit", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xBE",
+				"desc": "0xA",
+				"args": [
+					["operand", "r32", "regm"],
+					["bit", "r32", "rego"]
 				]
 			}
 		]
@@ -731,8 +739,16 @@
 				"opcode": "0xBE",
 				"desc": "0x6",
 				"args": [
-					["operand", "r8", "regm"],
+					["operand", "r32", "regm"],
 					["bit", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xBE",
+				"desc": "0x9",
+				"args": [
+					["operand", "r32", "regm"],
+					["bit", "r32", "rego"]
 				]
 			}
 		]
@@ -746,8 +762,16 @@
 				"opcode": "0xBE",
 				"desc": "0x8",
 				"args": [
-					["operand", "r8", "regm"],
+					["operand", "r32", "regm"],
 					["bit", "imm8", "mv8"]
+				]
+			},
+			{
+				"opcode": "0xBE",
+				"desc": "0xB",
+				"args": [
+					["operand", "r32", "regm"],
+					["bit", "r32", "rego"]
 				]
 			}
 		]

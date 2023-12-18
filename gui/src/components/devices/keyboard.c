@@ -21,6 +21,15 @@
 #define CTRL_STATE self->api_data[0]
 #define CTRL_CYCLES self->api_data[1]
 
+#define STATUS_TYPE self->regs[0]
+#define STATUS_TYPEH self->regs[1]
+#define STATUS_VERSION self->regs[2]
+#define STATUS_VERSIONH self->regs[3]
+#define STATUS_VARYATION self->regs[4]
+#define STATUS_VENDOR self->regs[5]
+#define STATUS_FLAGS self->regs[6]
+#define STATUS_READY_STATE self->regs[7]
+
 
 /*
 	Handling Callback Functions
@@ -83,14 +92,14 @@ void keySetup(Device *self, Monitor *mntr) {
 	CTRL_CYCLES = 0; // Cycles Counter
 
 	// Configure Registers
-	self->regs[0] = DEVICE_TYPE; // Device Type
-	self->regs[1] = DEVICE_TYPE>>8;
-	self->regs[2] = DEVICE_VERSION; // Device Version
-	self->regs[3] = DEVICE_VERSION>>8;
-	self->regs[4] = DEVICE_VARYATION; // Device Varyation
-	self->regs[5] = DEVICE_VENDOR; // Device Vendor
-	self->regs[6] = 0; // Device Control Flags
-	self->regs[7] = 0; // Ready State
+	STATUS_TYPE = DEVICE_TYPE; // Device Type
+	STATUS_TYPEH = DEVICE_TYPE>>8;
+	STATUS_VERSION = DEVICE_VERSION; // Device Version
+	STATUS_VERSIONH = DEVICE_VERSION>>8;
+	STATUS_VARYATION = DEVICE_VARYATION; // Device Varyation
+	STATUS_VENDOR = DEVICE_VENDOR; // Device Vendor
+	STATUS_FLAGS = 0; // Device Control Flags
+	STATUS_READY_STATE = 0; // Ready State
 }
 
 void keyDestroy(Device *dev) {

@@ -15,6 +15,7 @@ int asmAssembly(Lexer*(*opener)(const char*), const char* src, uint8** bin, uint
 		char msg[256];
 		asmErrorToString(msg, 255);
 		log("\n\n\nCompilation FAILED!!!\nreason => \"%s\"\n\n", msg);
+		printf("\n\n\nCompilation FAILED!!!\nreason => \"%s\"\n\n", msg);
 		return err;
 	}
 
@@ -25,10 +26,12 @@ int asmAssembly(Lexer*(*opener)(const char*), const char* src, uint8** bin, uint
 		char msg[256];
 		asmErrorToString(msg, 255);
 		log("\n\n\nCompilation FAILED!!!\nreason => \"%s\"\n\n", msg);
+		printf("\n\n\nCompilation FAILED!!!\nreason => \"%s\"\n\n", msg);
 		return err;
 	}
 	
 	log("\n\n\nCompilation SUCCESS!!!\n\n");
+	printf("\n\n\nCompilation SUCCESS!!!\n\n");
 	return ERROR_NONE;
 }
 

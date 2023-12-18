@@ -82,7 +82,7 @@ fs.writeFileSync('../assembler/src/assembler/instructions.c', c_code, {"encoding
 fs.writeFileSync('./mnemonics.txt', mnes, {"encoding": "utf-8"});
 
 // Writing HTML datasheet
-let datasheet = '<html><head></head><style>td{border:1px solid black; padding: 5px;}\n.content{width:70px; height:30px; font-size:10pt; overflow:hidden; user-select:none;}</style><body>';
+let datasheet = '<html><head></head><style>body{font-family:verdana}\ntd{border:1px solid black; padding: 5px;}\n.content{width:70px; height:30px; font-size:10pt; overflow:hidden; user-select:none;}</style><body>';
 datasheet += '<table line="10px">';
 
 function mountEncode(enc){
@@ -124,33 +124,109 @@ datasheet += '</table><br/><br/>';
 ordered.sort(function(a, b){return a.name-b.name;});
 for (let mi=0; mi<ordered.length; mi++){
 	let mne = ordered[mi];
-	datasheet += '<h1>'+mne.name+'</h1>';
+	datasheet += '<hr/><h1>'+mne.name+'</h1>';
 	datasheet += '<table><tr><td><b>Opcode</b></td><td><b>Encode</b></td><td><b>Instruction</b></td><td><b>Clocks</b></td><td><b>Description</b></td></tr>';
 	for (let vi=0; vi<mne.encode.length; vi++){
 		let enc = mne.encode[vi];
 		let opcode = enc.opcode.substr(2, 2);
 		let encode = '';
 		let instruction = mne.name;
-		let clocks = mne.cycles;
+		let clocks_min = mne.cycles, clocks_max = mne.cycles;
 		let description = '';
 		
+		// Opcode generation
+		let has_os1 = enc.desc=='cond' || enc.desc=='condo', has_os2 = false, has_os3 = false;
+		let has_ns = false;
+		let mv_size = 0;
+		
+		for (let ai=0; ai<enc.args.length; ai++){
+			let arg = enc.args[ai];
+			switch (arg[2]){
+				case 'regm1':
+				case 'regm': {
+					has_os1 = true;
+				}
+				break;
+				case 'rego1':
+				case 'rego': {
+					has_os1 = true;
+				}
+				break;
+				case 'regm2': {
+					has_os2 = true;
+				}
+				break;
+				case 'rego2': {
+					has_os2 = true;
+				}
+				break;
+				case 'regm3': {
+					has_os3 = true;
+				}
+				break;
+				case 'rego3': {
+					has_os3 = true;
+				}
+				break;
+				case 'mem': {
+					has_ns = true;
+				}
+				break;
+				case 'mv8': {
+					mv_size = 1;
+				}
+				break;
+				case 'mv16': {
+					mv_size = 2;
+				}
+				break;
+				case 'mv32': {
+					mv_size = 4;
+				}
+				break;
+			}
+		}
+		
+		// Opcode mounting
+		clocks_min += has_os1 + has_os2 + has_os3 + (mv_size==1? 1: mv_size>1? 1: 0) + has_ns;
+		clocks_max += has_os1 + has_os2 + has_os3 + (mv_size==1? 1: mv_size>1? 2: 0) + (has_ns? 4: 0);
 		if (enc.desc=="cond"){
 			opcode += " /c";
 		}
 		else if (enc.desc=="condo"){
-			opcode += " /co";
+			opcode += " /d";
 		}
 		else if (enc.desc){
 			opcode += " "+enc.desc.substr(2, 1)+"_";
 		}
+		else if (has_os1){
+			opcode += " /o";
+		}
 		
+		if (has_os2){
+			opcode += " /p";
+		}
+		
+		if (has_os3){
+			opcode += " /q";
+		}
+		
+		if (has_ns){
+			opcode += " /m";
+		}
+		
+		if (mv_size){
+			opcode += " /i"+(mv_size==1? 8: mv_size==2? 16: 32);
+		}
+		
+		// Instruction mounting
 		for (let ai=0; ai<enc.args.length; ai++){
 			let arg = enc.args[ai];
 			encode += ' '+arg[0]+':'+arg[2]+(ai==(enc.args.length-1)? '': ',');
 			instruction += ' '+arg[0]+':'+arg[1]+(ai==(enc.args.length-1)? '': ',');
 		}
 		
-		datasheet += '<tr><td>'+opcode+'</td><td>'+encode+'</td><td>'+instruction+'</td><td>'+clocks+'</td><td>'+description+'</td></tr>';
+		datasheet += '<tr><td>'+opcode+'</td><td>'+encode+'</td><td>'+instruction+'</td><td>'+(clocks_min!=clocks_max? clocks_min+"..."+clocks_max: clocks_max)+'</td><td>'+description+'</td></tr>';
 	}
 	datasheet += '</table>';
 	
@@ -162,7 +238,7 @@ for (let mi=0; mi<ordered.length; mi++){
 	}
 	datasheet += '<h3>Flags Affected</h3>'+(flags==''? 'None': flags)+'<br/>';
 	
-	datasheet += '<br/><hr/>';
+	datasheet += '<br/>';
 }
 
 datasheet += '</body></html>';

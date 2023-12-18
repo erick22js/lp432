@@ -295,6 +295,7 @@ cpuInterr procFF(Cpu *cpu_s);
 
 #define procEnsureNotInProtectedMode() {\
 	if (cpu_s->reg_st&FLAG_PM){\
+		cpu_s->iregs[0] = cpu_s->reg_lpc;\
 		cpuThrowInterruption(INTR_PROTECTED_MODE_VIOLATION);\
 	}\
 }

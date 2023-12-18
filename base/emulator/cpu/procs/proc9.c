@@ -20,6 +20,8 @@
 
 #define procDiv(v1, v2, res, sign, type) {\
 	if (v2==0){\
+		cpu_s->iregs[0] = cpu_s->reg_lpc;\
+		cpu_s->iregs[1] = v1;\
 		cpuThrowInterruption(INTR_DIVISION_BY_ZERO);\
 	}\
 	res = v1 / v2;\
@@ -33,6 +35,8 @@
 
 #define procSDiv(v1, v2, res, sign, type) {\
 	if (v2==0){\
+		cpu_s->iregs[0] = cpu_s->reg_lpc;\
+		cpu_s->iregs[1] = v1;\
 		cpuThrowInterruption(INTR_DIVISION_BY_ZERO);\
 	}\
 	res = (type)((type)v1 / (type)v2);\
@@ -250,6 +254,9 @@ cpuInterr proc93(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}
@@ -520,6 +527,9 @@ cpuInterr proc9B(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}
@@ -732,6 +742,9 @@ cpuInterr proc9F(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}

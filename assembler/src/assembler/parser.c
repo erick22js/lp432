@@ -133,7 +133,7 @@ int encodeInstruction(Enc *encode, Arg* args, uint8 cond_desc) {
 
 	// Outputs the given result
 	out8(encode->opcode);
-	if (has_os1 || cond_desc!=0xFF || encode->desc != NO_DESC || encode->desc == COND_DESC || encode->desc == CONDO_DESC){
+	if (has_os1 || cond_desc!=0xFF || encode->desc == COND_DESC || encode->desc == CONDO_DESC){
 		// Descriptor will be the conditional code
 		if (encode->desc == COND_DESC || encode->desc == CONDO_DESC){
 			out8((os1&0x0F) | ((cond_desc&0xF)<<4));
@@ -889,13 +889,13 @@ int parserParse(bool first, uint8** bin, uint32* bin_size){
 	//
 	Token tk = {0};
 	lexerEnded();
-	while (tk.kind != TOKEN_END_OF_FILE || hasRemainLexers()){
+	while (hasRemainLexers()){
 		tryCatchAndThrow(
 			tkrFetchToken(&tk)
 		);
 		
 		// Lexer has ended
-		if (tk.kind == TOKEN_END_OF_FILE){
+		if (lexerEnded() && tk.kind == TOKEN_END_OF_FILE){
 			if (lexerCurrent()->status){
 				scopeLeave();
 			}

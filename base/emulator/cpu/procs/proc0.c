@@ -14,6 +14,8 @@ cpuInterr proc01(Cpu *cpu_s){
 
 cpuInterr proc02(Cpu *cpu_s){
 	// Instruction: debug
+	cpu_s->iregs[0] = cpu_s->reg_pc;
+	cpu_s->iregs[1] = cpu_s->reg_st;
 	cpuThrowInterruption(INTR_DEBUGGER_INTERRUPTION);
 	return 0;
 }

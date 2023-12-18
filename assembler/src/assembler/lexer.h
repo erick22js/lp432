@@ -13,12 +13,12 @@ typedef struct{
 	LexerType type;
 
 	// String properties
-	const char* src;
+	char* src;
 	uint32 src_len;
 
 	// File properties
 	char path[512];
-	FILE *file;
+	//FILE *file;
 
 	// Common properties
 	uint32 limit;

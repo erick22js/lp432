@@ -58,6 +58,9 @@ cpuInterr proc63(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}
@@ -159,6 +162,9 @@ cpuInterr proc6B(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}

@@ -59,7 +59,10 @@ struct Pci;
 	Basic Debug Functions
 */
 
-#define log(...) {printf(__VA_ARGS__);}
+extern FILE *flog;
+extern bool flog_enable;
+extern bool flog_file;
+#define log(...) {if (flog_enable){ if (flog_file){fprintf(flog, __VA_ARGS__);} else{printf(__VA_ARGS__);}}}
 
 
 

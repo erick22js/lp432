@@ -15,6 +15,13 @@ void tkrConsumeSpace() {
 			// The character is a space
 			saveSeek();
 		}
+		else if (chr>127){
+			while (!charIsBreakLine(chr) && !lexerEnded()){
+				saveSeek();
+				chr = lexerGet();
+			}
+			restoreSeek();
+		}
 		else if (chr==';'){
 			while (!charIsBreakLine(chr) && !lexerEnded()){
 				saveSeek();

@@ -2,13 +2,13 @@
 #include "../../pci.h"
 
 
-#define procIn8(adr, dest) {if (!pciReadDevice8(cpu_s->pci, adr, &dest)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
-#define procIn16(adr, dest) {if (!pciReadDevice16(cpu_s->pci, adr, &dest)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
-#define procIn32(adr, dest) {if (!pciReadDevice32(cpu_s->pci, adr, &dest)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
+#define procIn8(adr, dest) {if (!pciReadDevice8(cpu_s->pci, adr, &dest)) {cpu_s->iregs[0] = adr>>8; cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}}
+#define procIn16(adr, dest) {if (!pciReadDevice16(cpu_s->pci, adr, &dest)) {cpu_s->iregs[0] = adr>>8; cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}}
+#define procIn32(adr, dest) {if (!pciReadDevice32(cpu_s->pci, adr, &dest)) {cpu_s->iregs[0] = adr>>8; cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}}
 
-#define procOut8(adr, src) {if (!pciWriteDevice8(cpu_s->pci, adr, src)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
-#define procOut16(adr, src) {if (!pciWriteDevice16(cpu_s->pci, adr, src)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
-#define procOut32(adr, src) {if (!pciWriteDevice32(cpu_s->pci, adr, src)) cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}
+#define procOut8(adr, src) {if (!pciWriteDevice8(cpu_s->pci, adr, src)) {cpu_s->iregs[0] = adr>>8; cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}}
+#define procOut16(adr, src) {if (!pciWriteDevice16(cpu_s->pci, adr, src)) {cpu_s->iregs[0] = adr>>8; cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}}
+#define procOut32(adr, src) {if (!pciWriteDevice32(cpu_s->pci, adr, src)) {cpu_s->iregs[0] = adr>>8; cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);}}
 
 #define portWideAdr8To16(adr) ((adr&0x7)|((adr&0xF8)<<5))
 
@@ -201,6 +201,7 @@ cpuInterr procF9(Cpu *cpu_s){
 		cpu_s->waiting = true;
 	}
 	else{
+		cpu_s->iregs[0] = 256;
 		cpuThrowInterruption(INTR_DEVICE_UNAVAILABLE);
 	}
 	return 0;

@@ -717,42 +717,66 @@ Ist isa[] = {
 	},
 	{
 		.mne = "btc",
-		.encodes_length = 1,
+		.encodes_length = 2,
 		.encodes = {
 			{
 				.opcode = 0xBE, .desc = 0x7,
 				.params_length = 2,
 				.params = {
-					{ .type = TYPE_R8, .encode = ENCODE_REGM },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
 					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 }
+				}
+			},
+			{
+				.opcode = 0xBE, .desc = 0xA,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO }
 				}
 			}
 		}
 	},
 	{
 		.mne = "bts",
-		.encodes_length = 1,
+		.encodes_length = 2,
 		.encodes = {
 			{
 				.opcode = 0xBE, .desc = 0x6,
 				.params_length = 2,
 				.params = {
-					{ .type = TYPE_R8, .encode = ENCODE_REGM },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
 					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 }
+				}
+			},
+			{
+				.opcode = 0xBE, .desc = 0x9,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO }
 				}
 			}
 		}
 	},
 	{
 		.mne = "btt",
-		.encodes_length = 1,
+		.encodes_length = 2,
 		.encodes = {
 			{
 				.opcode = 0xBE, .desc = 0x8,
 				.params_length = 2,
 				.params = {
-					{ .type = TYPE_R8, .encode = ENCODE_REGM },
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
 					{ .type = TYPE_IMM8, .encode = ENCODE_MV8 }
+				}
+			},
+			{
+				.opcode = 0xBE, .desc = 0xB,
+				.params_length = 2,
+				.params = {
+					{ .type = TYPE_R32, .encode = ENCODE_REGM },
+					{ .type = TYPE_R32, .encode = ENCODE_REGO }
 				}
 			}
 		}

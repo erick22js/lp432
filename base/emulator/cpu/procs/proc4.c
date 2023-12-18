@@ -166,6 +166,9 @@ cpuInterr proc44(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}
@@ -337,6 +340,9 @@ cpuInterr proc45(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}
@@ -508,6 +514,9 @@ cpuInterr proc46(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}
@@ -539,6 +548,9 @@ cpuInterr proc49(Cpu *cpu_s){
 		cpuWriteReg32(cpu_s->os_regm, (uint32)data);
 	}
 	else {
+		cpu_s->iregs[0] = cpu_s->reg_lpc;
+		cpu_s->iregs[1] = cpu_s->opcode;
+		cpu_s->iregs[2] = cpu_s->os_desc;
 		cpuThrowInterruption(INTR_INVALID_OPCODE);
 	}
 	return 0;
@@ -569,6 +581,9 @@ cpuInterr proc4B(Cpu *cpu_s){
 		cpuWriteReg32(cpu_s->os_regm, (uint32)data);
 	}
 	else {
+		cpu_s->iregs[0] = cpu_s->reg_lpc;
+		cpu_s->iregs[1] = cpu_s->opcode;
+		cpu_s->iregs[2] = cpu_s->os_desc;
 		cpuThrowInterruption(INTR_INVALID_OPCODE);
 	}
 	return 0;
@@ -599,6 +614,9 @@ cpuInterr proc4D(Cpu *cpu_s){
 		cpuWriteReg16(cpu_s->os_regm, (uint32)data);
 	}
 	else {
+		cpu_s->iregs[0] = cpu_s->reg_lpc;
+		cpu_s->iregs[1] = cpu_s->opcode;
+		cpu_s->iregs[2] = cpu_s->os_desc;
 		cpuThrowInterruption(INTR_INVALID_OPCODE);
 	}
 	return 0;
@@ -801,6 +819,9 @@ cpuInterr proc4F(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}

@@ -1,0 +1,44 @@
+
+0x1 => Violation of system protection by software
+	ir0 -> Instruction Virtual Address
+
+0x3 => Page Fault
+	ir0 -> Memory Access Address
+
+0x4 => Segment Not Present
+	ir0 -> Memory Access Address
+
+0x5 => Directory Fault
+	ir0 -> Memory Access Address
+
+0x6 => Denied Memory Access
+	ir0 -> Memory Access Address
+
+0x7 => Denied Code Access
+	ir0 -> Memory Access Address
+
+0x9 => Invalid Opcode
+	ir0 -> Instruction Virtual Address
+	ir1 -> Opcode
+	[ir2 -> OS_DESC1]
+
+0xA => Division By Zero
+	ir0 -> Instruction Virtual Address
+	ir1 -> Value
+
+0xB => Timer Interruption
+
+0xC => Debugger Interruption
+	ir0 -> Instruction Virtual Address
+	ir1 -> Status Register
+
+0xD => Device Not Available
+	ir0 -> Device Port
+
+0xE => Software Interruption
+	ir0 -> Request Code
+
+0xF => Hardware Interruption
+	ir0 -> Device Port
+	ir1...ir7 -> Device Values
+

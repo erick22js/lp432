@@ -17,6 +17,7 @@ typedef struct{
 	SDL_Renderer *rd;
 	SDL_Texture *tex;
 	Uint32* buffer;
+	_Bool enable_display;
 	int buff_wid, buff_hei;
 
 	// Callback events

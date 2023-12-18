@@ -23,7 +23,17 @@
 #define CTRL_CYCLES self->api_data[1]
 #define CTRL_X_POS self->api_data[2]
 #define CTRL_Y_POS self->api_data[3]
+#define CTRL_MONITOR ((Monitor*)self->api_refs[0])
+#define CTRL_BUFFER (self->api_refs[1])
 
+#define STATUS_TYPE self->regs[0]
+#define STATUS_TYPEH self->regs[1]
+#define STATUS_VERSION self->regs[2]
+#define STATUS_VERSIONH self->regs[3]
+#define STATUS_VARYATION self->regs[4]
+#define STATUS_VENDOR self->regs[5]
+#define STATUS_FLAGS self->regs[6]
+#define STATUS_READY_STATE self->regs[7]
 #define REG_WIDTH ((uint32*)self->regs)[2]
 #define REG_HEIGHT ((uint32*)self->regs)[3]
 #define REG_DATA_BASE ((uint32*)self->regs)[4]
@@ -40,9 +50,14 @@ uint8 dsRead(Device* self, uint8 reg){
 }
 
 void dsWrite(Device* self, uint8 reg, uint8 data){
-	if (reg >= 16){
-		self->regs[reg] = data;
+	if (reg == 6){
+		CTRL_MONITOR->enable_display = data&1;
 	}
+	else if (reg >= 16){}
+	else {
+		return;
+	}
+	self->regs[reg] = data;
 }
 
 void dsStep(Device* self, uint32 cycles){
@@ -105,7 +120,7 @@ void dsStep(Device* self, uint32 cycles){
 			uint32 pix_tile1 = vga_font[chr1*FONT_WIDTH*FONT_HEIGHT + off_y*FONT_WIDTH + off_x],
 				pix_tile2 = vga_font[chr2*FONT_WIDTH*FONT_HEIGHT + off_y*FONT_WIDTH + off_x];
 
-			((uint32*)(self->api_refs[0]))[y*REG_WIDTH + x] = pix_tile1? color_fore: color_back;
+			((uint32*)(CTRL_BUFFER))[y*REG_WIDTH + x] = pix_tile1? color_fore: color_back;
 		}
 		CTRL_X_POS += PIXELS_PER_TICK;
 		if (CTRL_X_POS >= REG_WIDTH){
@@ -151,22 +166,26 @@ void dsSetup(Device *self, Monitor *mntr) {
 	CTRL_CYCLES = 0; // Cycles Counter
 	CTRL_X_POS = 0; // X counter
 	CTRL_X_POS = 0; // Y counter
-	self->api_refs[0] = mntr->buffer; // Host Pixels Buffer Pointer
+	CTRL_MONITOR = mntr; // Monitor Reference
+	CTRL_BUFFER = mntr->buffer; // Host Pixels Buffer Pointer
 
 	// Configure Registers
-	self->regs[0] = DEVICE_TYPE; // Device Type
-	self->regs[1] = DEVICE_TYPE>>8;
-	self->regs[2] = DEVICE_VERSION; // Device Version
-	self->regs[3] = DEVICE_VERSION>>8;
-	self->regs[4] = DEVICE_VARYATION; // Device Varyation
-	self->regs[5] = DEVICE_VENDOR; // Device Vendor
-	self->regs[6] = 0; // Device Control Flags
-	self->regs[7] = 0; // Ready State
+	STATUS_TYPE = DEVICE_TYPE; // Device Type
+	STATUS_TYPEH = DEVICE_TYPE>>8;
+	STATUS_VERSION = DEVICE_VERSION; // Device Version
+	STATUS_VERSIONH = DEVICE_VERSION>>8;
+	STATUS_VARYATION = DEVICE_VARYATION; // Device Varyation
+	STATUS_VENDOR = DEVICE_VENDOR; // Device Vendor
+	STATUS_FLAGS = 0; // Device Control Flags
+	STATUS_READY_STATE = 0; // Ready State
 	REG_WIDTH = mntr->buff_wid; // Display Width
 	REG_HEIGHT = mntr->buff_hei; // Display Height
 	REG_DATA_BASE = 0; // Data Buffer Base Address
 	REG_PAL_BASE = 0; // Palette Buffer Base Address
 	REG_DFLAGS = 0; // Display Flags
+
+	// Configure Monitor
+	mntr->enable_display = 0;
 }
 
 void dsDestroy(Device *dev) {

@@ -1,8 +1,15 @@
 #include "assembler/assembler.h"
 
 
-
+FILE *flog = null;
+bool flog_enable = true;
+bool flog_file = true;
 int main(int args, char** argv) {
+	flog_enable = args>2? strcmp(argv[2], "true")==0: true;
+	flog_file = false;
+	if (fopen_s(&flog, "assembly.log.txt", "w")){
+		flog_file = false;
+	}
 	//const char* code = "";
 	
 	uint8* bin = null;
@@ -14,7 +21,7 @@ int main(int args, char** argv) {
 		sprintf_s(input, sizeof(input)-1, "%s", argv[1]);
 	}
 	else {
-		sprintf_s(input, sizeof(input)-1, "%s", "tests/main.asm");
+		sprintf_s(input, sizeof(input)-1, "%s", "C:/Users/erick/Documents/meus-projetos/c/lp432/tests/device_display/main2.asm");//"tests/main.asm");
 	}
 	sprintf_s(output, sizeof(output)-1, "%s", input);
 	{
@@ -46,7 +53,7 @@ int main(int args, char** argv) {
 	}
 
 	// Dump hex code to preview
-	/*
+#ifdef SHOW_BINARY
 	log("\nOutput Binary\n");
 	for (int l = 0; l<(int)bin_size; l += 16){
 		for (int r = 0; (l+r)<(int)bin_size && r<16; r++){
@@ -54,7 +61,8 @@ int main(int args, char** argv) {
 		}
 		log("\n");
 	}
-	*/
+#endif
+	
 	system("pause");
 	return 0;
 }

@@ -276,6 +276,9 @@ cpuInterr procB3(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}
@@ -488,6 +491,9 @@ cpuInterr procB7(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}
@@ -700,6 +706,9 @@ cpuInterr procBB(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}
@@ -773,7 +782,28 @@ cpuInterr procBE(Cpu *cpu_s){
 			cpuWriteReg32(cpu_s->os_regm, cpuReadReg32(cpu_s->os_regm) ^ (1<<(bit)));
 		}
 		break;
+		case 0x9:{
+			// Instruction: bts r32:regm, r32:rego
+			uint32 bit = cpu_s->os_rego;
+			cpuWriteReg32(cpu_s->os_regm, cpuReadReg32(cpu_s->os_regm) | (1<<(bit)));
+		}
+		break;
+		case 0xA:{
+			// Instruction: btc r32:regm, r32:rego
+			uint32 bit = cpu_s->os_rego;
+			cpuWriteReg32(cpu_s->os_regm, cpuReadReg32(cpu_s->os_regm) & (~(1<<(bit))));
+		}
+		break;
+		case 0xB:{
+			// Instruction: btt r32:regm, r32:rego
+			uint32 bit = cpu_s->os_rego;
+			cpuWriteReg32(cpu_s->os_regm, cpuReadReg32(cpu_s->os_regm) ^ (1<<(bit)));
+		}
+		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}
@@ -905,6 +935,9 @@ cpuInterr procBF(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}

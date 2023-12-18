@@ -49,6 +49,7 @@ cpuInterr proc31(Cpu *cpu_s){
 
 cpuInterr proc32(Cpu *cpu_s){
 	// Instruction: int
+	cpu_s->iregs[0] = 0;
 	cpuThrowInterruption(INTR_SOFTWARE_INTERRUPTION);
 }
 
@@ -102,6 +103,9 @@ cpuInterr proc38(Cpu *cpu_s){
 		procLoadSegment(cpu_s, &cpu_s->sregs[cpu_s->os_desc]);
 	}
 	else {
+		cpu_s->iregs[0] = cpu_s->reg_lpc;
+		cpu_s->iregs[1] = cpu_s->opcode;
+		cpu_s->iregs[2] = cpu_s->os_desc;
 		cpuThrowInterruption(INTR_INVALID_OPCODE);
 	}
 
@@ -135,6 +139,9 @@ cpuInterr proc39(Cpu *cpu_s){
 		}
 		break;
 		default: {
+			cpu_s->iregs[0] = cpu_s->reg_lpc;
+			cpu_s->iregs[1] = cpu_s->opcode;
+			cpu_s->iregs[2] = cpu_s->os_desc;
 			cpuThrowInterruption(INTR_INVALID_OPCODE);
 		}
 	}

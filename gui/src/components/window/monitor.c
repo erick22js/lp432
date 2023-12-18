@@ -21,13 +21,20 @@ void mntrOpen(Monitor *monitor, char* title, int width, int height, int buff_wid
 	monitor->tex = SDL_CreateTexture(monitor->rd, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, buff_wid, buff_hei);
 	monitor->buff_wid = buff_wid;
 	monitor->buff_hei = buff_hei;
+	monitor->enable_display = 1;
 	monitor->buffer = malloc(buff_wid*buff_hei*4);
 	memset(monitor->buffer, 0, buff_wid*buff_hei*4);
 }
 
 void mntrRender(Monitor *monitor){
-	SDL_UpdateTexture(monitor->tex, NULL, monitor->buffer, monitor->buff_wid*4);
-	SDL_RenderCopy(monitor->rd, monitor->tex, NULL, NULL);
+	if (monitor->enable_display){
+		SDL_UpdateTexture(monitor->tex, NULL, monitor->buffer, monitor->buff_wid*4);
+		SDL_RenderCopy(monitor->rd, monitor->tex, NULL, NULL);
+	}
+	else {
+		SDL_SetRenderDrawColor(monitor->rd, 0, 0, 0, 255);
+		SDL_RenderDrawRect(monitor->rd, NULL);
+	}
 	SDL_RenderPresent(monitor->rd);
 }
 

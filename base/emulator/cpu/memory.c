@@ -10,9 +10,10 @@
 #define cpuTrAdr(adr, seg_flag, acs_intr, pag_flag) {\
 	if (cpu_s->reg_st&FLAG_SE){\
 		CpuSegment *seg_reg = &cpu_s->sregs[adr>>29];\
+		cpu_s->iregs[0] = adr;\
 		if (seg_reg->flags&SEG_ENABLED){\
 			if (seg_reg->flags&SEG_PROTECTED && eval(cpu_s->reg_st&FLAG_PM)){\
-				cpuThrowInterruption(INTR_PROTECTED_MODE_VIOLATION);\
+				cpuThrowInterruption(acs_intr);\
 			}\
 			adr &= 0x1FFFFFFF;\
 			if (seg_reg->flags&seg_flag && (adr<seg_reg->limit)){\
@@ -29,12 +30,13 @@
 	if (cpu_s->reg_st&FLAG_PE){\
 		uint32 ptr = cpu_s->reg_ptd + ((adr>>22)&0x3FF)*4;\
 		uint32 dir = cpuReadBus32(ptr);\
+		cpu_s->iregs[0] = adr;\
 		if (dir){\
 			ptr = dir + ((adr>>12)&0x3FF)*4;\
 			uint32 pag = cpuReadBus32(ptr);\
 			if (pag&PAG_ENABLED){\
 				if (pag&PAG_PROTECTED && eval(cpu_s->reg_st&FLAG_PM)){\
-					cpuThrowInterruption(INTR_PROTECTED_MODE_VIOLATION);\
+					cpuThrowInterruption(acs_intr);\
 				}\
 				if (pag&pag_flag){\
 					adr = (pag&0xFFFFF000) | (adr&0xFFF);\

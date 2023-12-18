@@ -44,14 +44,25 @@ Lexer *lexerOpenFile(const char* path){
 	if (lexers_top < MAX_LEXERS){
 		Lexer *lexer = &lexers[lexers_top];
 		lexer->type = LEXER_TYPE_FILE;
-		if (fopen_s(&lexer->file, path, "r")){
+		FILE *file = null;
+		if (!(file = fopen(path, "r"))){
 			return null;
 		}
+		// Setup buffer
+		fseek(file, 0, SEEK_END);
+		lexer->src_len = ftell(file);
+		fseek(file, 0, SEEK_SET);
+		lexer->src = malloc(lexer->src_len);
+		fread(lexer->src, 1, lexer->src_len, file);
+		//lexer->src[lexer->src_len] = lexer->src[lexer->src_len+1] = lexer->src[lexer->src_len+2] = lexer->src[lexer->src_len+3] = 0;
+		fclose(file);
+		// Setup descriptor
 		getFullPath(lexer->path, path);
 		lexer->limit = 0;
 		lexer->status = 0;
 		lexer->args = null;
-		lexer->src = null;
+		//lexer->src = null;
+		lexer->seek = 0;
 		lexers_top++;
 		cur_lexer = lexer;
 		return lexer;
@@ -64,7 +75,9 @@ bool lexerClose(){
 	}
 	if (lexers_top > 0){
 		if (cur_lexer->type == LEXER_TYPE_FILE){
-			fclose(cur_lexer->file);
+			//free(cur_lexer->src);
+			//fclose(cur_lexer->file);
+			//cur_lexer->file = null;
 		}
 		else{
 			//mem_free(cur_lexer->src);
@@ -82,21 +95,21 @@ uint32 lexerGet(){
 	if (!cur_lexer){
 		return EOF;
 	}
-	if (cur_lexer->type == LEXER_TYPE_FILE){
+	/*if (cur_lexer->type == LEXER_TYPE_FILE){
 		if (cur_lexer->limit && ftell(cur_lexer->file)>=cur_lexer->limit){
 			return EOF;
 		}
 		return fgetc(cur_lexer->file);
 	}
-	else{
+	else*/{
 		uint32 chr = EOF;
 		if (cur_lexer->seek < cur_lexer->src_len && (!cur_lexer->limit || cur_lexer->seek<cur_lexer->limit)){
 			chr = cur_lexer->src[cur_lexer->seek];
+			cur_lexer->seek++;
 		}
 		if (chr == 0){
 			chr = EOF;
 		}
-		cur_lexer->seek++;
 		return chr;
 	}
 }
@@ -104,13 +117,13 @@ bool lexerEnded(){
 	if (!cur_lexer){
 		return true;
 	}
-	if (cur_lexer->type == LEXER_TYPE_FILE){
+	/*if (cur_lexer->type == LEXER_TYPE_FILE){
 		if (cur_lexer->limit && ftell(cur_lexer->file)>=cur_lexer->limit){
 			return true;
 		}
 		return feof(cur_lexer->file);
 	}
-	else{
+	else*/{
 		if (cur_lexer->limit && cur_lexer->seek>=cur_lexer->limit){
 			return true;
 		}
@@ -124,10 +137,10 @@ uint32 lexerTell(){
 	if (!cur_lexer){
 		return 0;
 	}
-	if (cur_lexer->type == LEXER_TYPE_FILE){
+	/*if (cur_lexer->type == LEXER_TYPE_FILE){
 		return ftell(cur_lexer->file);
 	}
-	else{
+	else*/{
 		return cur_lexer->seek;
 	}
 }
@@ -135,10 +148,10 @@ void lexerSeekSet(uint32 address){
 	if (!cur_lexer){
 		return;
 	}
-	if (cur_lexer->type == LEXER_TYPE_FILE){
+	/*if (cur_lexer->type == LEXER_TYPE_FILE){
 		fseek(cur_lexer->file, address, SEEK_SET);
 	}
-	else{
+	else*/{
 		cur_lexer->seek = address;
 	}
 }
@@ -146,13 +159,13 @@ void lexerSeekCur(int offset){
 	if (!cur_lexer){
 		return;
 	}
-	if (cur_lexer->type == LEXER_TYPE_FILE){
+	/*if (cur_lexer->type == LEXER_TYPE_FILE){
 		if (feof(cur_lexer->file)){
 			return;
 		}
 		fseek(cur_lexer->file, offset, SEEK_CUR);
 	}
-	else{
+	else*/{
 		cur_lexer->seek += offset;
 	}
 }

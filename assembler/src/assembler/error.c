@@ -11,6 +11,10 @@ int asm_error_v2 = 0;
 int asm_error_v3 = 0;
 int asm_error_v4 = 0;
 
+void errException(){
+	return;
+}
+
 void asmErrorToString(char* buffer, int buffer_size) {
 	char* format = "unknown error";
 	switch (asm_error_code){
