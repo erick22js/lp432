@@ -1,302 +1,508 @@
 #include "tokener.h"
 
 
-/*
-	Common Fetch Functions
-*/
+//
+//	NAMING REUSES
+//
+typedef char* _Name;
+_Name __first_name = null;
 
-// Consume any detected space
-void tkrConsumeSpace() {
-	createSeek();
-	uint32 chr = lexerGet();
+#define _getName_NamePtr(name) (*(_Name*)(name))
+#define _getName_Cstr(name) ((char*)((name)+sizeof(_Name*)))
 
-	while (!lexerEnded()){
-		if (charIsBlank(chr)){
-			// The character is a space
-			saveSeek();
+char* reuseName(char* name){
+	_Name *entry = &__first_name;
+
+	while (*entry){
+		if (strcmp(_getName_Cstr(*entry), name)==0){
+			return _getName_Cstr(*entry);
 		}
-		else if (chr>127){
-			while (!charIsBreakLine(chr) && !lexerEnded()){
-				saveSeek();
-				chr = lexerGet();
-			}
-			restoreSeek();
-		}
+		entry = &_getName_NamePtr(*entry);
+	}
+	
+	u32 len = strlen(name);
+	_Name nentry = mem_alloc(sizeof(_Name*) + len+1);
+	char* nname = _getName_Cstr(nentry);
+	memcpy(nname, name, len);
+	nname[len] = 0;
+	*entry = (_Name)nentry;
+	_getName_NamePtr(nentry) = null;
+	return _getName_Cstr(*entry);
+}
+
+char* wrapString(char* cstr){
+	int size = strlen(cstr);
+	char *ncstr = mem_alloc(size+1);
+	memcpy(ncstr, cstr, size+1);
+	return ncstr;
+}
+
+char* wrapStringSized(char* cstr, int size){
+	char *ncstr = mem_alloc(size+1);
+	memcpy(ncstr, cstr, size+1);
+	return ncstr;
+}
+
+
+//
+//	INTERNAL FUNCTIONS
+//
+
+void tkrConsumeBlank(){
+	seekCreate();
+	do {
+		u32 chr = lexGet();
+		if (chrIsSpace(chr)){}
 		else if (chr==';'){
-			while (!charIsBreakLine(chr) && !lexerEnded()){
-				saveSeek();
-				chr = lexerGet();
+			while (!chrIsNewLine(chr)){
+				chr = lexGet();
 			}
-			restoreSeek();
+			lexSeekCur(-1);
 		}
 		else if (chr=='/'){
-			chr = lexerGet();
+			chr = lexGet();
 			if (chr=='/'){
-				while (!charIsBreakLine(chr) && !lexerEnded()){
-					saveSeek();
-					chr = lexerGet();
+				while (!chrIsNewLine(chr)){
+					chr = lexGet();
 				}
-				restoreSeek();
+				lexSeekCur(-1);
 			}
 			else if (chr=='*'){
-				while (!lexerEnded()){
-					saveSeek();
-					chr = lexerGet();
+				while (!lexEnded()){
+					chr = lexGet();
 					if (chr=='*'){
-						saveSeek();
-						chr = lexerGet();
+						chr = lexGet();
 						if (chr=='/'){
-							saveSeek();
 							break;
 						}
-						restoreSeek();
+						else {
+								lexSeekCur(-1);
+						}
 					}
 				}
 			}
 			else {
-				restoreSeek();
+				lexSeekCur(-2);
 				break;
 			}
 		}
-		else{
-			restoreSeek();
+		else if (chr=='\\'){
+			chr = lexGet();
+			if (chr=='\n'){}
+			else {
+				lexSeekCur(-2);
+				break;
+			}
+		}
+		else {
 			break;
 		}
-		chr = lexerGet();
-	}
+		seekSave();
+	} while(!lexEnded());
+	seekRestore();
 }
 
-// Consume the left line, returns the index where the character is not blank, -1 otherwise
-int tkrConsumeLine() {
-	tkrConsumeSpace();
-	uint32 chr = lexerGet();
-	int offset = -1;
-	while (!charIsBreakLine(chr) && !lexerEnded()){
-		if (!charIsBlank(chr) && offset==(-1)) {
-			offset = lexerTell()-1;
-		}
-		chr = lexerGet();
-	}
-	return offset;
+void tkrConsumeLeftLine() {
+	u32 chr = 0;
+	do {
+		chr = lexGet();
+	}while (!chrIsNewLine(chr));
 }
 
-// Detect the tokener ended fetch
-bool tkrEnded() {
-	return lexerEnded();
-}
 
-// Detect the tokener not ended fetch
-bool tkrNotEnded() {
-	return !lexerEnded();
-}
+//
+//	NUMERIC DECODING
+//
 
-// Fetch the next token, return error code
-int tkrFetchToken(Token *tk) {
-	tkrConsumeSpace();
-	uint32 initial = lexerGet();
-
-	// Return no character on end of file detected
-	if (initial == EOF){
-		tk->kind = TOKEN_END_OF_FILE;
-		tk->value.integer = 0;
-		return 0;
+Error decNumberBin(Token *tk){
+	u64 lit = 0;
+	u32 chr = lexGet();
+	while (chrIsBinary(chr)){
+		lit <<= 1;
+		lit += (chr-'0');
+		chr = lexGet();
 	}
-	// Detect if precursor is a end of file
-	else if (charIsBreakLine(initial)){
-		tk->kind = TOKEN_NEW_LINE;
-		tk->value.integer = '\n';
-		return 0;
+	if (chr=='.'){
+		f64 fp = 0;
+		f64 div = 1.0;
+		chr = lexGet();
+		while (chrIsBinary(chr)){
+			div /= 2;
+			fp += (chr-'0')*div;
+			chr = lexGet();
+		}
+		fp += lit;
+		tk->value.fp = fp;
+		tk->fp_lit = true;
 	}
-	// Detect if precursor is a number
-	else if (charIsNumeric(initial)){
-		uint32 value = 0;
-		uint32 chr = initial;
-		if (initial=='0'){
-			chr = lexerGet();
-			if (chr=='b' || chr=='B'){
-				chr = lexerGet();
-				while (chr=='0' || chr=='1'){
-					value = (value<<1) | (chr-'0');
-					chr = lexerGet();
-				}
-				if (charIsAlpha(chr)){
-					return ERROR_INVALID_NUMBER_POSFIX;
-				}
-				lexerSeekCur(-1);
-				tk->kind = TOKEN_INTEGER;
-				tk->value.integer = value;
-				return 0;
-			}
-			else if (chr=='o' || chr=='O'){
-				chr = lexerGet();
-				while (chr>='0' && chr<='7'){
-					value = (value<<3) | (chr-'0');
-					chr = lexerGet();
-				}
-				if (charIsAlpha(chr)){
-					return ERROR_INVALID_NUMBER_POSFIX;
-				}
-				lexerSeekCur(-1);
-				tk->kind = TOKEN_INTEGER;
-				tk->value.integer = value;
-				return 0;
-			}
-			else if (chr=='x' || chr=='X'){
-				chr = lexerGet();
-				while (charIsHex(chr)){
-					value = (value<<4) | (
-						chr>='0' && chr<='9'? chr-'0':
-						chr>='a' && chr<='f'? chr-'a'+10:
-						chr>='A' && chr<='F'? chr-'A'+10: 0
-						);
-					chr = lexerGet();
-				}
-				if (charIsAlpha(chr)){
-					return ERROR_INVALID_NUMBER_POSFIX;
-				}
-				lexerSeekCur(-1);
-				tk->kind = TOKEN_INTEGER;
-				tk->value.integer = value;
-				return 0;
-			}
-			else {
-				chr = '0';
-				lexerSeekCur(-1);
-			}
-		}
-		while (charIsNumeric(chr)){
-			value = (value*10) + (chr-'0');
-			chr = lexerGet();
-		}
-		if (charIsAlpha(chr)){
-			return ERROR_INVALID_NUMBER_POSFIX;
-		}
-		lexerSeekCur(-1);
-		tk->kind = TOKEN_INTEGER;
-		tk->value.integer = value;
-		return 0;
-	}
-	// Detect if precursor is a identifier
-	else if (charIsAlpha(initial)){
-		char identifier[MAX_IDENTIFIER_SIZE+1];
-		uint32 chr = initial;
-		uint32 s = 0;
-		while (charIsAlpha(chr) && s<MAX_IDENTIFIER_SIZE){
-			identifier[s] = chr;
-			chr = lexerGet();
-			s++;
-		}
-		identifier[s] = 0;
-		lexerSeekCur(-1);
-		tk->kind = TOKEN_IDENTIFIER;
-		tk->value.string = textReuse(identifier);
-		return 0;
-	}
-	// Detect if precursor is a numerical string
-	else if (initial == '\''){
-		uint32 value = 0;
-		uint32 chr = lexerGet();
-		uint32 s = 0;
-		while (chr != EOF && chr != '\'' && s<MAX_STRING_SIZE){
-			if (chr=='\\'){
-				chr = lexerGet();
-				if (chr=='n'){
-					chr = '\n';
-				}
-				else if (chr=='t'){
-					chr = '\t';
-				}
-				else if (chr=='r'){
-					chr = '\r';
-				}
-			}
-			value <<= 8;
-			value |= chr;
-			chr = lexerGet();
-			s++;
-		}
-
-		if (chr == EOF){
-			return ERROR_UNTERMINATED_STRING;
-		}
-		tk->kind = TOKEN_INTEGER;
-		tk->value.integer = value;
-		return 0;
-	}
-	// Detect if precursor is a string
-	else if (initial == '"'){
-		char string[MAX_STRING_SIZE+1];
-		uint32 chr = lexerGet();
-		uint32 s = 0;
-		while (chr != EOF && chr != '"' && s<MAX_STRING_SIZE){
-			if (chr=='\\'){
-				chr = lexerGet();
-				if (chr=='n'){
-					chr = '\n';
-				}
-				else if (chr=='t'){
-					chr = '\t';
-				}
-				else if (chr=='r'){
-					chr = '\r';
-				}
-			}
-			string[s] = chr;
-			chr = lexerGet();
-			s++;
-		}
-		string[s] = 0;
-
-		if (chr == EOF){
-			return ERROR_UNTERMINATED_STRING;
-		}
-
-		tk->kind = TOKEN_STRING;
-		tk->value.string = textReuse(string);
-		return 0;
-	}
-	// Detect if precursor is a symbol
 	else {
-		// TODO
-		tk->kind = TOKEN_SYMBOL;
-		tk->value.integer = initial;
-		return 0;
+		tk->value.lit = lit;
 	}
-	return 0;
+	lexSeekCur(-1);
+	tk->type = TOKEN_LITERAL;
+	return ERROR_NONE;
 }
 
-void tkrPrint(Token *tk){
-	switch (tk->kind){
-		case TOKEN_INTEGER:{
-			log("TOKEN_INTEGER: %d\n", tk->value.integer);
+Error decNumberOctal(Token *tk){
+	u64 lit = 0;
+	u32 chr = lexGet();
+	while (chrIsOctal(chr)){
+		lit <<= 3;
+		lit += (chr-'0');
+		chr = lexGet();
+	}
+	if (chr=='.'){
+		f64 fp = 0;
+		f64 div = 1.0;
+		chr = lexGet();
+		while (chrIsOctal(chr)){
+			div /= 8;
+			fp += (chr-'0')*div;
+			chr = lexGet();
+		}
+		fp += lit;
+		tk->value.fp = fp;
+		tk->fp_lit = true;
+	}
+	else {
+		tk->value.lit = lit;
+	}
+	lexSeekCur(-1);
+	tk->type = TOKEN_LITERAL;
+	return ERROR_NONE;
+}
+
+Error decNumberDecimal(Token *tk, u32 chr){
+	u64 lit = 0;
+	while (chrIsDecimal(chr)){
+		lit *= 10;
+		lit += chr-'0';
+		chr = lexGet();
+	}
+	if (chr=='.'){
+		f64 fp = 0;
+		f64 div = 1.0;
+		chr = lexGet();
+		while (chrIsDecimal(chr)){
+			div /= 10;
+			fp += (chr-'0')*div;
+			chr = lexGet();
+		}
+		fp += lit;
+		tk->value.fp = fp;
+		tk->fp_lit = true;
+	}
+	else {
+		tk->value.lit = lit;
+	}
+	lexSeekCur(-1);
+	tk->type = TOKEN_LITERAL;
+	return ERROR_NONE;
+}
+
+Error decNumberHexa(Token *tk){
+	u64 lit = 0;
+	u32 chr = lexGet();
+	while (chrIsHexa(chr)){
+		lit <<= 4;
+		lit += chr>='0' && chr<='9'? chr-'0': chr>='a' && chr<='f'? chr-'a'+10: chr>='A' && chr<='F'? chr-'A'+10: 0;
+		chr = lexGet();
+	}
+	if (chr=='.'){
+		f64 fp = 0;
+		f64 div = 1.0;
+		chr = lexGet();
+		while (chrIsHexa(chr)){
+			div /= 16;
+			fp += (chr>='0' && chr<='9'? chr-'0': chr>='a' && chr<='f'? chr-'a'+10: chr>='A' && chr<='F'? chr-'A'+10: 0)*div;
+			chr = lexGet();
+		}
+		fp += lit;
+		tk->value.fp = fp;
+		tk->fp_lit = true;
+	}
+	else {
+		tk->value.lit = lit;
+	}
+	lexSeekCur(-1);
+	tk->type = TOKEN_LITERAL;
+	return ERROR_NONE;
+}
+
+Error decNumber(Token *tk, u32 fchr){
+	if (fchr=='0'){
+		fchr = lexGet();
+		
+		if (fchr=='x' || fchr=='X'){
+			errTryCatch(
+				decNumberHexa(tk)
+			);
+		}
+		else if (fchr=='o' || fchr=='O'){
+			errTryCatch(
+				decNumberOctal(tk)
+			);
+		}
+		else if (fchr=='b' || fchr=='B'){
+			errTryCatch(
+				decNumberBin(tk)
+			);
+		}
+		else {
+			lexSeekCur(-1);
+			errTryCatch(
+				decNumberDecimal(tk, '0')
+			);
+		}
+	}
+	else {
+		errTryCatch(
+			decNumberDecimal(tk, fchr)
+		);
+	}
+	return ERROR_NONE;
+}
+
+
+//
+//	GENERAL TEXT DECODING
+//
+
+Error decEscape(char *out){
+	char chr = lexGet();
+	
+	switch (chr){
+		case 'N':
+		case 'n': {
+			*out = '\n';
 		}
 		break;
-		case TOKEN_REAL:{
-			log("TOKEN_REAL: %f\n", tk->value.real);
+		case 'T':
+		case 't': {
+			*out = '\t';
 		}
 		break;
-		case TOKEN_STRING:{
-			log("TOKEN_STRING: \"%s\"\n", tk->value.string);
+		case 'R':
+		case 'r': {
+			*out = '\r';
 		}
 		break;
-		case TOKEN_IDENTIFIER:{
-			log("TOKEN_IDENTIFIER: %s\n", tk->value.string);
-		}
-		break;
-		case TOKEN_NEW_LINE:{
-			log("TOKEN_NEW_LINE\n");
-		}
-		break;
-		case TOKEN_END_OF_FILE:{
-			log("TOKEN_END_OF_FILE\n");
-		}
-		break;
-		case TOKEN_SYMBOL:{
-			log("TOKEN_SYMBOL: '%c'\n", ((uint32)tk->value.integer));
+		case '0': {
+			*out = 0;
 		}
 		break;
 		default: {
-			log("TOKEN_UNKNOWN\n");
+			*out = chr;
 		}
 	}
-};
+	
+	return ERROR_NONE;
+}
+
+Error decName(Token *tk, u32 chr) {
+	char name[MAX_NAME_LENGTH+1];
+	u32 i = 0;
+	while (chrIsName(chr)){
+		if (i<=MAX_NAME_LENGTH){
+			name[i] = chr;
+			i++;
+		}
+		chr = lexGet();
+	}
+	name[i] = 0;
+	lexSeekCur(-1);
+	
+	tk->type = TOKEN_NAME;
+	tk->value.str = reuseName(name);
+	tk->length = i;
+	return ERROR_NONE;
+}
+
+Error decCharacter(Token *tk) {
+	u64 character = 0;
+	u32 chr = lexGet();
+	u32 i = 0;
+	while (!lexEnded() && chr!='\''){
+		if (chr=='\\'){
+			errTryCatch(
+				decEscape((char*)&chr)
+			);
+		}
+		
+		character <<= 8;
+		character |= chr;
+		i++;
+		chr = lexGet();
+	}
+	
+	tk->type = TOKEN_LITERAL;
+	tk->value.lit = character;
+	tk->length = i;
+	return ERROR_NONE;
+}
+
+Error decString(Token *tk) {
+	char str[MAX_STRING_LENGTH+1];
+	u32 chr = lexGet();
+	u32 i = 0;
+	while (!lexEnded() && chr!='"'){
+		if (chr=='\\'){
+			errTryCatch(
+				decEscape((char*)&chr)
+			);
+		}
+		
+		if (i<=MAX_STRING_LENGTH){
+			str[i] = chr;
+			i++;
+		}
+		chr = lexGet();
+	}
+	str[i] = 0;
+	
+	tk->type = TOKEN_STRING;
+	tk->value.str = wrapStringSized(str, i);
+	tk->length = i;
+	return ERROR_NONE;
+}
+
+
+//
+//	UTILITIES FUNCTIONS
+//
+
+Error _tkrFetch(Token *tk){
+	tkrConsumeBlank();
+	tk->position = lexTell();
+	tk->length = 0;
+	tk->fp_lit = false;
+	
+	u32 chr = lexGet();
+	if (chrIsNewLine(chr)){
+		tk->type = TOKEN_EOL;
+		tk->value.lit = 0;
+	}
+	else if (chrIsDecimal(chr)){
+		errTryCatch(
+			decNumber(tk, chr)
+		);
+	}
+	else if (chrIsName(chr)){
+		errTryCatch(
+			decName(tk, chr)
+		);
+	}
+	else if (chr=='\"'){
+		errTryCatch(
+			decString(tk)
+		);
+	}
+	else if (chr=='\''){
+		errTryCatch(
+			decCharacter(tk)
+		);
+	}
+	else {
+		switch (chr){
+			case '\\': {
+				chr = lexGet();
+				if (chr=='n' || chr=='N'){
+					tk->type = TOKEN_EOL;
+					tk->value.lit = 0;
+					return ERROR_NONE;
+				}
+				lexSeekCur(-2);
+			}
+			break;
+			case '|': {
+				chr = lexGet();
+				if (chr=='|'){
+					tk->type = TOKEN_SYMBOL;
+					tk->value.lit = *(u16*)"||";
+					return ERROR_NONE;
+				}
+				chr = '|';
+				lexSeekCur(-1);
+			}
+			break;
+			case '&': {
+				chr = lexGet();
+				if (chr=='&'){
+					tk->type = TOKEN_SYMBOL;
+					tk->value.lit = *(u16*)"&&";
+					return ERROR_NONE;
+				}
+				chr = '&';
+				lexSeekCur(-1);
+			}
+			break;
+			case '=': {
+				chr = lexGet();
+				if (chr=='='){
+					tk->type = TOKEN_SYMBOL;
+					tk->value.lit = *(u16*)"==";
+					return ERROR_NONE;
+				}
+				chr = '=';
+				lexSeekCur(-1);
+			}
+			break;
+			case '!': {
+				chr = lexGet();
+				if (chr=='='){
+					tk->type = TOKEN_SYMBOL;
+					tk->value.lit = *(u16*)"!=";
+					return ERROR_NONE;
+				}
+				chr = '!';
+				lexSeekCur(-1);
+			}
+			break;
+			case '>': {
+				chr = lexGet();
+				if (chr=='='){
+					tk->type = TOKEN_SYMBOL;
+					tk->value.lit = *(u16*)">=";
+					return ERROR_NONE;
+				}
+				else if (chr=='>'){
+					tk->type = TOKEN_SYMBOL;
+					tk->value.lit = *(u16*)">>";
+					return ERROR_NONE;
+				}
+				chr = '>';
+				lexSeekCur(-1);
+			}
+			break;
+			case '<': {
+				chr = lexGet();
+				if (chr=='='){
+					tk->type = TOKEN_SYMBOL;
+					tk->value.lit = *(u16*)"<=";
+					return ERROR_NONE;
+				}
+				else if (chr=='<'){
+					tk->type = TOKEN_SYMBOL;
+					tk->value.lit = *(u16*)"<<";
+					return ERROR_NONE;
+				}
+				chr = '<';
+				lexSeekCur(-1);
+			}
+			break;
+		}
+		tk->type = TOKEN_SYMBOL;
+		tk->value.lit = chr;
+	}
+	
+	return ERROR_NONE;
+}
+
+Error tkrFetch(Token *tk){
+	errTryCatch(
+		_tkrFetch(tk)
+	);
+	//tkPrint(tk);
+	return ERROR_NONE;
+}
+

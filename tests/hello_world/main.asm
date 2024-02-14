@@ -1,5 +1,5 @@
 ; Map the address of program ROM in memory
-.program_adr 0x8000
+.address 0x8000
 
 sys_start:
 	mov ecx, hello_world_end-hello_world

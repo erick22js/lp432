@@ -4,8 +4,25 @@
 #include "common.h"
 
 
-extern int getFullPath(char* destpath, char* relpath);
-extern int combinePath(char* destpath, char* base, char* append);
+//
+//	PATH CONFIGURATION
+//
+
+#define PATH_SEPARATOR '/'
+#define MAX_PATH_SIZE 255
+typedef char Path[MAX_PATH_SIZE+1];
+typedef char* PathPtr;
+
+#define PATH_ERROR 1
+
+
+//
+//	PATH FUNCTIONS
+//
+
+bool pathIsAbsolute(PathPtr out);
+int pathOpen(PathPtr out, char* in);
+int pathCombine(PathPtr out, char* in);
 
 
 #endif

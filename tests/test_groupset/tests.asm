@@ -3,18 +3,18 @@
 //	TEXTS
 //
 
-text_test_regs_movs: .text "Test 1: Data \"mov\" to and between regs..."
-text_test_movs_adrm: .text "Test 2: Data \"mov\" in memory..."
-text_test_mem_wides: .text "Test 3: Memory different wides access..."
-text_test_conv_xchg: .text "Test 4: Differents wides extension and data exchanges..."
-text_test_stack: .text "Test 5: Stack pushes and pops..."
-text_test_interruption: .text "Test 6: System interruption..."
-text_test_software_flags: .text "Test 7: Software flags changes and integrity..."
-text_test_jumps: .text "Test 8: Program jumps and branches..."
-text_test_adds_subs: .text "Test 9: Instructions \"adc\", \"add\", \"sbb\" and \"sub\"..."
-text_passed: .text "Passed!\n"
-text_failed: .text "Failed!\n"
-text_tests_done: .text "All tests done!\n"
+text_test_regs_movs: .text "Test 1: Data \"mov\" to and between regs...\0"
+text_test_movs_adrm: .text "Test 2: Data \"mov\" in memory...\0"
+text_test_mem_wides: .text "Test 3: Memory different wides access...\0"
+text_test_conv_xchg: .text "Test 4: Differents wides extension and data exchanges...\0"
+text_test_stack: .text "Test 5: Stack pushes and pops...\0"
+text_test_interruption: .text "Test 6: System interruption...\0"
+text_test_software_flags: .text "Test 7: Software flags changes and integrity...\0"
+text_test_jumps: .text "Test 8: Program jumps and branches...\0"
+text_test_adds_subs: .text "Test 9: Instructions \"adc\", \"add\", \"sbb\" and \"sub\"...\0"
+text_passed: .text "Passed!\n\0"
+text_failed: .text "Failed!\n\0"
+text_tests_done: .text "All tests done!\n\0"
 
 
 //
@@ -224,107 +224,107 @@ text_tests_done: .text "All tests done!\n"
 	// Testing [regi:u32 + NV:s8]
 	mov eax, 0xBE1D01D0
 	mov ebx, 0x0020
-	mov [ebx + 0xFFFFFF00:Byte], eax
-	mov edx, [ebx + 0xFFFFFF00:Byte]
+	mov [ebx, 0xFFFFFF00:Byte], eax
+	mov edx, [ebx, 0xFFFFFF00:Byte]
 	cmp eax, edx
 	jr.ne @failed
 	
 	// Testing [regi:u32 + NV:s16]
 	mov eax, 0xBE1D01D0
 	mov ebx, 0x0020
-	mov [ebx + 0xFFFF0004:Half], eax
-	mov edx, [ebx + 0xFFFF0004:Half]
+	mov [ebx, 0xFFFF0004:Half], eax
+	mov edx, [ebx, 0xFFFF0004:Half]
 	cmp eax, edx
 	jr.ne @failed
 	
 	// Testing [regi:u32 + NV:s32]
 	mov eax, 0xBE1D01D0
 	mov ebx, 0x0020
-	mov [ebx + 0x00000008:Word], eax
-	mov edx, [ebx + 0x00000008:Word]
+	mov [ebx, 0x00000008:Word], eax
+	mov edx, [ebx, 0x00000008:Word]
 	cmp eax, edx
 	jr.ne @failed
 	
-	// Testing [regi:u32 + reg1:s32]
+	// Testing [regi:u32, reg1:s32]
 	mov eax, 0xBE1D01D0
 	mov ebx, 0x0020
 	mov ecx, 0x000C
-	mov [ebx + ecx], eax
-	mov edx, [ebx + ecx]
+	mov [ebx, ecx], eax
+	mov edx, [ebx, ecx]
 	cmp eax, edx
 	jr.ne @failed
 	
-	// Testing [regi:u32 + reg1:s32 + NV:s8]
+	// Testing [regi:u32, reg1:s32, NV:s8]
 	mov eax, 0xBE1D01D0
 	mov ebx, 0x0020
 	mov ecx, 0x0010
-	mov [ebx + ecx + 0xFFFFFF00:Byte], eax
-	mov edx, [ebx + ecx + 0xFFFFFF00:Byte]
+	mov [ebx, ecx, 0xFFFFFF00:Byte], eax
+	mov edx, [ebx, ecx, 0xFFFFFF00:Byte]
 	cmp eax, edx
 	jr.ne @failed
 	
-	// Testing [regi:u32 + reg1:s32 + NV:s16]
+	// Testing [regi:u32, reg1:s32, NV:s16]
 	mov eax, 0xBE1D01D0
 	mov ebx, 0x0020
 	mov ecx, 0x0010
-	mov [ebx + ecx + 0xFFFF0004:Half], eax
-	mov edx, [ebx + ecx + 0xFFFF0004:Half]
+	mov [ebx, ecx, 0xFFFF0004:Half], eax
+	mov edx, [ebx, ecx, 0xFFFF0004:Half]
 	cmp eax, edx
 	jr.ne @failed
 	
-	// Testing [regi:u32 + reg1:s32 + NV:s32]
+	// Testing [regi:u32, reg1:s32, NV:s32]
 	mov eax, 0xBE1D01D0
 	mov ebx, 0x0020
 	mov ecx, 0x0010
-	mov [ebx + ecx + 0x00000008:Word], eax
-	mov edx, [ebx + ecx + 0x00000008:Word]
+	mov [ebx, ecx, 0x00000008:Word], eax
+	mov edx, [ebx, ecx, 0x00000008:Word]
 	cmp eax, edx
 	jr.ne @failed
 	
-	// Testing [regi:u32 + reg1:s32 * reg2:u32]
+	// Testing [regi:u32, reg1:s32.reg2:u32]
 	mov eax, 0xBE1D01D0
 	mov ebx, 0x0020
 	mov ecx, 0x000E
 	mov eex, 2
-	mov [ebx + ecx*eex], eax
-	mov edx, [ebx + ecx*eex]
+	mov [ebx, ecx.eex], eax
+	mov edx, [ebx, ecx.eex]
 	cmp eax, edx
 	jr.ne @failed
 	
-	// Testing [regi:u32 + reg1:s32 * reg2:u32 + NV:s16]
+	// Testing [regi:u32, reg1:s32.reg2:u32, NV:s16]
 	mov eax, 0xBE1D01D0
 	mov ebx, 0x0020
 	mov ecx, 0x000E
 	mov eex, 2
-	mov [ebx + ecx*eex + 0xFFFF0004:Half], eax
-	mov edx, [ebx + ecx*eex + 0xFFFF0004:Half]
+	mov [ebx, ecx.eex, 0xFFFF0004:Half], eax
+	mov edx, [ebx, ecx.eex, 0xFFFF0004:Half]
 	cmp eax, edx
 	jr.ne @failed
 	
-	// Testing [regi:u32 + reg1:s32 * NV:u8]
+	// Testing [regi:u32, reg1:s32.NV:u8]
 	mov eax, 0xBE1D01D0
 	mov ebx, 0x0020
 	mov ecx, 2
-	mov [ebx + ecx*0xFFFFFF12:Byte], eax
-	mov edx, [ebx + ecx*0xFFFFFF12:Byte]
+	mov [ebx, ecx.0xFFFFFF12:Byte], eax
+	mov edx, [ebx, ecx.0xFFFFFF12:Byte]
 	cmp eax, edx
 	jr.ne @failed
 	
-	// Testing [regi:u32 + reg1:s32 * NV:u16]
+	// Testing [regi:u32, reg1:s32.NV:u16]
 	mov eax, 0xBE1D01D0
 	mov ebx, 0x0020
 	mov ecx, 2
-	mov [ebx + ecx*0xFFFF0014:Half], eax
-	mov edx, [ebx + ecx*0xFFFF0014:Half]
+	mov [ebx, ecx.0xFFFF0014:Half], eax
+	mov edx, [ebx, ecx.0xFFFF0014:Half]
 	cmp eax, edx
 	jr.ne @failed
 	
-	// Testing [regi:u32 + reg1:s32 * NV:u16]
+	// Testing [regi:u32, reg1:s32.NV:u16]
 	mov eax, 0xBE1D01D0
 	mov ebx, 0x0020
 	mov ecx, 2
-	mov [ebx + ecx*0x00000016:Word], eax
-	mov edx, [ebx + ecx*0x00000016:Word]
+	mov [ebx, ecx.0x00000016:Word], eax
+	mov edx, [ebx, ecx.0x00000016:Word]
 	cmp eax, edx
 	jr.ne @failed
 	

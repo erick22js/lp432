@@ -8,11 +8,11 @@ ZERO:
 .const oitenta 80
 .const dezesseis 16
 
-.macro add_one value:Word
+.macro add_one value:Imm32
 	add eax, value+5
 .endmacro
 
-.macro sums dest:Reg16, data
+.macro sums dest:Greg16, data
 	.byte 10, 20
 	adc dest, data
 	add_one 1

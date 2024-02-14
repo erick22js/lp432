@@ -185,7 +185,7 @@ void guiSetOnKeyDown(void (*onKeyDown)(Uint32 key, Uint32 input, _Bool ctrl, _Bo
 */
 
 void guiStart() {
-	SDL_Init(SDL_INIT_EVERYTHING);
+	//SDL_Init(SDL_INIT_EVERYTHING);
 
 	sp_win = SDL_CreateWindow("LP432 Inspector", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 480, 0);
 	sp_rnd = SDL_CreateRenderer(sp_win, 0, 0);

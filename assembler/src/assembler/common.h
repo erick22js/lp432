@@ -1,5 +1,5 @@
-#ifndef EMU_COMMON_H
-#define EMU_COMMON_H
+#ifndef ASM_COMMON_H
+#define ASM_COMMON_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,62 +8,63 @@
 #include <math.h>
 
 
-/*
-	Primitive Typedefs
-*/
+//
+//	TYPES DEFINITION
+//
 
 typedef _Bool bool;
 
-typedef uint8_t uint8;
-typedef uint16_t uint16;
-typedef uint32_t uint32;
-typedef uint64_t uint64;
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64;
 
-typedef int8_t sint8;
-typedef int16_t sint16;
-typedef int32_t sint32;
-typedef int64_t sint64;
+typedef int8_t i8;
+typedef int16_t i16;
+typedef int32_t i32;
+typedef int64_t i64;
 
-typedef float float32;
-typedef double float64;
-
-struct Pci;
+typedef float f32;
+typedef double f64;
 
 
-/*
-	Primitive Values
-*/
+//
+//	VALUES DEFINITION
+//
 
-#define true 1
+#define null 0
 #define false 0
-#define null ((void*)0)
+#define true 1
 
 
-/*
-	Basic Operation Functions
-*/
+//
+//	UTIL FUNCTIONS
+//
 
-#define u8ToInt(data) ((int)((sint8)((uint8)(data))))
-#define u16ToInt(data) ((int)((sint16)((uint16)(data))))
-#define u32ToInt(data) ((int)((sint32)((uint32)(data))))
+// Data Sign Extension
 
-#define eval(v) (!!(v))
-#define setBit(data, bit, v) (v? (data)|bit: (data)&(~bit))
+#define u8ToInt(data) ((int)((i8)((u8)data)))
+
+#define u16ToInt(data) ((int)((i16)((u16)data)))
+
+#define u32ToInt(data) ((int)((i32)((u32)data)))
+
+// Memory Allocation
 
 #define mem_alloc(size) (malloc(size))
+
+#define mem_realloc(ptr, size) (realloc(ptr, size))
+
 #define mem_free(ptr) (free(ptr))
-#define mem_realloc(oldptr, size) (realloc(oldptr, size))
 
 
-/*
-	Basic Debug Functions
-*/
+//
+//	ASSEMBLER CONFIGURATIONS
+//
 
-extern FILE *flog;
-extern bool flog_enable;
-extern bool flog_file;
-#define log(...) {if (flog_enable){ if (flog_file){fprintf(flog, __VA_ARGS__);} else{printf(__VA_ARGS__);}}}
-
+#define MAX_NAME_LENGTH 255
+#define MAX_STRING_LENGTH 65535
+#define MAX_CMD_PARAMS 4
 
 
 #endif

@@ -18,6 +18,39 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\assembler\asm.c" />
+    <ClCompile Include="src\assembler\base.c" />
+    <ClCompile Include="src\assembler\encoder.c" />
+    <ClCompile Include="src\assembler\error.c" />
+    <ClCompile Include="src\assembler\expression.c" />
+    <ClCompile Include="src\assembler\instructions.c" />
+    <ClCompile Include="src\assembler\lexer.c" />
+    <ClCompile Include="src\assembler\logger.c" />
+    <ClCompile Include="src\assembler\parser.c" />
+    <ClCompile Include="src\assembler\path.c" />
+    <ClCompile Include="src\assembler\status.c" />
+    <ClCompile Include="src\assembler\symbol.c" />
+    <ClCompile Include="src\assembler\token.c" />
+    <ClCompile Include="src\assembler\tokener.c" />
+    <ClCompile Include="src\main.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\assembler\asm.h" />
+    <ClInclude Include="src\assembler\base.h" />
+    <ClInclude Include="src\assembler\common.h" />
+    <ClInclude Include="src\assembler\encoder.h" />
+    <ClInclude Include="src\assembler\error.h" />
+    <ClInclude Include="src\assembler\expression.h" />
+    <ClInclude Include="src\assembler\lexer.h" />
+    <ClInclude Include="src\assembler\logger.h" />
+    <ClInclude Include="src\assembler\parser.h" />
+    <ClInclude Include="src\assembler\path.h" />
+    <ClInclude Include="src\assembler\status.h" />
+    <ClInclude Include="src\assembler\symbol.h" />
+    <ClInclude Include="src\assembler\token.h" />
+    <ClInclude Include="src\assembler\tokener.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{61B843B3-A626-4903-BFF9-295C1BE04E51}</ProjectGuid>
@@ -123,31 +156,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="src\assembler\assembler.c" />
-    <ClCompile Include="src\assembler\base.c" />
-    <ClCompile Include="src\assembler\error.c" />
-    <ClCompile Include="src\assembler\instructions.c" />
-    <ClCompile Include="src\assembler\lexer.c" />
-    <ClCompile Include="src\assembler\parser.c" />
-    <ClCompile Include="src\assembler\path.c" />
-    <ClCompile Include="src\assembler\symbols.c" />
-    <ClCompile Include="src\assembler\text.c" />
-    <ClCompile Include="src\assembler\tokener.c" />
-    <ClCompile Include="src\main.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\assembler\assembler.h" />
-    <ClInclude Include="src\assembler\common.h" />
-    <ClInclude Include="src\assembler\error.h" />
-    <ClInclude Include="src\assembler\base.h" />
-    <ClInclude Include="src\assembler\lexer.h" />
-    <ClInclude Include="src\assembler\parser.h" />
-    <ClInclude Include="src\assembler\path.h" />
-    <ClInclude Include="src\assembler\symbols.h" />
-    <ClInclude Include="src\assembler\text.h" />
-    <ClInclude Include="src\assembler\tokener.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

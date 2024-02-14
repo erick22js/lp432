@@ -1,52 +1,133 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include <windows.h>
-
 #include "path.h"
 
 
-int getFullPath(char* destpath, char* relpath) {
-	return GetFullPathName(relpath, 512, destpath, null);
-}
+//
+//	PATH CORE
+//
 
-int combinePath(char *dst, char *pth1, char *pth2) {
-	if(pth1 == NULL && pth2 == NULL) {
-		strcpy(dst, "");
-	}
-	else if(pth2 == NULL || strlen(pth2) == 0) {
-		strcpy(dst, pth1);
-	}
-	else if(pth1 == NULL || strlen(pth1) == 0) {
-		strcpy(dst, pth2);
-	} 
-	else {
-		char directory_separator[] = "/";
-#ifdef WIN32
-		directory_separator[0] = '\\';
-#endif
-		const char *last_char = pth1;
-		while(*last_char != '\0')
-			last_char++;        
-		int append_directory_separator = 0;
-		if(strcmp(last_char, directory_separator) != 0) {
-			append_directory_separator = 1;
+#define chrIsSeparator(chr) (chr=='/' || chr=='\\' || chr==0)
+
+int pathWalk(bool abp, char* names, int *names_top, int* seeks, int *seeks_top, bool *shifted, char* in){
+	// Split up the input path
+	int ip = 0;
+	
+	if (chrIsSeparator(in[0])){
+		if (abp){
+			names[*names_top] = PATH_SEPARATOR;
+			(*names_top)++;
+			names[*names_top] = 0;
+			(*names_top)++;
+			(*seeks_top)++;
+			seeks[*seeks_top] = *names_top;
+			*shifted = true;
 		}
-		strcpy(dst, pth1);
-		if(append_directory_separator)
-			strcat(dst, directory_separator);
-		strcat(dst, pth2);
+		ip++;
 	}
-
-	char *rm, *fn;
-	int l;
-	while((rm = strstr (dst, "/../")) != NULL) {
-		for(fn = (rm - 1); fn >= dst; fn--) {
-			if(*fn == '/') {
-				l = strlen(rm + 4);
-				memcpy(fn + 1, rm + 4, l);
-				*(fn + l + 1) = 0;
-				break;
+	
+	while (in[ip]){
+		do {
+			int chr = in[ip];
+			names[*names_top] = chr;
+			ip++, (*names_top)++;
+		} while(!chrIsSeparator(in[ip]));
+		names[*names_top] = 0;
+		(*names_top)++;
+		
+		// Detecting Directory name
+		if (strcmp(&names[seeks[*seeks_top]], ".") == 0){
+			seeks[*seeks_top] = *names_top;
+		}
+		else if (strcmp(&names[seeks[*seeks_top]], "..") == 0){
+			if (*seeks_top>0){
+				seeks[*seeks_top-1] = *names_top;
+				(*seeks_top)--;
 			}
 		}
+		else {
+			(*seeks_top)++;
+			seeks[*seeks_top] = *names_top;
+		}
+		
+		if (in[ip]==0){
+			break;
+		}
+		ip++;
 	}
+	
+	return 0;
+}
+
+int pathBuild(char* names, int *names_top, int* seeks, int *seeks_top, bool shifted, char* out){
+	int op = 0;
+	//logo("directories: %d\n", *seeks_top);
+	for (int ni=0; ni<*seeks_top; ni++){
+		for (int ci=seeks[ni]; names[ci]; ci++){
+			out[op] = names[ci];
+			op++;
+		}
+		if (ni < ((*seeks_top)-1) && !(shifted && ni==0)){
+			out[op] = PATH_SEPARATOR;
+			op++;
+		}
+	}
+	out[op] = 0;
+	
+	return 0;
+}
+
+
+//
+//	PATH FUNCTIONS
+//
+
+void printEvery(char* txt, int size){
+	for (int i=0; i<size; i++){
+		printf("%c", txt[i]);
+	}
+	printf("\n");
+}
+
+bool pathIsAbsolute(PathPtr out) {
+	if (out[0]=='/' || out[0]=='\\'){
+		return true;
+	}
+	if (out[0]!=0 && out[1]==':' && (out[2]=='/' || out[2]=='\\')){
+		return true;
+	}
+	return false;
+}
+
+// Rewrite walked path in "in" to "out"
+int pathOpen(PathPtr out, char* in) {
+	char names[(MAX_PATH_SIZE+1)*2];
+	int name_top = 0;
+	int seeks[MAX_PATH_SIZE] = {[0] = 0};
+	int seek_top = 0;
+	bool shifted = false;
+	
+	// Split up the input path
+	pathWalk(true, names, &name_top, seeks, &seek_top, &shifted, in);
+	
+	// Join the split parts to output
+	pathBuild(names, &name_top, seeks, &seek_top, shifted, out);
+	
+	return 0;
+}
+
+// Combine relative path in "in" to absolute "out"
+int pathCombine(PathPtr out, char* in) {
+	char names[(MAX_PATH_SIZE+1)*2];
+	int name_top = 0;
+	int seeks[MAX_PATH_SIZE] = {[0] = 0};
+	int seek_top = 0;
+	bool shifted = false;
+	
+	// Split up the input path
+	pathWalk(true, names, &name_top, seeks, &seek_top, &shifted, out);
+	pathWalk(false, names, &name_top, seeks, &seek_top, &shifted, in);
+	
+	// Join the split parts to output
+	pathBuild(names, &name_top, seeks, &seek_top, shifted, out);
+	
 	return 0;
 }

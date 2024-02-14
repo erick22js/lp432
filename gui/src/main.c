@@ -11,7 +11,7 @@ int main(int args, char** argv) {
 	if (!config){
 		config = iniObjectCreate();
 		iniObjectSetKeyAsBool(config, "initialized", INI_TRUE);
-		iniObjectSetKeyAsText(config, "default_rom_path", "./mem.dump");
+		iniObjectSetKeyAsText(config, "default_rom_path", "");
 		iniObjectSetKeyAsHex(config, "default_rom_offset", 0x8000);
 		iniObjectSetKeyAsInteger(config, "default_rom_size", 0x100);
 		iniObjectSave("config.ini", config);
@@ -19,7 +19,7 @@ int main(int args, char** argv) {
 	if (!setup){
 		setup = iniObjectCreate();
 		iniObjectSetKeyAsInteger(setup, "ramsize", 1024*1024*8);
-		iniObjectSetKeyAsText(setup, "rompath", "./mem.dump");
+		iniObjectSetKeyAsText(setup, "rompath", "");
 		iniObjectSetKeyAsHex(setup, "romoffset", 0x8000);
 		iniObjectSetKeyAsHex(setup, "startadr", 0x8000);
 		iniObjectSave("setup.ini", setup);

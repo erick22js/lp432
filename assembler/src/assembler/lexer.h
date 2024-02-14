@@ -1,55 +1,57 @@
 #ifndef ASM_LEXER_H
 #define ASM_LEXER_H
 
-#include "common.h"
+#include "path.h"
 
 
-typedef enum{
-	LEXER_TYPE_STRING,
-	LEXER_TYPE_FILE
-}LexerType;
+//
+//	STRUCTURE AND DATATYPES
+//
 
-typedef struct{
-	LexerType type;
+#define MAX_LEXER_DEPTH 32
 
-	// String properties
-	char* src;
-	uint32 src_len;
+typedef struct Lexer Lexer;
+struct Lexer{
+	// File information
+	Path path;
+	
+	// Buffer information
+	bool allocated;
+	u8* buffer;
+	u32 length;
+	u32 seek;
+	
+	// Arbitrary Data
+	u32 datas[32];
+	void* refs[32];
+};
 
-	// File properties
-	char path[512];
-	//FILE *file;
 
-	// Common properties
-	uint32 limit;
-	uint32 status;
-	void *args;
-	uint32 seek;
-}Lexer;
+//
+//	LEXER FUNCTIONS
+//
+Lexer *lexOpenString(char* str);
+Lexer *lexOpenStream(u8* buffer, u32 size);
+Lexer *lexOpenFile(char* path);
+bool lexClose();
+Lexer *lexCurrent();
+u8 lexGet();
+bool lexEnded();
+int lexDepth();
+void lexPosition(u32 offset, u32 *line, u32 *collumn);
+u32 lexTell();
+u32 lexSize();
+void lexSeekSet(u32 offset);
+void lexSeekCur(i32 offset);
+char* lexCopyBuffer(u32 offset, u32 size);
 
-/*
-	API Functions
-*/
-// Open a string lexer, return a pointer to lexer on success or null on error
-extern Lexer *lexerOpenString(const char* src);
-// Open a file lexer, return a pointer to lexer on success or null on error
-extern Lexer *lexerOpenFile(const char* path);
-// Closes the last open lexer
-extern bool lexerClose();
-// Retrieve the current lexer
-extern Lexer *lexerCurrent();
-// Fetch the next character on lexer
-extern uint32 lexerGet();
-// Verify if the current lexer is ended
-extern bool lexerEnded();
-// Verify if has remaining lexers
-extern bool hasRemainLexers();
-// Tell the current address in lexer stream
-extern uint32 lexerTell();
-// Sets the current address in lexer stream
-extern void lexerSeekSet(uint32 address);
-// Move through current address in lexer stream
-extern void lexerSeekCur(int offset);
+//
+//	POINTER MANIPULATION
+//
+
+#define seekCreate() u32 _s_ret = lexTell();
+#define seekSave() {_s_ret = lexTell();}
+#define seekRestore() {lexSeekSet(_s_ret);}
 
 
 #endif

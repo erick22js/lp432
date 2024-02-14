@@ -6,6 +6,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LocalDebuggerWorkingDirectory>$(SolutionDir)</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>"tests/device_display/main.asm"</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>"tests/test_groupset/main.asm" "assembler.log"</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>

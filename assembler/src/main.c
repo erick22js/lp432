@@ -1,35 +1,36 @@
-#include "assembler/assembler.h"
+#include "assembler/asm.h"
 
 
-FILE *flog = null;
-bool flog_enable = true;
-bool flog_file = true;
-int main(int args, char** argv) {
-	flog_enable = args>2? strcmp(argv[2], "true")==0: true;
-	flog_file = false;
-	if (fopen_s(&flog, "assembly.log.txt", "w")){
-		flog_file = false;
-	}
-	//const char* code = "";
-	
-	uint8* bin = null;
-	uint32 bin_size = 0;
-
-	char input[256], output[256];
-	if (args>1){
-		printf("%s\n", argv[1]);
-		sprintf_s(input, sizeof(input)-1, "%s", argv[1]);
+int main(int argc, char *argv[]){
+	// Setting up the assembly log to user and technical
+	Path log;
+	if (argc > 2){
+		pathOpen(log, argv[2]);
+		logInit(log, true, null, true);
 	}
 	else {
-		sprintf_s(input, sizeof(input)-1, "%s", "C:/Users/erick/Documents/meus-projetos/c/lp432/tests/device_display/main2.asm");//"tests/main.asm");
+		logInit(null, true, null, true);
 	}
-	sprintf_s(output, sizeof(output)-1, "%s", input);
+	
+	// Opening path for assembly source file
+	Path src;
+	if (argc > 1){
+		pathOpen(src, argv[1]);
+	}
+	else {
+		pathOpen(src, "C:/Users/erick/Documents/meus-projetos/c/lp432/tests/test_groupset/main.asm");
+	}
+	logUserInfo("Assembling input source: %s\n", src);
+
+	// Opening path for output file
+	Path out;
+	pathOpen(out, src);
 	{
 		int dot = -1;
-		char *pc = output;
+		char *pc = out;
 		while (*pc){
 			if (*pc == '.'){
-				dot = pc-output;
+				dot = pc-out;
 			}
 			pc++;
 		}
@@ -39,30 +40,47 @@ int main(int args, char** argv) {
 			*(pc+2) = 0;
 		}
 		else {
-			output[dot+1] = 'o';
-			output[dot+2] = 0;
+			out[dot+1] = 'o';
+			out[dot+2] = 0;
 		}
 	}
+	logUserInfo("Output file: %s\n", out);
 
-	remove(output);
-	if (!asmAssemblyFile(input, &bin, &bin_size)){
-		FILE *out = NULL;
-		if (!fopen_s(&out, output, "wb")){
-			fwrite(bin, 1, bin_size, out);
-		}
+	// Setting up the binary info holders and assembling source file
+	u8* bin = null;
+	u32 bin_size = 0;
+	if (asmFile(src, &bin, &bin_size)){
+		// Error in assembly
+		// Flushing logs and waiting for user input to end
+		logFlush();
+		system("pause");
+		return 0;
 	}
-
-	// Dump hex code to preview
-#ifdef SHOW_BINARY
-	log("\nOutput Binary\n");
-	for (int l = 0; l<(int)bin_size; l += 16){
-		for (int r = 0; (l+r)<(int)bin_size && r<16; r++){
-			log("%s%.2X", (r!=0?" ":""), bin[l+r]);
-		}
-		log("\n");
-	}
-#endif
 	
+	//	Outputing result binary file
+	FILE *output = fopen(out, "wb");
+	if (output){
+		fwrite(bin, 1, bin_size, output);
+		fclose(output);
+	}
+	else {
+		logUserInfo("\nErr: Output file \"%s\" could not be open!\n", out);
+	}
+
+	// Printing the binary to console
+	/*
+	logUserInfo("\nBinary Output\n");
+	for (int i=0; i<(int)bin_size; i+=16){
+		for (int o=0; o<16 && (i+o)<(int)bin_size; o++){
+			int val = bin[i+o];
+			logUserInfo(o==0? "\t%.2X": " %.2X", val);
+		}
+		logUserInfo("\n");
+	}
+	*/
+	
+	// Flushing logs and waiting for user input to end
+	logFlush();
 	system("pause");
 	return 0;
 }

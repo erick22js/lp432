@@ -1,58 +1,66 @@
 #ifndef ASM_ERROR_H
 #define ASM_ERROR_H
 
-#include <stdio.h>
-#include <stdint.h>
+#include "logger.h"
 
 
-/*
-	Error Codes
-*/
+//
+//	TYPES AND SYMBOLS DEFINITION
+//
+
+typedef u32 Error;
 
 #define ERROR_NONE 0
 #define ERROR_UNKNOWN 1
-#define ERROR_SYMBOL_NOT_DEFINED 2
-#define ERROR_EXPECTED_CHAR 3
-#define ERROR_UNEXPECTED 4
-#define ERROR_UNTERMINATED_STRING 5
-#define ERROR_INVALID_NUMBER_POSFIX 6
-#define ERROR_INVALID_CAST_TYPE 10
-#define ERROR_EXPECTED_DATA_TYPE 11
-#define ERROR_DIVISION_BY_ZERO 20
-#define ERROR_UNEXISTENT_CONDITION_SPECIFIER 30
-#define ERROR_UNSUPPLIED_CONDITION_SPECIFIER 31
-#define ERROR_EXPECTED_END_OF_LINE 40
-#define ERROR_NO_INSTRUCTION_PATTERN 50
-#define ERROR_PREFIX_POSTDOT_MISSING 51
-#define ERROR_MACRO_WRONG_ARGUMENTS 52
-#define ERROR_ALREADY_DECLARATED_SYMBOL 60
-#define ERROR_ALREADY_DECLARATED_MACRO 61
-#define ERROR_EXPECTED_PROCESSOR_COMMAND 70
-#define ERROR_EXPECTED_MACRO_NAME 71
-#define ERROR_EXPECTED_MACRO_PARAM_NAME 72
-#define ERROR_EXPECTED_CONSTANT_NAME 73
-#define ERROR_EXPECTED_PATH_STRING 74
-#define ERROR_EXPECTED_STRING 75
-#define ERROR_FILE_DO_NOT_EXISTS 80
-#define ERROR_ERROR_INVALID_PROCESSOR_NAME 81
+
+#define ERROR_SRC_FILE_NOT_OPEN 0x08
+
+#define ERROR_UNEXPECTED_TOKEN 0x10
+#define ERROR_UNEXPECTED_NAME 0x11
+#define ERROR_EXPECTED_NAME 0x14
+#define ERROR_EXPECTED_CLOSIN_BRACKET 0x15
+#define ERROR_EXPECTED_CLOSIN_PAREN 0x16
+#define ERROR_EXPECTED_COMMAND 0x18
+#define ERROR_EXPECTED_STRING 0x19
+#define ERROR_EXPECTED_IMMEDIATE 0x1A
+#define ERROR_EXPECTED_CASTNAME 0x1B
+#define ERROR_EXPECTED_DATANAME 0x1C
+#define ERROR_EXPECTED_EOL 0x1F
+
+#define ERROR_INVALID_CASTING 0x20
+#define ERROR_INVALID_OPERANDS 0x21
+#define ERROR_DIVISOR_ZERO 0x22
+
+#define ERROR_MACRO_INSIDE_MACRO 0x30
+#define ERROR_SKIP_INSIDE_MACRO 0x31
+
+#define ERROR_EXPECTED_INSTRUCTION_SUFIX 0x40
+#define ERROR_INSTRUCTION_NO_PATTERN 0x41
+#define ERROR_MACRO_NO_PATTERN 0x42
+
+#define ERROR_SYMBOL_ALREADY_DEFINED 0x50
+#define ERROR_MACRO_SAME_NAME 0x51
+#define ERROR_SYMBOL_NOT_DEFINED 0x58
+
+#define ERROR_UNMATCHED_SCOPE_LOCATION 0x70
+#define ERROR_LEAVING_GLOBAL_SCOPE 0x71
+#define ERROR_LEAVING_MACRO_SCOPE 0x72
 
 
-/*
-	Error Handling
-*/
+extern Error err_code;
+extern u32 err_offset;
+extern u32 err_params[4];
+extern void* (err_refs[4]);
 
-extern int asm_error_code;
-extern intptr_t asm_error_v1;
-extern intptr_t asm_error_v2;
-extern intptr_t asm_error_v3;
-extern intptr_t asm_error_v4;
 
-extern void errException();
+//
+//	UTILITIES FUNCTIONS
+//
 
-#define throwError(error) {asm_error_code = error; log("@@@ ERROR Throwed at \"%s\" in line %d, in src file \"%s\" at offset %d with code 0x%X!\n", __FILE__, __LINE__, lexerCurrent()->path, lexerTell(), asm_error_code); errException(); return asm_error_code;}
-#define tryCatchAndThrow(func) {int err_code = asm_error_code = func; if (err_code) {log("%% ERROR CATCHED at \"%s\" in line %d with code 0x%X and Throwed!\n", __FILE__, __LINE__, err_code); return err_code;}}
+#define errThrow(err) { logDevInfo("ERR: Throwed error at file \"%s\" at line %d\n", __FILE__, __LINE__); err_code = err; return err; }
+#define errTryCatch(operation) { Error err = operation; if (err){ logDevInfo("ERR: Catched error at file \"%s\" at line %d\n", __FILE__, __LINE__); return err; } }
 
-extern void asmErrorToString(char* buffer, int buffer_size);
+void errSprint(char* out, int limit);
 
 
 #endif

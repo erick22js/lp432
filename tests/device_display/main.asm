@@ -1,4 +1,4 @@
-.program_adr 0x8000
+.address 0x8000
 ja sys_start
 
 //

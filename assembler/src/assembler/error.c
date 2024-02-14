@@ -1,47 +1,135 @@
 #include "error.h"
+#include "lexer.h"
+#include "symbol.h"
 
 
-/*
-	Error Handling
-*/
+//
+//	TYPES AND SYMBOLS DEFINITION
+//
 
-int asm_error_code = 0;
-int asm_error_v1 = 0;
-int asm_error_v2 = 0;
-int asm_error_v3 = 0;
-int asm_error_v4 = 0;
+Error err_code = ERROR_NONE;
+u32 err_offset = 0;
+u32 err_params[4] = {0};
+void* (err_refs[4]) = {0};
 
-void errException(){
-	return;
-}
 
-void asmErrorToString(char* buffer, int buffer_size) {
-	char* format = "unknown error";
-	switch (asm_error_code){
-		case ERROR_SYMBOL_NOT_DEFINED: format = "symbol with the name '%s' not defined"; break;
-		case ERROR_EXPECTED_CHAR: format = "was expected a '%c' token"; break;
-		case ERROR_UNEXPECTED: format = "was not expected a %d token"; break;
-		case ERROR_UNTERMINATED_STRING: format = "was detected a non terminated string"; break;
-		case ERROR_INVALID_NUMBER_POSFIX: format = "invalid number posfix"; break;
-		case ERROR_INVALID_CAST_TYPE: format = "invalid casting to data type \"%s\""; break;
-		case ERROR_EXPECTED_DATA_TYPE: format = "was expected a data type name"; break;
-		case ERROR_DIVISION_BY_ZERO: format = "the divider cannot be zero"; break;
-		case ERROR_UNEXISTENT_CONDITION_SPECIFIER: format = "the condition specifier with name \"%s\" does not exists"; break;
-		case ERROR_UNSUPPLIED_CONDITION_SPECIFIER: format = "the instruction requires a condition specifier"; break;
-		case ERROR_EXPECTED_END_OF_LINE: format = "was expected the end of line"; break;
-		case ERROR_NO_INSTRUCTION_PATTERN: format = "does not exists a varyation from instruction \"%s\" with the given parameters"; break;
-		case ERROR_PREFIX_POSTDOT_MISSING: format = "was expected a dot following prefix name"; break;
-		case ERROR_MACRO_WRONG_ARGUMENTS: format = "the macro \"%s\" was invoked with wrong arguments"; break;
-		case ERROR_ALREADY_DECLARATED_SYMBOL: format = "declaring symbol with a name \"%s\" while another with same name exists"; break;
-		case ERROR_ALREADY_DECLARATED_MACRO: format = "declaring macro with a name \"%s\" while another with same name exists"; break;
-		case ERROR_EXPECTED_PROCESSOR_COMMAND: format = "expected processor command"; break;
-		case ERROR_EXPECTED_MACRO_NAME: format = "expected a identifier as macro name"; break;
-		case ERROR_EXPECTED_MACRO_PARAM_NAME: format = "expected a identifier as macro parameter name"; break;
-		case ERROR_EXPECTED_CONSTANT_NAME: format = "expected a identifier as constant name"; break;
-		case ERROR_EXPECTED_PATH_STRING: format = "expected a string for path"; break;
-		case ERROR_EXPECTED_STRING: format = "expected a string"; break;
-		case ERROR_FILE_DO_NOT_EXISTS: format = "file in include path \"%s\" do not exists or could not be open"; break;
-		case ERROR_ERROR_INVALID_PROCESSOR_NAME: format = "invalid processor name \"%s\""; break;
+
+//
+//	UTILITIES FUNCTIONS
+//
+
+void errSprint(char* out, int limit) {
+	char* msg = mem_alloc(limit*sizeof(char));
+	u32 line = 0, collumn = 0;
+	lexPosition(err_offset, &line, &collumn);
+	line += lexCurrent()->datas[0]? ((Macro*)lexCurrent()->refs[0])->line: 0;
+	#define fmp(...)\
+		{sprintf(msg, __VA_ARGS__); sprintf(out, "ERROR 0x%X in file \"%s\" in line %d on offset %d:\n\t%s\n", err_code, lexCurrent()->path, line, collumn, msg);}
+	switch (err_code){
+		case ERROR_SRC_FILE_NOT_OPEN: {
+			fmp("Could not open src file");
+		}
+		break;
+		case ERROR_UNEXPECTED_TOKEN: {
+			fmp("Unexpected token");
+		}
+		break;
+		case ERROR_UNEXPECTED_NAME: {
+			fmp("Unexpected name");
+		}
+		break;
+		case ERROR_EXPECTED_NAME: {
+			fmp("Was expected a name");
+		}
+		break;
+		case ERROR_EXPECTED_CLOSIN_BRACKET: {
+			fmp("Was expected a closin bracket");
+		}
+		break;
+		case ERROR_EXPECTED_CLOSIN_PAREN: {
+			fmp("Was expected a closin paren");
+		}
+		break;
+		case ERROR_EXPECTED_COMMAND: {
+			fmp("Was expected a command name");
+		}
+		break;
+		case ERROR_EXPECTED_STRING: {
+			fmp("Was expected a string");
+		}
+		break;
+		case ERROR_EXPECTED_IMMEDIATE: {
+			fmp("Was expected a immediate literal value");
+		}
+		break;
+		case ERROR_EXPECTED_CASTNAME: {
+			fmp("Was expected a cast name");
+		}
+		break;
+		case ERROR_EXPECTED_DATANAME: {
+			fmp("Was expected a data type name");
+		}
+		break;
+		case ERROR_EXPECTED_EOL: {
+			fmp("Was expected a end of line");
+		}
+		break;
+		case ERROR_INVALID_CASTING: {
+			fmp("Invalid casting from/to types");
+		}
+		break;
+		case ERROR_INVALID_OPERANDS: {
+			fmp("Invalid operands operation type");
+		}
+		break;
+		case ERROR_DIVISOR_ZERO: {
+			fmp("Division by zero is not allowed");
+		}
+		break;
+		case ERROR_MACRO_INSIDE_MACRO: {
+			fmp("Cannot declare macro inside a macro declaration");
+		}
+		break;
+		case ERROR_SKIP_INSIDE_MACRO: {
+			fmp("Cannot skip file inside macro declaration");
+		}
+		break;
+		case ERROR_EXPECTED_INSTRUCTION_SUFIX: {
+			fmp("Was expected a sufix for instruction");
+		}
+		break;
+		case ERROR_INSTRUCTION_NO_PATTERN: {
+			fmp("No any instruction params pattern matched");
+		}
+		break;
+		case ERROR_MACRO_NO_PATTERN: {
+			fmp("The macro params pattern did not match");
+		}
+		break;
+		case ERROR_SYMBOL_ALREADY_DEFINED: {
+			fmp("A symbol with same name was previously defined");
+		}
+		break;
+		case ERROR_SYMBOL_NOT_DEFINED: {
+			fmp("A symbol with name was not defined");
+		}
+		break;
+		case ERROR_UNMATCHED_SCOPE_LOCATION: {
+			fmp("The current scope of program is not valid");
+		}
+		break;
+		case ERROR_LEAVING_GLOBAL_SCOPE: {
+			fmp("Cannot leave the global scope");
+		}
+		break;
+		case ERROR_LEAVING_MACRO_SCOPE: {
+			fmp("Cannot leave the macro scope");
+		}
+		break;
+		default: {
+			fmp("Unknown error");
+		}
 	}
-	sprintf_s(buffer, buffer_size, format, asm_error_v1, asm_error_v2, asm_error_v3, asm_error_v4);
+	mem_free(msg);
 }
+

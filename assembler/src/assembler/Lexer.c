@@ -1,171 +1,161 @@
 #include "lexer.h"
-#include "text.h"
-#include "path.h"
-
-/*
-	Storage Lexers
-*/
-
-#define MAX_LEXERS 32
-Lexer lexers[32];
-Lexer *cur_lexer = null;
-int lexers_top = 0;
 
 
-/*
-	API Functions
-*/
-Lexer *lexerOpenString(const char* src){
-	if (lexers_top < MAX_LEXERS){
-		Lexer *lexer = &lexers[lexers_top];
-		lexer->type = LEXER_TYPE_STRING;
-		/*
-		lexer->src_len = strlen(src);
-		lexer->src = (char*)mem_alloc(lexer->src_len+2);
-		char* lsrc = textCopy(lexer->src, src);
-		lsrc[lexer->src_len] = ' ';
-		lsrc[lexer->src_len+1] = 0;
-		*/
-		lexer->limit = 0;
-		lexer->status = 0;
-		lexer->args = null;
-		lexer->src = src;
-		lexer->src_len = strlen(src)+1;
-		getFullPath(lexer->path, './');
+//
+//	LEXER GLOBALS
+//
 
-		lexer->seek = 0;
-		lexers_top++;
-		cur_lexer = lexer;
-		return lexer;
+Lexer lexers[MAX_LEXER_DEPTH];
+Lexer *clex = null;
+u32 tl = 0;
+
+
+//
+//	LEXER FUNCTIONS
+//
+
+Lexer *lexOpenString(char* str) {
+	if (tl>=MAX_LEXER_DEPTH){
+		return null;
 	}
-	return null;
+	lexers[tl].length = strlen(str);
+	lexers[tl].buffer = (u8*)str;
+	lexers[tl].allocated = false;
+	lexers[tl].path[0] = 0;
+	lexers[tl].seek = 0;
+	clex = &lexers[tl];
+	tl++;
+	return clex;
 }
-Lexer *lexerOpenFile(const char* path){
-	if (lexers_top < MAX_LEXERS){
-		Lexer *lexer = &lexers[lexers_top];
-		lexer->type = LEXER_TYPE_FILE;
-		FILE *file = null;
-		if (!(file = fopen(path, "r"))){
-			return null;
-		}
-		// Setup buffer
-		fseek(file, 0, SEEK_END);
-		lexer->src_len = ftell(file);
-		fseek(file, 0, SEEK_SET);
-		lexer->src = malloc(lexer->src_len);
-		fread(lexer->src, 1, lexer->src_len, file);
-		//lexer->src[lexer->src_len] = lexer->src[lexer->src_len+1] = lexer->src[lexer->src_len+2] = lexer->src[lexer->src_len+3] = 0;
-		fclose(file);
-		// Setup descriptor
-		getFullPath(lexer->path, path);
-		lexer->limit = 0;
-		lexer->status = 0;
-		lexer->args = null;
-		//lexer->src = null;
-		lexer->seek = 0;
-		lexers_top++;
-		cur_lexer = lexer;
-		return lexer;
+
+Lexer *lexOpenStream(u8* buffer, u32 size) {
+	if (tl>=MAX_LEXER_DEPTH){
+		return null;
 	}
-	return null;
+	lexers[tl].length = size;
+	lexers[tl].buffer = buffer;
+	lexers[tl].allocated = false;
+	lexers[tl].path[0] = 0;
+	lexers[tl].seek = 0;
+	clex = &lexers[tl];
+	tl++;
+	return clex;
 }
-bool lexerClose(){
-	if (!cur_lexer){
+
+Lexer *lexOpenFile(char* path) {
+	if (tl>=MAX_LEXER_DEPTH){
+		return null;
+	}
+	FILE *file = null;
+	if (!(file = fopen(path, "r"))){
+		return null;
+	}
+	fseek(file, 0, SEEK_END);
+	lexers[tl].length = ftell(file);
+	fseek(file, 0, SEEK_SET);
+	lexers[tl].buffer = calloc(lexers[tl].length, 1);
+	fread(lexers[tl].buffer, 1, lexers[tl].length, file);
+	fclose(file);
+	lexers[tl].allocated = true;
+	pathOpen(lexers[tl].path, path);
+	lexers[tl].seek = 0;
+	clex = &lexers[tl];
+	tl++;
+	return clex;
+}
+
+bool lexClose() {
+	if (clex && clex->allocated){
+		free(clex->buffer);
+	}
+	if (tl) {
+		tl--;
+		clex = &lexers[tl-1];
 		return true;
 	}
-	if (lexers_top > 0){
-		if (cur_lexer->type == LEXER_TYPE_FILE){
-			//free(cur_lexer->src);
-			//fclose(cur_lexer->file);
-			//cur_lexer->file = null;
-		}
-		else{
-			//mem_free(cur_lexer->src);
-		}
-		lexers_top--;
-		cur_lexer = &lexers[lexers_top-1];
-		return true;
-	}
+	clex = null;
 	return false;
 }
-Lexer *lexerCurrent() {
-	return cur_lexer;
+
+Lexer *lexCurrent() {
+	return clex;
 }
-uint32 lexerGet(){
-	if (!cur_lexer){
-		return EOF;
-	}
-	/*if (cur_lexer->type == LEXER_TYPE_FILE){
-		if (cur_lexer->limit && ftell(cur_lexer->file)>=cur_lexer->limit){
-			return EOF;
-		}
-		return fgetc(cur_lexer->file);
-	}
-	else*/{
-		uint32 chr = EOF;
-		if (cur_lexer->seek < cur_lexer->src_len && (!cur_lexer->limit || cur_lexer->seek<cur_lexer->limit)){
-			chr = cur_lexer->src[cur_lexer->seek];
-			cur_lexer->seek++;
-		}
-		if (chr == 0){
-			chr = EOF;
-		}
-		return chr;
-	}
-}
-bool lexerEnded(){
-	if (!cur_lexer){
-		return true;
-	}
-	/*if (cur_lexer->type == LEXER_TYPE_FILE){
-		if (cur_lexer->limit && ftell(cur_lexer->file)>=cur_lexer->limit){
-			return true;
-		}
-		return feof(cur_lexer->file);
-	}
-	else*/{
-		if (cur_lexer->limit && cur_lexer->seek>=cur_lexer->limit){
-			return true;
-		}
-		return cur_lexer->seek >= cur_lexer->src_len;
-	}
-}
-bool hasRemainLexers(){
-	return lexers_top != 0;
-}
-uint32 lexerTell(){
-	if (!cur_lexer){
+
+u8 lexGet() {
+	if (!clex){
 		return 0;
 	}
-	/*if (cur_lexer->type == LEXER_TYPE_FILE){
-		return ftell(cur_lexer->file);
+	if (clex->seek >= clex->length){
+		clex->seek++;
+		return 0;
 	}
-	else*/{
-		return cur_lexer->seek;
-	}
+	u8 chr = clex->buffer[clex->seek];
+	clex->seek++;
+	//printf("LEX: '%c' [%d]\n", chr, (clex->seek-1));
+	return chr;
 }
-void lexerSeekSet(uint32 address){
-	if (!cur_lexer){
-		return;
+
+bool lexEnded() {
+	if (!clex){
+		return true;
 	}
-	/*if (cur_lexer->type == LEXER_TYPE_FILE){
-		fseek(cur_lexer->file, address, SEEK_SET);
-	}
-	else*/{
-		cur_lexer->seek = address;
-	}
+	return clex->seek >= clex->length;
 }
-void lexerSeekCur(int offset){
-	if (!cur_lexer){
-		return;
-	}
-	/*if (cur_lexer->type == LEXER_TYPE_FILE){
-		if (feof(cur_lexer->file)){
-			return;
+
+
+int lexDepth() {
+	return tl;
+}
+
+void lexPosition(u32 offset, u32 *line, u32 *collumn) {
+	*line = 1, *collumn = 1;
+	for (int i=0; i<(int)clex->length && i<(int)offset; i++){
+		char chr = clex->buffer[i];
+		if (chr=='\n'){
+			(*line)++;
+			(*collumn) = 0;
 		}
-		fseek(cur_lexer->file, offset, SEEK_CUR);
-	}
-	else*/{
-		cur_lexer->seek += offset;
+		(*collumn)++;
 	}
 }
+
+u32 lexTell() {
+	if (!clex){
+		return 0;
+	}
+	return clex->seek;
+}
+
+u32 lexSize() {
+	if (!clex){
+		return 0;
+	}
+	return clex->length;
+}
+
+void lexSeekSet(u32 offset) {
+	if (!clex){
+		return;
+	}
+	clex->seek = offset;
+}
+
+void lexSeekCur(i32 offset) {
+	if (!clex){
+		return;
+	}
+	clex->seek += offset;
+}
+
+char* lexCopyBuffer(u32 offset, u32 size) {
+	if (!clex){
+		return null;
+	}
+	char* buffer = calloc(size, 1);
+	for (int i=0; i<(int)size && (i+offset)<(int)clex->length; i++){
+		buffer[i] = clex->buffer[i+offset];
+	}
+	return buffer;
+}
+
+
