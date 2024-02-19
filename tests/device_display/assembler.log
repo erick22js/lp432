@@ -1,0 +1,103 @@
+===========PHASE ONE=============
+
+SCP: Restarted {006AE920} - depth 1
+VAL: Immediate:14 = 32768 / 0x8000
+PSR: Changing address of program to 0x8000
+PSR: Mnemonic "ja"
+ARG: Arguments list: 
+VAL: Immediate:14 = 1 / 0x1
+ARG: Arguments total: 1 
+CMP: Matched encode {1}
+SYM: Declaring const with name "intr_address"
+VAL: Immediate:14 = 4096 / 0x1000
+SYM: Declaring label with name "sys_start" with value 0x8005
+SCP: Entered {006AEC70} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 3: r16 
+VAL: Immediate:14 = 536 / 0x218
+ARG: Arguments total: 2 
+CMP: Matched encode {4}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r8 
+VAL: Immediate:14 = 1 / 0x1
+ARG: Arguments total: 2 
+CMP: Matched encode {3}
+PSR: Mnemonic "out"
+ARG: Arguments list: 
+VAL: GReg = 3: r16 
+VAL: GReg = 0: r8 
+ARG: Arguments total: 2 
+CMP: Matched encode {0}
+PSR: Mnemonic "ja"
+ARG: Arguments list: 
+VAL: Immediate:14 = 1 / 0x1
+ARG: Arguments total: 1 
+CMP: Matched encode {1}
+SCP: Leaved {006AE920} - depth 1
+SYM: Declaring label with name "sys_loop" with value 0x8013
+SCP: Entered {006AFF18} - depth 2
+PSR: Mnemonic "ja"
+ARG: Arguments list: 
+VAL: Immediate:14 = 32787 / 0x8013
+ARG: Arguments total: 1 
+CMP: Matched encode {1}
+SCP: Leaved {006AE920} - depth 1
+PSR: Closing src file at "tests/device_display/main.asm"
+
+Ending of phase 1
+
+
+===========PHASE TWO=============
+
+SCP: Restarted {006AE920} - depth 1
+VAL: Immediate:14 = 32768 / 0x8000
+PSR: Changing address of program to 0x8000
+PSR: Mnemonic "ja"
+ARG: Arguments list: 
+VAL: Immediate:14 = 32773 / 0x8005
+ARG: Arguments total: 1 
+CMP: Matched encode {1}
+VAL: Immediate:14 = 4096 / 0x1000
+SCP: Entered {006AEC70} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 3: r16 
+VAL: Immediate:14 = 536 / 0x218
+ARG: Arguments total: 2 
+CMP: Matched encode {4}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r8 
+VAL: Immediate:14 = 1 / 0x1
+ARG: Arguments total: 2 
+CMP: Matched encode {3}
+PSR: Mnemonic "out"
+ARG: Arguments list: 
+VAL: GReg = 3: r16 
+VAL: GReg = 0: r8 
+ARG: Arguments total: 2 
+CMP: Matched encode {0}
+PSR: Mnemonic "ja"
+ARG: Arguments list: 
+VAL: Immediate:14 = 32787 / 0x8013
+ARG: Arguments total: 1 
+CMP: Matched encode {1}
+SCP: Leaved {006AE920} - depth 1
+SCP: Entered {006AFF18} - depth 2
+PSR: Mnemonic "ja"
+ARG: Arguments list: 
+VAL: Immediate:14 = 32787 / 0x8013
+ARG: Arguments total: 1 
+CMP: Matched encode {1}
+SCP: Leaved {006AE920} - depth 1
+PSR: Closing src file at "tests/device_display/main.asm"
+
+Ending of phase 2
+
+
+
+	COMPILATION SUCCESS!
+
+

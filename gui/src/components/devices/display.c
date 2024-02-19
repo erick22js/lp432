@@ -50,7 +50,7 @@ uint8 dsRead(Device* self, uint8 reg){
 }
 
 void dsWrite(Device* self, uint8 reg, uint8 data){
-	if (reg == 6){
+	if (reg == 24){
 		CTRL_MONITOR->enable_display = data&1;
 	}
 	else if (reg >= 16){}
@@ -185,7 +185,7 @@ void dsSetup(Device *self, Monitor *mntr) {
 	REG_DFLAGS = 0; // Display Flags
 
 	// Configure Monitor
-	mntr->enable_display = 0;
+	mntr->enable_display = 1;
 }
 
 void dsDestroy(Device *dev) {

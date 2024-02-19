@@ -2455,7 +2455,7 @@ Instruction const isa[] = {
 				.params_len = 2,
 				.params = {
 					{ "", .type = TYPE_GR8, .encode = ENCODE_REGM },
-					{ "", .type = TYPE_GR16, .encode = ENCODE_REGM }
+					{ "", .type = TYPE_GR16, .encode = ENCODE_REGO }
 				}
 			},
 			{
@@ -2463,7 +2463,7 @@ Instruction const isa[] = {
 				.params_len = 2,
 				.params = {
 					{ "", .type = TYPE_GR16, .encode = ENCODE_REGM },
-					{ "", .type = TYPE_GR16, .encode = ENCODE_REGM }
+					{ "", .type = TYPE_GR16, .encode = ENCODE_REGO }
 				}
 			},
 			{
@@ -2471,7 +2471,7 @@ Instruction const isa[] = {
 				.params_len = 2,
 				.params = {
 					{ "", .type = TYPE_GR32, .encode = ENCODE_REGM },
-					{ "", .type = TYPE_GR16, .encode = ENCODE_REGM }
+					{ "", .type = TYPE_GR16, .encode = ENCODE_REGO }
 				}
 			},
 			{
@@ -4251,7 +4251,7 @@ Instruction const isa[] = {
 				.opcode = 0xF4, .desc = NO_DESC,
 				.params_len = 2,
 				.params = {
-					{ "", .type = TYPE_GR16, .encode = ENCODE_REGM },
+					{ "", .type = TYPE_GR16, .encode = ENCODE_REGO },
 					{ "", .type = TYPE_GR8, .encode = ENCODE_REGM }
 				}
 			},
@@ -4259,7 +4259,7 @@ Instruction const isa[] = {
 				.opcode = 0xF5, .desc = NO_DESC,
 				.params_len = 2,
 				.params = {
-					{ "", .type = TYPE_GR16, .encode = ENCODE_REGM },
+					{ "", .type = TYPE_GR16, .encode = ENCODE_REGO },
 					{ "", .type = TYPE_GR16, .encode = ENCODE_REGM }
 				}
 			},
@@ -4267,7 +4267,7 @@ Instruction const isa[] = {
 				.opcode = 0xF6, .desc = NO_DESC,
 				.params_len = 2,
 				.params = {
-					{ "", .type = TYPE_GR16, .encode = ENCODE_REGM },
+					{ "", .type = TYPE_GR16, .encode = ENCODE_REGO },
 					{ "", .type = TYPE_GR32, .encode = ENCODE_REGM }
 				}
 			},

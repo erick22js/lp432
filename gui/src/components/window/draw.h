@@ -7,7 +7,7 @@
 
 
 // Global Control properties
-extern const unsigned char vga_font[];
+extern const unsigned char gui_font[];
 SDL_Window *sp_win;
 SDL_Renderer *sp_rnd;
 SDL_Texture *sp_chars;
@@ -78,7 +78,8 @@ void dwStrokeRect(int left, int top, int width, int height){
 //
 
 void dwSetup() {
-	SDL_Surface *font_img = IMG_Load("../gui/font.png");
+	SDL_RWops *rw = SDL_RWFromMem((void*)gui_font, 3596);
+	SDL_Surface *font_img = IMG_Load_RW(rw, 1);
 	sp_chars = SDL_CreateTextureFromSurface(sp_rnd, font_img);
 	SDL_SetRenderDrawBlendMode(sp_rnd, SDL_BLENDMODE_BLEND);
 	SDL_SetTextureBlendMode(sp_chars, SDL_BLENDMODE_BLEND);

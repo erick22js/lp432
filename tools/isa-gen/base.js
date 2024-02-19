@@ -2521,21 +2521,21 @@ const isa_j = {
 				"opcode": "0xF0",
 				"args": [
 					["dest", "gr8", "regm"],
-					["port", "gr16", "regm"]
+					["port", "gr16", "rego"]
 				]
 			},
 			{
 				"opcode": "0xF1",
 				"args": [
 					["dest", "gr16", "regm"],
-					["port", "gr16", "regm"]
+					["port", "gr16", "rego"]
 				]
 			},
 			{
 				"opcode": "0xF2",
 				"args": [
 					["dest", "gr32", "regm"],
-					["port", "gr16", "regm"]
+					["port", "gr16", "rego"]
 				]
 			},
 			{
@@ -4310,21 +4310,21 @@ const isa_j = {
 			{
 				"opcode": "0xF4",
 				"args": [
-					["port", "gr16", "regm"],
+					["port", "gr16", "rego"],
 					["source", "gr8", "regm"]
 				]
 			},
 			{
 				"opcode": "0xF5",
 				"args": [
-					["port", "gr16", "regm"],
+					["port", "gr16", "rego"],
 					["source", "gr16", "regm"]
 				]
 			},
 			{
 				"opcode": "0xF6",
 				"args": [
-					["port", "gr16", "regm"],
+					["port", "gr16", "rego"],
 					["source", "gr32", "regm"]
 				]
 			},

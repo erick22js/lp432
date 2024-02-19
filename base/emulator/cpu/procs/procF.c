@@ -107,8 +107,8 @@ cpuInterr procF3(Cpu *cpu_s){
 cpuInterr procF4(Cpu *cpu_s){
 	// Instruction: out r16:regm, r8:rego
 	cpuFetchOS();
-	uint16 adr = cpuReadReg16(cpu_s->os_regm);
-	uint8 data = cpuReadReg8(cpu_s->os_rego);
+	uint16 adr = cpuReadReg16(cpu_s->os_rego);
+	uint8 data = cpuReadReg8(cpu_s->os_regm);
 	procOut8(adr, data);
 	return 0;
 }
@@ -116,8 +116,8 @@ cpuInterr procF4(Cpu *cpu_s){
 cpuInterr procF5(Cpu *cpu_s){
 	// Instruction: out r16:regm, r16:rego
 	cpuFetchOS();
-	uint16 adr = cpuReadReg16(cpu_s->os_regm);
-	uint16 data = cpuReadReg16(cpu_s->os_rego);
+	uint16 adr = cpuReadReg16(cpu_s->os_rego);
+	uint16 data = cpuReadReg16(cpu_s->os_regm);
 	procOut16(adr, data);
 	return 0;
 }
@@ -125,8 +125,8 @@ cpuInterr procF5(Cpu *cpu_s){
 cpuInterr procF6(Cpu *cpu_s){
 	// Instruction: out r16:regm, r32:rego
 	cpuFetchOS();
-	uint16 adr = cpuReadReg16(cpu_s->os_regm);
-	uint32 data = cpuReadReg32(cpu_s->os_rego);
+	uint16 adr = cpuReadReg16(cpu_s->os_rego);
+	uint32 data = cpuReadReg32(cpu_s->os_regm);
 	procOut32(adr, data);
 	return 0;
 }
