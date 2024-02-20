@@ -185,7 +185,7 @@ void dsSetup(Device *self, Monitor *mntr) {
 	REG_DFLAGS = 0; // Display Flags
 
 	// Configure Monitor
-	mntr->enable_display = 1;
+	mntr->enable_display = 0;
 }
 
 void dsDestroy(Device *dev) {
