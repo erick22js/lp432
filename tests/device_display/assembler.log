@@ -1,6 +1,6 @@
 ===========PHASE ONE=============
 
-SCP: Restarted {007BEEC0} - depth 1
+SCP: Restarted {0059EEC0} - depth 1
 VAL: Immediate:14 = 32768 / 0x8000
 PSR: Changing address of program to 0x8000
 PSR: Mnemonic "ja"
@@ -14,14 +14,14 @@ SYM: Declaring const with name "char_vector"
 VAL: Immediate:14 = 8192 / 0x2000
 SYM: Declaring label with name "hello_text" with value 0x8005
 SYM: Declaring label with name "intrSetup" with value 0x8012
-SCP: Entered {007C0328} - depth 2
+SCP: Entered {005A0328} - depth 2
 PSR: Mnemonic "iret"
 ARG: Arguments list: 
 ARG: Arguments total: 0 
 CMP: Matched encode {0}
-SCP: Leaved {007BEEC0} - depth 1
+SCP: Leaved {0059EEC0} - depth 1
 SYM: Declaring label with name "intrVecSetup" with value 0x8013
-SCP: Entered {007C04E8} - depth 2
+SCP: Entered {005A04E8} - depth 2
 PSR: Mnemonic "psh"
 ARG: Arguments list: 
 VAL: GReg = 0: r32 
@@ -164,9 +164,9 @@ PSR: Mnemonic "ret"
 ARG: Arguments list: 
 ARG: Arguments total: 0 
 CMP: Matched encode {0}
-SCP: Leaved {007BEEC0} - depth 1
+SCP: Leaved {0059EEC0} - depth 1
 SYM: Declaring label with name "drawText" with value 0x807F
-SCP: Entered {007C0F50} - depth 2
+SCP: Entered {005A0F50} - depth 2
 PSR: Mnemonic "psh"
 ARG: Arguments list: 
 VAL: GReg = 0: r32 
@@ -236,9 +236,9 @@ PSR: Mnemonic "ret"
 ARG: Arguments list: 
 ARG: Arguments total: 0 
 CMP: Matched encode {0}
-SCP: Leaved {007BEEC0} - depth 1
+SCP: Leaved {0059EEC0} - depth 1
 SYM: Declaring label with name "sysStart" with value 0x80AB
-SCP: Entered {007C10A0} - depth 2
+SCP: Entered {005A10A0} - depth 2
 PSR: Mnemonic "mov"
 ARG: Arguments list: 
 VAL: GReg = 14: r32 
@@ -302,15 +302,15 @@ ARG: Arguments list:
 VAL: Immediate:14 = 1 / 0x1
 ARG: Arguments total: 1 
 CMP: Matched encode {1}
-SCP: Leaved {007BEEC0} - depth 1
+SCP: Leaved {0059EEC0} - depth 1
 SYM: Declaring label with name "sysLoop" with value 0x80DB
-SCP: Entered {007C11F0} - depth 2
+SCP: Entered {005A11F0} - depth 2
 PSR: Mnemonic "ja"
 ARG: Arguments list: 
 VAL: Immediate:14 = 32987 / 0x80DB
 ARG: Arguments total: 1 
 CMP: Matched encode {1}
-SCP: Leaved {007BEEC0} - depth 1
+SCP: Leaved {0059EEC0} - depth 1
 PSR: Closing src file at "tests/device_display/main.asm"
 
 Ending of phase 1
@@ -318,7 +318,7 @@ Ending of phase 1
 
 ===========PHASE TWO=============
 
-SCP: Restarted {007BEEC0} - depth 1
+SCP: Restarted {0059EEC0} - depth 1
 VAL: Immediate:14 = 32768 / 0x8000
 PSR: Changing address of program to 0x8000
 PSR: Mnemonic "ja"
@@ -328,13 +328,13 @@ ARG: Arguments total: 1
 CMP: Matched encode {1}
 VAL: Immediate:14 = 4096 / 0x1000
 VAL: Immediate:14 = 8192 / 0x2000
-SCP: Entered {007C0328} - depth 2
+SCP: Entered {005A0328} - depth 2
 PSR: Mnemonic "iret"
 ARG: Arguments list: 
 ARG: Arguments total: 0 
 CMP: Matched encode {0}
-SCP: Leaved {007BEEC0} - depth 1
-SCP: Entered {007C04E8} - depth 2
+SCP: Leaved {0059EEC0} - depth 1
+SCP: Entered {005A04E8} - depth 2
 PSR: Mnemonic "psh"
 ARG: Arguments list: 
 VAL: GReg = 0: r32 
@@ -477,8 +477,8 @@ PSR: Mnemonic "ret"
 ARG: Arguments list: 
 ARG: Arguments total: 0 
 CMP: Matched encode {0}
-SCP: Leaved {007BEEC0} - depth 1
-SCP: Entered {007C0F50} - depth 2
+SCP: Leaved {0059EEC0} - depth 1
+SCP: Entered {005A0F50} - depth 2
 PSR: Mnemonic "psh"
 ARG: Arguments list: 
 VAL: GReg = 0: r32 
@@ -546,8 +546,8 @@ PSR: Mnemonic "ret"
 ARG: Arguments list: 
 ARG: Arguments total: 0 
 CMP: Matched encode {0}
-SCP: Leaved {007BEEC0} - depth 1
-SCP: Entered {007C10A0} - depth 2
+SCP: Leaved {0059EEC0} - depth 1
+SCP: Entered {005A10A0} - depth 2
 PSR: Mnemonic "mov"
 ARG: Arguments list: 
 VAL: GReg = 14: r32 
@@ -611,14 +611,14 @@ ARG: Arguments list:
 VAL: Immediate:14 = 32987 / 0x80DB
 ARG: Arguments total: 1 
 CMP: Matched encode {1}
-SCP: Leaved {007BEEC0} - depth 1
-SCP: Entered {007C11F0} - depth 2
+SCP: Leaved {0059EEC0} - depth 1
+SCP: Entered {005A11F0} - depth 2
 PSR: Mnemonic "ja"
 ARG: Arguments list: 
 VAL: Immediate:14 = 32987 / 0x80DB
 ARG: Arguments total: 1 
 CMP: Matched encode {1}
-SCP: Leaved {007BEEC0} - depth 1
+SCP: Leaved {0059EEC0} - depth 1
 PSR: Closing src file at "tests/device_display/main.asm"
 
 Ending of phase 2

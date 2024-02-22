@@ -1,4 +1,4 @@
-set dir=tests/device_display
+set dir=tests/interruption
 
 "Debug/assembler.exe" ^
 	%dir%/main.asm ^

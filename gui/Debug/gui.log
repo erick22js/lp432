@@ -1,2 +1,38 @@
-﻿  display.c
+﻿  bus.c
+  cpu.c
+  interruption.c
+  memory.c
+  proc0.c
+  proc1.c
+  proc2.c
+  proc3.c
+  proc4.c
+  proc5.c
+  proc6.c
+  proc7.c
+  proc8.c
+  proc9.c
+  procA.c
+  procB.c
+  procC.c
+  procD.c
+  procE.c
+  procedures.c
+  Gerando Código...
+  Compilando...
+  procF.c
+  device.c
+  emu.c
+  pci.c
+  common.c
+  display.c
+  keyboard.c
+  serial.c
+  font.c
+  inspector.c
+  ini.c
+  monitor.c
+  sdl_related.c
+  main.c
+  Gerando Código...
   gui.vcxproj -> C:\Users\erick\Documents\meus-projetos\c\lp432\Debug\gui.exe

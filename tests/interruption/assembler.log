@@ -1,0 +1,1452 @@
+===========PHASE ONE=============
+
+SCP: Restarted {0049EA08} - depth 1
+VAL: Immediate:14 = 32768 / 0x8000
+PSR: Changing address of program to 0x8000
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 14: r32 
+VAL: Immediate:14 = 32512 / 0x7F00
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "ja"
+ARG: Arguments list: 
+VAL: Immediate:14 = 1 / 0x1
+ARG: Arguments total: 1 
+CMP: Matched encode {1}
+PSR: Opening src file at "tests/interruption/system.asm"
+MRK: Following file with mark id "tests/interruption/system.asm"
+MRK: Marking with id "tests/interruption/system.asm"
+PSR: Opening src file at "tests/interruption/interruption.asm"
+MRK: Following file with mark id "tests/interruption/interruption.asm"
+MRK: Marking with id "tests/interruption/interruption.asm"
+SYM: Declaring const with name "intr_address"
+VAL: Immediate:14 = 4096 / 0x1000
+SYM: Declaring const with name "list_devices"
+VAL: Immediate:14 = 4352 / 0x1100
+SYM: Declaring label with name "intrActNoAction" with value 0x800B
+SCP: Entered {004A0EB8} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483648 / 0x80000000
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+SYM: Declaring label with name "loop" with value 0x8011
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SYM: Declaring label with name "intrActProtectionViolation" with value 0x8015
+SCP: Entered {004A1890} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483649 / 0x80000001
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+SYM: Declaring label with name "loop" with value 0x801B
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SYM: Declaring label with name "intrActPageFault" with value 0x801F
+SCP: Entered {004A19E0} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483651 / 0x80000003
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+SYM: Declaring label with name "loop" with value 0x8025
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SYM: Declaring label with name "intrActSegmentNotPresent" with value 0x8029
+SCP: Entered {004A1B80} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483652 / 0x80000004
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+SYM: Declaring label with name "loop" with value 0x802F
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SYM: Declaring label with name "intrActDirectoryFault" with value 0x8033
+SCP: Entered {004A1CD0} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483653 / 0x80000005
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+SYM: Declaring label with name "loop" with value 0x8039
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SYM: Declaring label with name "intrActDeniedMemoryAccess" with value 0x803D
+SCP: Entered {004A1E70} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483654 / 0x80000006
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+SYM: Declaring label with name "loop" with value 0x8043
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SYM: Declaring label with name "intrActDeniedCodeAccess" with value 0x8047
+SCP: Entered {004A1FC0} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483655 / 0x80000007
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+SYM: Declaring label with name "loop" with value 0x804D
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SYM: Declaring label with name "intrActInvalidOpcode" with value 0x8051
+SCP: Entered {004A2110} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483657 / 0x80000009
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+SYM: Declaring label with name "loop" with value 0x8057
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SYM: Declaring label with name "intrActDivisionByZero" with value 0x805B
+SCP: Entered {004A2260} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483658 / 0x8000000A
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+SYM: Declaring label with name "loop" with value 0x8061
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SYM: Declaring label with name "intrActTimerInterruption" with value 0x8065
+SCP: Entered {004A2400} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483659 / 0x8000000B
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+SYM: Declaring label with name "loop" with value 0x806B
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SYM: Declaring label with name "intrActDebuggerInterruption" with value 0x806F
+SCP: Entered {004A25A0} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483660 / 0x8000000C
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+SYM: Declaring label with name "loop" with value 0x8075
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SYM: Declaring label with name "intrActDeviceUnavailable" with value 0x8079
+SCP: Entered {004A2740} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483661 / 0x8000000D
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+SYM: Declaring label with name "loop" with value 0x807F
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SYM: Declaring label with name "intrActSoftwareInterruption" with value 0x8083
+SCP: Entered {004A28E0} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483662 / 0x8000000E
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+SYM: Declaring label with name "loop" with value 0x8089
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SYM: Declaring label with name "intrActHardwareInterruption" with value 0x808D
+SCP: Entered {004A2A80} - depth 2
+PSR: Mnemonic "mvfir"
+ARG: Arguments list: 
+VAL: GReg = 1: r32 
+VAL: IReg = 0 
+ARG: Arguments total: 2 
+CMP: Matched encode {0}
+PSR: Mnemonic "and"
+ARG: Arguments list: 
+VAL: GReg = 1: r32 
+VAL: Immediate:14 = 255 / 0xFF
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 2: r32 
+VAL: GReg = 1: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {2}
+PSR: Mnemonic "add"
+ARG: Arguments list: 
+VAL: GReg = 2: r32 
+VAL: Immediate:14 = 4352 / 0x1100
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Memory = [2:regi]
+ARG: Arguments total: 2 
+CMP: Matched encode {11}
+PSR: Mnemonic "jr"
+PSR: Suffix "nez" detected
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = -32927 / 0xFFFFFFFFFFFF7F61
+ARG: Arguments total: 2 
+CMP: Matched encode {2}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 2: r32 
+VAL: GReg = 1: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {2}
+PSR: Mnemonic "lsh"
+ARG: Arguments list: 
+VAL: GReg = 2: r32 
+VAL: Immediate:14 = 8 / 0x8
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "in"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: GReg = 2: r16 
+ARG: Arguments total: 2 
+CMP: Matched encode {2}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 2: r32 
+VAL: GReg = 1: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {2}
+PSR: Mnemonic "add"
+ARG: Arguments list: 
+VAL: GReg = 2: r32 
+VAL: Immediate:14 = 4352 / 0x1100
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [2:regi]
+VAL: GReg = 0: r8 
+ARG: Arguments total: 2 
+CMP: Matched encode {18}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SYM: Declaring label with name "register" with value 0x80B7
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SYM: Declaring label with name "intrVecSetup" with value 0x80B8
+SCP: Entered {004A33D0} - depth 2
+PSR: Mnemonic "psh"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+ARG: Arguments total: 1 
+CMP: Matched encode {2}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32779 / 0x800B
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1000]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32789 / 0x8015
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1004]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32779 / 0x800B
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1008]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32799 / 0x801F
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x100C]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32809 / 0x8029
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1010]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32819 / 0x8033
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1014]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32829 / 0x803D
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1018]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32839 / 0x8047
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x101C]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32779 / 0x800B
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1020]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32849 / 0x8051
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1024]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32859 / 0x805B
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1028]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32869 / 0x8065
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x102C]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32879 / 0x806F
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1030]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32889 / 0x8079
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1034]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32899 / 0x8083
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1038]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32909 / 0x808D
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x103C]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 4096 / 0x1000
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mvtitd"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32764 / 0x7FFC
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mvtisp"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "seti"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+PSR: Mnemonic "pop"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+ARG: Arguments total: 1 
+CMP: Matched encode {2}
+PSR: Mnemonic "ret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+PSR: Closing src file at "tests/interruption/interruption.asm"
+SYM: Declaring const with name "char_vector"
+VAL: Immediate:14 = 8192 / 0x2000
+SYM: Declaring label with name "drawText" with value 0x817E
+SCP: Entered {004A3588} - depth 2
+PSR: Mnemonic "psh"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+ARG: Arguments total: 1 
+CMP: Matched encode {2}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 2: r32 
+VAL: Immediate:14 = 8192 / 0x2000
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+SYM: Declaring label with name "loop" with value 0x8186
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 1: r8 
+VAL: Memory = [0:regi]
+ARG: Arguments total: 2 
+CMP: Matched encode {9}
+PSR: Mnemonic "and"
+ARG: Arguments list: 
+VAL: GReg = 1: r32 
+VAL: Immediate:14 = 255 / 0xFF
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "jr"
+PSR: Suffix "eqz" detected
+ARG: Arguments list: 
+VAL: GReg = 1: r32 
+VAL: Immediate:14 = -33166 / 0xFFFFFFFFFFFF7E72
+ARG: Arguments total: 2 
+CMP: Matched encode {2}
+PSR: Mnemonic "or"
+ARG: Arguments list: 
+VAL: GReg = 1: r32 
+VAL: Immediate:14 = 16711680 / 0xFF0000
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [2:regi]
+VAL: GReg = 1: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "add"
+ARG: Arguments list: 
+VAL: GReg = 2: r32 
+VAL: Immediate:14 = 4 / 0x4
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "inc"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+ARG: Arguments total: 1 
+CMP: Matched encode {2}
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = -30 / 0xFFFFFFFFFFFFFFE2
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+SYM: Declaring label with name "end" with value 0x81A7
+PSR: Mnemonic "pop"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+ARG: Arguments total: 1 
+CMP: Matched encode {2}
+PSR: Mnemonic "ret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+PSR: Closing src file at "tests/interruption/system.asm"
+SYM: Declaring label with name "hello_text" with value 0x81AA
+SYM: Declaring label with name "sysStart" with value 0x81B7
+SCP: Entered {004A36F0} - depth 2
+PSR: Mnemonic "ba"
+ARG: Arguments list: 
+VAL: Immediate:14 = 32952 / 0x80B8
+ARG: Arguments total: 1 
+CMP: Matched encode {1}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 3: r16 
+VAL: Immediate:14 = 528 / 0x210
+ARG: Arguments total: 2 
+CMP: Matched encode {4}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 8192 / 0x2000
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "out"
+ARG: Arguments list: 
+VAL: GReg = 3: r16 
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {2}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 3: r16 
+VAL: Immediate:14 = 536 / 0x218
+ARG: Arguments total: 2 
+CMP: Matched encode {4}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r8 
+VAL: Immediate:14 = 1 / 0x1
+ARG: Arguments total: 2 
+CMP: Matched encode {3}
+PSR: Mnemonic "out"
+ARG: Arguments list: 
+VAL: GReg = 3: r16 
+VAL: GReg = 0: r8 
+ARG: Arguments total: 2 
+CMP: Matched encode {0}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 33194 / 0x81AA
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "ba"
+ARG: Arguments list: 
+VAL: Immediate:14 = 33150 / 0x817E
+ARG: Arguments total: 1 
+CMP: Matched encode {1}
+PSR: Mnemonic "ja"
+ARG: Arguments list: 
+VAL: Immediate:14 = 1 / 0x1
+ARG: Arguments total: 1 
+CMP: Matched encode {1}
+SCP: Leaved {0049EA08} - depth 1
+SYM: Declaring label with name "sysLoop" with value 0x81E1
+SCP: Entered {004A3848} - depth 2
+PSR: Mnemonic "ja"
+ARG: Arguments list: 
+VAL: Immediate:14 = 33249 / 0x81E1
+ARG: Arguments total: 1 
+CMP: Matched encode {1}
+SCP: Leaved {0049EA08} - depth 1
+PSR: Closing src file at "tests/interruption/main.asm"
+
+Ending of phase 1
+
+
+===========PHASE TWO=============
+
+SCP: Restarted {0049EA08} - depth 1
+VAL: Immediate:14 = 32768 / 0x8000
+PSR: Changing address of program to 0x8000
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 14: r32 
+VAL: Immediate:14 = 32512 / 0x7F00
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "ja"
+ARG: Arguments list: 
+VAL: Immediate:14 = 33207 / 0x81B7
+ARG: Arguments total: 1 
+CMP: Matched encode {1}
+PSR: Opening src file at "tests/interruption/system.asm"
+MRK: Following file with mark id "tests/interruption/system.asm"
+MRK: Marking with id "tests/interruption/system.asm"
+PSR: Opening src file at "tests/interruption/interruption.asm"
+MRK: Following file with mark id "tests/interruption/interruption.asm"
+MRK: Marking with id "tests/interruption/interruption.asm"
+VAL: Immediate:14 = 4096 / 0x1000
+VAL: Immediate:14 = 4352 / 0x1100
+SCP: Entered {004A0EB8} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483648 / 0x80000000
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SCP: Entered {004A1890} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483649 / 0x80000001
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SCP: Entered {004A19E0} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483651 / 0x80000003
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SCP: Entered {004A1B80} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483652 / 0x80000004
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SCP: Entered {004A1CD0} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483653 / 0x80000005
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SCP: Entered {004A1E70} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483654 / 0x80000006
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SCP: Entered {004A1FC0} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483655 / 0x80000007
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SCP: Entered {004A2110} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483657 / 0x80000009
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SCP: Entered {004A2260} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483658 / 0x8000000A
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SCP: Entered {004A2400} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483659 / 0x8000000B
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SCP: Entered {004A25A0} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483660 / 0x8000000C
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SCP: Entered {004A2740} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483661 / 0x8000000D
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SCP: Entered {004A28E0} - depth 2
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 2147483662 / 0x8000000E
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = 0 / 0x0
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SCP: Entered {004A2A80} - depth 2
+PSR: Mnemonic "mvfir"
+ARG: Arguments list: 
+VAL: GReg = 1: r32 
+VAL: IReg = 0 
+ARG: Arguments total: 2 
+CMP: Matched encode {0}
+PSR: Mnemonic "and"
+ARG: Arguments list: 
+VAL: GReg = 1: r32 
+VAL: Immediate:14 = 255 / 0xFF
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 2: r32 
+VAL: GReg = 1: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {2}
+PSR: Mnemonic "add"
+ARG: Arguments list: 
+VAL: GReg = 2: r32 
+VAL: Immediate:14 = 4352 / 0x1100
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Memory = [2:regi]
+ARG: Arguments total: 2 
+CMP: Matched encode {11}
+PSR: Mnemonic "jr"
+PSR: Suffix "nez" detected
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 23 / 0x17
+ARG: Arguments total: 2 
+CMP: Matched encode {2}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 2: r32 
+VAL: GReg = 1: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {2}
+PSR: Mnemonic "lsh"
+ARG: Arguments list: 
+VAL: GReg = 2: r32 
+VAL: Immediate:14 = 8 / 0x8
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "in"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: GReg = 2: r16 
+ARG: Arguments total: 2 
+CMP: Matched encode {2}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 2: r32 
+VAL: GReg = 1: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {2}
+PSR: Mnemonic "add"
+ARG: Arguments list: 
+VAL: GReg = 2: r32 
+VAL: Immediate:14 = 4352 / 0x1100
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [2:regi]
+VAL: GReg = 0: r8 
+ARG: Arguments total: 2 
+CMP: Matched encode {18}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+PSR: Mnemonic "iret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+SCP: Entered {004A33D0} - depth 2
+PSR: Mnemonic "psh"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+ARG: Arguments total: 1 
+CMP: Matched encode {2}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32779 / 0x800B
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1000]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32789 / 0x8015
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1004]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32779 / 0x800B
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1008]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32799 / 0x801F
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x100C]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32809 / 0x8029
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1010]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32819 / 0x8033
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1014]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32829 / 0x803D
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1018]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32839 / 0x8047
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x101C]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32779 / 0x800B
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1020]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32849 / 0x8051
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1024]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32859 / 0x805B
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1028]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32869 / 0x8065
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x102C]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32879 / 0x806F
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1030]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32889 / 0x8079
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1034]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32899 / 0x8083
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x1038]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32909 / 0x808D
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [0x103C]
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 4096 / 0x1000
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mvtitd"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 32764 / 0x7FFC
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mvtisp"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "seti"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+PSR: Mnemonic "pop"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+ARG: Arguments total: 1 
+CMP: Matched encode {2}
+PSR: Mnemonic "ret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+PSR: Closing src file at "tests/interruption/interruption.asm"
+VAL: Immediate:14 = 8192 / 0x2000
+SCP: Entered {004A3588} - depth 2
+PSR: Mnemonic "psh"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+ARG: Arguments total: 1 
+CMP: Matched encode {2}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 2: r32 
+VAL: Immediate:14 = 8192 / 0x2000
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 1: r8 
+VAL: Memory = [0:regi]
+ARG: Arguments total: 2 
+CMP: Matched encode {9}
+PSR: Mnemonic "and"
+ARG: Arguments list: 
+VAL: GReg = 1: r32 
+VAL: Immediate:14 = 255 / 0xFF
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "jr"
+PSR: Suffix "eqz" detected
+ARG: Arguments list: 
+VAL: GReg = 1: r32 
+VAL: Immediate:14 = 24 / 0x18
+ARG: Arguments total: 2 
+CMP: Matched encode {2}
+PSR: Mnemonic "or"
+ARG: Arguments list: 
+VAL: GReg = 1: r32 
+VAL: Immediate:14 = 16711680 / 0xFF0000
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: Memory = [2:regi]
+VAL: GReg = 1: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {20}
+PSR: Mnemonic "add"
+ARG: Arguments list: 
+VAL: GReg = 2: r32 
+VAL: Immediate:14 = 4 / 0x4
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "inc"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+ARG: Arguments total: 1 
+CMP: Matched encode {2}
+PSR: Mnemonic "jr"
+ARG: Arguments list: 
+VAL: Immediate:14 = -30 / 0xFFFFFFFFFFFFFFE2
+ARG: Arguments total: 1 
+CMP: Matched encode {0}
+PSR: Mnemonic "pop"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+ARG: Arguments total: 1 
+CMP: Matched encode {2}
+PSR: Mnemonic "ret"
+ARG: Arguments list: 
+ARG: Arguments total: 0 
+CMP: Matched encode {0}
+SCP: Leaved {0049EA08} - depth 1
+PSR: Closing src file at "tests/interruption/system.asm"
+SCP: Entered {004A36F0} - depth 2
+PSR: Mnemonic "ba"
+ARG: Arguments list: 
+VAL: Immediate:14 = 32952 / 0x80B8
+ARG: Arguments total: 1 
+CMP: Matched encode {1}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 3: r16 
+VAL: Immediate:14 = 528 / 0x210
+ARG: Arguments total: 2 
+CMP: Matched encode {4}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 8192 / 0x2000
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "out"
+ARG: Arguments list: 
+VAL: GReg = 3: r16 
+VAL: GReg = 0: r32 
+ARG: Arguments total: 2 
+CMP: Matched encode {2}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 3: r16 
+VAL: Immediate:14 = 536 / 0x218
+ARG: Arguments total: 2 
+CMP: Matched encode {4}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r8 
+VAL: Immediate:14 = 1 / 0x1
+ARG: Arguments total: 2 
+CMP: Matched encode {3}
+PSR: Mnemonic "out"
+ARG: Arguments list: 
+VAL: GReg = 3: r16 
+VAL: GReg = 0: r8 
+ARG: Arguments total: 2 
+CMP: Matched encode {0}
+PSR: Mnemonic "mov"
+ARG: Arguments list: 
+VAL: GReg = 0: r32 
+VAL: Immediate:14 = 33194 / 0x81AA
+ARG: Arguments total: 2 
+CMP: Matched encode {5}
+PSR: Mnemonic "ba"
+ARG: Arguments list: 
+VAL: Immediate:14 = 33150 / 0x817E
+ARG: Arguments total: 1 
+CMP: Matched encode {1}
+PSR: Mnemonic "ja"
+ARG: Arguments list: 
+VAL: Immediate:14 = 33249 / 0x81E1
+ARG: Arguments total: 1 
+CMP: Matched encode {1}
+SCP: Leaved {0049EA08} - depth 1
+SCP: Entered {004A3848} - depth 2
+PSR: Mnemonic "ja"
+ARG: Arguments list: 
+VAL: Immediate:14 = 33249 / 0x81E1
+ARG: Arguments total: 1 
+CMP: Matched encode {1}
+SCP: Leaved {0049EA08} - depth 1
+PSR: Closing src file at "tests/interruption/main.asm"
+
+Ending of phase 2
+
+
+
+	COMPILATION SUCCESS!
+
+
