@@ -7,110 +7,193 @@
 //
 
 .const intr_address 0x1000 // Length: 0x40
-.const list_devices 0x1100 // Length: 0x100
+.const list_devices 0x1100 // Length: 0x800
 
 //
 //	CODE TEXT
 //
 
 .scope intrActNoAction
+	psh eax
 	mov eax, 0x80000000
+	halt
 	loop: jr @loop
+	pop eax
 	iret
 .endscope
 
 .scope intrActProtectionViolation
+	psh eax
 	mov eax, 0x80000001
+	halt
 	loop: jr @loop
+	pop eax
 	iret
 .endscope
 
 .scope intrActPageFault
+	psh eax
 	mov eax, 0x80000003
+	halt
 	loop: jr @loop
+	pop eax
 	iret
 .endscope
 
 .scope intrActSegmentNotPresent
+	psh eax
 	mov eax, 0x80000004
+	halt
 	loop: jr @loop
+	pop eax
 	iret
 .endscope
 
 .scope intrActDirectoryFault
+	psh eax
 	mov eax, 0x80000005
+	halt
 	loop: jr @loop
+	pop eax
 	iret
 .endscope
 
 .scope intrActDeniedMemoryAccess
+	psh eax
 	mov eax, 0x80000006
+	halt
 	loop: jr @loop
+	pop eax
 	iret
 .endscope
 
 .scope intrActDeniedCodeAccess
+	psh eax
 	mov eax, 0x80000007
+	halt
 	loop: jr @loop
+	pop eax
 	iret
 .endscope
 
 .scope intrActInvalidOpcode
+	psh eax
 	mov eax, 0x80000009
+	halt
 	loop: jr @loop
+	pop eax
 	iret
 .endscope
 
 .scope intrActDivisionByZero
+	psh eax
 	mov eax, 0x8000000A
+	halt
 	loop: jr @loop
+	pop eax
 	iret
 .endscope
 
 .scope intrActTimerInterruption
+	psh eax
 	mov eax, 0x8000000B
+	halt
 	loop: jr @loop
+	pop eax
 	iret
 .endscope
 
 .scope intrActDebuggerInterruption
+	psh eax
 	mov eax, 0x8000000C
+	halt
 	loop: jr @loop
+	pop eax
 	iret
 .endscope
 
 .scope intrActDeviceUnavailable
+	psh eax
 	mov eax, 0x8000000D
+	halt
 	loop: jr @loop
+	pop eax
 	iret
 .endscope
 
 .scope intrActSoftwareInterruption
+	psh eax
 	mov eax, 0x8000000E
+	halt
 	loop: jr @loop
+	pop eax
 	iret
 .endscope
 
 .scope intrActHardwareInterruption
+	psh eax
+	psh edx
+	psh ecx
+	psh eex
+	psh efx
+	psh egx
+	
 	// Load the hardware port
 	mvfir edx, ir0
 	
 	// Check if the device is already registered by program, if no, only do his registration, if yes, execute dedicated interruption routine (no for now)
 	and edx, 0xFF
 	mov ecx, edx
+	mul ecx, 8
 	add ecx, list_devices
 	mov eax, [ecx]
 	jr.nez eax, @register
 	
+	// Loading device type
 	mov ecx, edx
 	lsh ecx, 8
-	in eax, cx
+	in ex, cx
+	// Loading device version
+	add ecx, 2
+	in fx, cx
+	// Loading device vendor
+	add ecx, 3
+	in gx, cx
+	// Saving device type
 	mov ecx, edx
+	mul ecx, 8
 	add ecx, list_devices
-	mov [ecx], al
+	mov [ecx], el
+	// Saving device vendor
+	add ecx, 1
+	mov [ecx], gl
+	// Saving device version
+	add ecx, 1
+	mov [ecx], fx
+	
+	pop egx
+	pop efx
+	pop eex
+	pop ecx
+	pop edx
+	pop eax
 	iret
 	
 	register:
+		mov ecx, edx
+		mul ecx, 8
+		add ecx, list_devices+4
+		mov eax, [ecx]
+		jr.eqz eax, @no_operation
+		ba eax
+		
+		no_operation:
+		pop egx
+		pop efx
+		pop eex
+		pop ecx
+		pop edx
+		pop eax
 		iret
 .endscope
 
@@ -161,4 +244,3 @@
 	pop eax
 	ret
 .endscope
-

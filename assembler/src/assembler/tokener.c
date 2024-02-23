@@ -502,7 +502,7 @@ Error tkrFetch(Token *tk){
 	errTryCatch(
 		_tkrFetch(tk)
 	);
-	//tkPrint(tk);
+	tkPrint(tk);
 	return ERROR_NONE;
 }
 

@@ -54,7 +54,12 @@ Lexer *lexOpenFile(char* path) {
 	lexers[tl].length = ftell(file);
 	fseek(file, 0, SEEK_SET);
 	lexers[tl].buffer = calloc(lexers[tl].length, 1);
-	fread(lexers[tl].buffer, 1, lexers[tl].length, file);
+	//fread(lexers[tl].buffer, 1, lexers[tl].length, file);
+	for (u32 i = 0; i<lexers[tl].length; i++){
+		fseek(file, i, SEEK_SET);
+		lexers[tl].buffer[i] = fgetc(file);
+	}
+	fseek(file, 0, SEEK_SET);
 	fclose(file);
 	lexers[tl].allocated = true;
 	pathOpen(lexers[tl].path, path);
