@@ -35,6 +35,10 @@ bool cpuRequestInterrupt(Cpu *cpu_s, uint16 port){
 	return false;
 }
 
+bool cpuCanRequestInterrupt(Cpu *cpu_s, uint16 port){
+	return !cpu_s->request_external && cpu_s->reg_st&FLAG_IE;
+}
+
 void cpuReset(Cpu *cpu_s){
 	memset(&cpu_s->gregs, 0, sizeof(cpu_s->gregs));
 	memset(&cpu_s->sregs, 0, sizeof(cpu_s->sregs));

@@ -16,10 +16,12 @@
 	Symbols Definition
 */
 
-#define PIXELS_PER_TICK 32
+#define TICKS_DELAY 16
 
 #define CTRL_STATE self->api_data[0]
 #define CTRL_CYCLES self->api_data[1]
+#define CTRL_KEYS(i) self->api_data[2 + i]
+#define CTRL_MONITOR_BIND self->api_data[15]
 
 #define STATUS_TYPE self->regs[0]
 #define STATUS_TYPEH self->regs[1]
@@ -29,6 +31,7 @@
 #define STATUS_VENDOR self->regs[5]
 #define STATUS_FLAGS self->regs[6]
 #define STATUS_READY_STATE self->regs[7]
+#define REG_SCANCODE ((uint32*)self->regs)[2]
 
 
 /*
@@ -48,16 +51,16 @@ void keyWrite(Device* self, uint8 reg, uint8 data){
 void keyStep(Device* self, uint32 cycles){
 	// CYCLE SYNC
 	CTRL_CYCLES += cycles;
-	if (CTRL_CYCLES < PIXELS_PER_TICK){
+	if (CTRL_CYCLES < TICKS_DELAY){
 		return;
 	}
-	CTRL_CYCLES -= PIXELS_PER_TICK;
+	CTRL_CYCLES -= TICKS_DELAY;
 
 	// INIT STATE
 	if (CTRL_STATE==-1){
 		if (devRequestCpuInterruption(self)){
 			printf("Keyboard interruption solved!\n");
-			CTRL_STATE = 0;
+			CTRL_STATE = 1;
 		}
 		return;
 	}
@@ -65,10 +68,64 @@ void keyStep(Device* self, uint32 cycles){
 	else if (CTRL_STATE==0){
 		return;
 	}
+	// BUSY STATE
+	else if (CTRL_STATE==1){
+		for (int i = 0; i < 4; i++){
+			if (!CTRL_KEYS(i)){
+				break;
+			}
+			if (CTRL_KEYS(i)&0x40000){
+				if (devCanRequestCpuInterruption(self)){
+					REG_SCANCODE = (CTRL_KEYS(i)&0xFFFF) | 0x400;
+					devRequestCpuInterruption(self);
+					CTRL_KEYS(i) &= ~0x40000;
+				}
+				break;
+			}
+			else if (CTRL_KEYS(i)&0x80000){
+				if (devCanRequestCpuInterruption(self)){
+					REG_SCANCODE = (CTRL_KEYS(i)&0xFFFF);
+					devRequestCpuInterruption(self);
+					for (; i < 3; i++){
+						CTRL_KEYS(i) = CTRL_KEYS(i+1);
+					}
+					CTRL_KEYS(3) = 0;
+				}
+				break;
+			}
+		}
+	}
 }
 
-void keyEventListener(SDL_Event *ev){
-	//printf("Event on runner\n");
+void keyEventListener(SDL_Event *ev, void* *data){
+	Device *self = data[1];
+	bool down = ev->type == SDL_KEYDOWN;
+	SDL_Keycode scancode = ev->key.keysym.sym;
+	if (scancode&SDLK_SCANCODE_MASK){
+		scancode &= ~SDLK_SCANCODE_MASK;
+		scancode |= 0x200;
+	}
+	if (down){
+		//printf("\ndown");
+		for (int i = 0; i < 4; i++){
+			if (!CTRL_KEYS(i)){
+				CTRL_KEYS(i) = scancode | 0x40000;
+				break;
+			}
+			else if ((CTRL_KEYS(i)&0xFFFF)==scancode){
+				break;
+			}
+		}
+	}
+	else {
+		//printf("\nup");
+		for (int i = 0; i < 4; i++){
+			if ((CTRL_KEYS(i)&0xFFFF)==scancode){
+				CTRL_KEYS(i) |= 0x80000;
+				break;
+			}
+		}
+	}
 }
 
 
@@ -84,12 +141,13 @@ void keySetup(Device *self, Monitor *mntr) {
 	self->step = keyStep;
 	self->active = true;
 
-	// Add Keyboard Events Listener to monitor
-	mntr->onKeyboardEvent = keyEventListener;
-
 	// Configure Control Properties
 	CTRL_STATE = -1; // State
 	CTRL_CYCLES = 0; // Cycles Counter
+	CTRL_KEYS(0) = 0; // Key 1 Status Controller
+	CTRL_KEYS(1) = 0; // Key 2 Status Controller
+	CTRL_KEYS(2) = 0; // Key 3 Status Controller
+	CTRL_KEYS(3) = 0; // Key 4 Status Controller
 
 	// Configure Registers
 	STATUS_TYPE = DEVICE_TYPE; // Device Type
@@ -100,6 +158,11 @@ void keySetup(Device *self, Monitor *mntr) {
 	STATUS_VENDOR = DEVICE_VENDOR; // Device Vendor
 	STATUS_FLAGS = 0; // Device Control Flags
 	STATUS_READY_STATE = 0; // Ready State
+	REG_SCANCODE = 0; // Scancode Register
+
+	// Add Keyboard Events Listener to monitor
+	mntr->bind_data[1] = (void*)self;
+	mntr->onKeyboardEvent = keyEventListener;
 }
 
 void keyDestroy(Device *dev) {

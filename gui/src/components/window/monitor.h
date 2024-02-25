@@ -21,10 +21,13 @@ typedef struct{
 	int buff_wid, buff_hei;
 
 	// Callback events
-	void (*onKeyboardEvent)(SDL_Event *ev);
-	void (*onMouseEvent)(SDL_Event *ev);
-	void (*onWindowEvent)(SDL_Event *ev);
-	void (*onOtherEvent)(SDL_Event *ev);
+	void (*onKeyboardEvent)(SDL_Event *ev, void* *data);
+	void (*onMouseEvent)(SDL_Event *ev, void* *data);
+	void (*onWindowEvent)(SDL_Event *ev, void* *data);
+	void (*onOtherEvent)(SDL_Event *ev, void* *data);
+
+	// User data
+	void *(bind_data[16]);
 }Monitor;
 
 

@@ -55,6 +55,7 @@ struct Device{
 //
 
 bool devRequestCpuInterruption(Device *device);
+bool devCanRequestCpuInterruption(Device *device);
 
 
 

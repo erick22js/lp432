@@ -35,6 +35,7 @@ extern bool pciWriteDevice16(Pci *pci, uint16 reg, uint16 data);
 extern bool pciWriteDevice32(Pci *pci, uint16 reg, uint32 data);
 
 extern bool pciRequestCpuInterruption(Pci *pci, Device *device);
+extern bool pciCanRequestCpuInterruption(Pci *pci, Device *device);
 
 
 /*

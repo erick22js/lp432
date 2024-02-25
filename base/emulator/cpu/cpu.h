@@ -163,6 +163,7 @@ struct Cpu{
 #define cpuJumpBy(off) {cpu_s->reg_pc = cpu_s->reg_lpc + (sint32)(off);}
 
 extern bool cpuRequestInterrupt(Cpu *cpu_s, uint16 port);
+extern bool cpuCanRequestInterrupt(Cpu *cpu_s, uint16 port);
 
 extern void cpuReset(Cpu *cpu_s);
 extern void cpuStep(Cpu *cpu_s);

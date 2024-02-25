@@ -44,25 +44,25 @@ void mntrListen(Monitor *monitor){
 		if (ev.type == SDL_KEYDOWN || ev.type == SDL_KEYUP){
 			//printf("Key Event on window\n");
 			if (monitor->onKeyboardEvent){
-				monitor->onKeyboardEvent(&ev);
+				monitor->onKeyboardEvent(&ev, monitor->bind_data);
 			}
 		}
 		else if (ev.type == SDL_MOUSEBUTTONDOWN || ev.type == SDL_MOUSEBUTTONUP || ev.type == SDL_MOUSEMOTION){
 			//printf("Mouse Event on window\n");
 			if (monitor->onMouseEvent){
-				monitor->onMouseEvent(&ev);
+				monitor->onMouseEvent(&ev, monitor->bind_data);
 			}
 		}
 		else if (ev.type == SDL_WINDOWEVENT || ev.type == SDL_QUIT){
 			//printf("Window Event on window\n");
 			if (monitor->onWindowEvent){
-				monitor->onWindowEvent(&ev);
+				monitor->onWindowEvent(&ev, monitor->bind_data);
 			}
 		}
 		else {
 			//printf("Other Event on window\n");
 			if (monitor->onOtherEvent){
-				monitor->onOtherEvent(&ev);
+				monitor->onOtherEvent(&ev, monitor->bind_data);
 			}
 		}
 	}

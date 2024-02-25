@@ -46,7 +46,7 @@ void srlWrite(Device* self, uint8 reg, uint8 data){
 		}
 		break;
 		case 2: {
-			printf(" 0x%X", data);
+			printf(" 0x%.2X", data);
 		}
 		break;
 		case 3: {

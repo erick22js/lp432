@@ -185,6 +185,7 @@ void dsSetup(Device *self, Monitor *mntr) {
 	REG_DFLAGS = 0; // Display Flags
 
 	// Configure Monitor
+	mntr->bind_data[0] = (void*)self;
 	mntr->enable_display = 0;
 }
 

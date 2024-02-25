@@ -137,6 +137,10 @@ bool pciRequestCpuInterruption(Pci *pci, Device *device){
 	return cpuRequestInterrupt(pci->cpu_s, device->port);
 }
 
+bool pciCanRequestCpuInterruption(Pci *pci, Device *device){
+	return cpuCanRequestInterrupt(pci->cpu_s, device->port);
+}
+
 
 
 /*

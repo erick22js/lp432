@@ -11,3 +11,7 @@ bool devRequestCpuInterruption(Device *device){
 	return pciRequestCpuInterruption(device->pci, device);
 }
 
+bool devCanRequestCpuInterruption(Device *device){
+	return pciCanRequestCpuInterruption(device->pci, device);
+}
+
