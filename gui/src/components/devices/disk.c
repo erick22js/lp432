@@ -104,7 +104,6 @@ void dskStep(Device* self, uint32 cycles){
 		}
 		if (REG_DISK_SEEK>=REG_DISK_SIZE || !REG_LENGTH){
 			CTRL_STATE = 8;
-			fflush(CTRL_IMAGE);
 		}
 	}
 	// WRITE STATE
