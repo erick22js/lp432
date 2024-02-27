@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\components\common.c" />
+    <ClCompile Include="src\components\devices\disk.c" />
     <ClCompile Include="src\components\devices\display.c" />
     <ClCompile Include="src\components\devices\keyboard.c" />
     <ClCompile Include="src\components\devices\serial.c" />
@@ -141,6 +142,7 @@
   <ItemGroup>
     <ClInclude Include="src\components\common.h" />
     <ClInclude Include="src\components\components.h" />
+    <ClInclude Include="src\components\devices\disk.h" />
     <ClInclude Include="src\components\devices\display.h" />
     <ClInclude Include="src\components\devices\keyboard.h" />
     <ClInclude Include="src\components\devices\serial.h" />

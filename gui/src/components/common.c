@@ -13,6 +13,7 @@ Pci g_pci;
 Device g_serial;
 Device g_display;
 Device g_keyboard;
+Device g_disk;
 
 
 /*
@@ -103,6 +104,8 @@ void vmSetup() {
 	pciPlugDevice(&g_pci, &g_display);
 	keySetup(&g_keyboard, &monitor);
 	pciPlugDevice(&g_pci, &g_keyboard);
+	dskSetup(&g_disk, "storage.img", 128);
+	pciPlugDevice(&g_pci, &g_disk);
 }
 
 void vmReset() {

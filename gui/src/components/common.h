@@ -6,6 +6,7 @@
 #include "devices/serial.h"
 #include "devices/display.h"
 #include "devices/keyboard.h"
+#include "devices/disk.h"
 #include "ini.h"
 
 
@@ -24,6 +25,7 @@ extern Pci g_pci;
 extern Device g_serial;
 extern Device g_display;
 extern Device g_keyboard;
+extern Device g_disk;
 
 
 /*

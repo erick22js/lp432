@@ -43,7 +43,7 @@ uint8 keyRead(Device* self, uint8 reg){
 }
 
 void keyWrite(Device* self, uint8 reg, uint8 data){
-	if (reg >= 16){
+	if (reg >= 12){
 		self->regs[reg] = data;
 	}
 }
@@ -76,7 +76,7 @@ void keyStep(Device* self, uint32 cycles){
 			}
 			if (CTRL_KEYS(i)&0x40000){
 				if (devCanRequestCpuInterruption(self)){
-					REG_SCANCODE = (CTRL_KEYS(i)&0xFFFF) | 0x400;
+					REG_SCANCODE = (CTRL_KEYS(i)&0xFFFF) | 0x800;
 					devRequestCpuInterruption(self);
 					CTRL_KEYS(i) &= ~0x40000;
 				}
@@ -100,7 +100,7 @@ void keyStep(Device* self, uint32 cycles){
 void keyEventListener(SDL_Event *ev, void* *data){
 	Device *self = data[1];
 	bool down = ev->type == SDL_KEYDOWN;
-	SDL_Keycode scancode = ev->key.keysym.sym;
+	SDL_Scancode scancode = ev->key.keysym.scancode;
 	if (scancode&SDLK_SCANCODE_MASK){
 		scancode &= ~SDLK_SCANCODE_MASK;
 		scancode |= 0x200;
