@@ -77,6 +77,7 @@ void vmSetup() {
 			printf("Rom in path \"%s\" does not exists!\n", path);
 		}
 		else {
+			printf("Loading rom at path \"%s\"...\n", path);
 			fseek(file, 0, SEEK_END);
 			long size = ftell(file);
 			fseek(file, 0, SEEK_SET);

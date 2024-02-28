@@ -1,4 +1,4 @@
-set dir=tests/keyboard
+set dir=tests/disk
 
 "Debug/assembler.exe" ^
 	%dir%/main.asm ^
