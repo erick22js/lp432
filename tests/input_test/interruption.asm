@@ -142,9 +142,11 @@
 	psh eax
 	psh edx
 	psh ecx
+	psh ebx
 	psh eex
 	psh efx
 	psh egx
+	psh ex0
 	
 	// Load the hardware port
 	mvfir edx, ir0
@@ -207,9 +209,11 @@
 	not_disk:
 	mov [ecx], ex0
 	
+	pop ex0
 	pop egx
 	pop efx
 	pop eex
+	pop ebx
 	pop ecx
 	pop edx
 	pop eax
@@ -225,9 +229,11 @@
 		ba ebx
 		
 		no_operation:
+		pop ex0
 		pop egx
 		pop efx
 		pop eex
+		pop ebx
 		pop ecx
 		pop edx
 		pop eax

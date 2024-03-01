@@ -60,6 +60,105 @@
 	ret
 .endscope
 
+//
+//	getDisplayWidth
+//	return:
+//	- eax => Width of display
+//
+.scope getDisplayWidth
+	// Saving old procedure values
+	psh ebx
+	mov eax, 0
+	
+	// Gathering the extenal device
+	mov ebx, 0
+	mov bl, [device_display]
+	jr.eqz ebx, @end
+	
+	// Inputing the data
+	lsh ebx, 8
+	add bx, 8
+	in eax, bx
+	
+	// End of function
+	end:
+	pop ebx
+	ret
+.endscope
+
+//
+//	getDisplayHeight
+//	return:
+//	- eax => Heigth of display
+//
+.scope getDisplayHeight
+	// Saving old procedure values
+	psh ebx
+	mov eax, 0
+	
+	// Gathering the extenal device
+	mov ebx, 0
+	mov bl, [device_display]
+	jr.eqz ebx, @end
+	
+	// Inputing the data
+	lsh ebx, 8
+	add bx, 12
+	in eax, bx
+	
+	// End of function
+	end:
+	pop ebx
+	ret
+.endscope
+
+//
+//	getDisplayCharWidth
+//	return:
+//	- eax => Width of display characters
+//
+.scope getDisplayCharWidth
+	// Saving old procedure values
+	psh ebx
+	mov eax, 0
+	
+	// Gathering the extenal device
+	mov ebx, 0
+	mov bl, [device_display]
+	jr.eqz ebx, @end
+	
+	// Inputing the data
+	mov eax, 8
+	
+	// End of function
+	end:
+	pop ebx
+	ret
+.endscope
+
+//
+//	getDisplayCharHeight
+//	return:
+//	- eax => Height of display characters
+//
+.scope getDisplayCharHeight
+	// Saving old procedure values
+	psh ebx
+	mov eax, 0
+	
+	// Gathering the extenal device
+	mov ebx, 0
+	mov bl, [device_display]
+	jr.eqz ebx, @end
+	
+	// Inputing the data
+	mov eax, 12
+	
+	// End of function
+	end:
+	pop ebx
+	ret
+.endscope
 
 //
 //	drawText
@@ -68,6 +167,8 @@
 //
 .scope drawText
 	psh eax
+	psh edx
+	psh ecx
 	mov ecx, char_vector
 	loop:
 		mov dl, [eax]
@@ -79,7 +180,8 @@
 		inc eax
 		jr @loop
 	end:
+	pop ecx
+	pop edx
 	pop eax
 	ret
 .endscope
-

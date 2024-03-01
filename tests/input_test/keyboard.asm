@@ -38,12 +38,14 @@
 	mov cl, [key_seek]
 	mov eax, ecx
 	lsh eax, 2
+	add eax, key_buffer
 	// Outputing Scancode
 	and edx, 0x1FF
-	mov [eax, key_buffer], dl
+	mov [eax], dl
 	// Outputing Key State
 	rsh ebx, 11
-	mov [eax, key_buffer+1], bl
+	inc eax
+	mov [eax], bl
 	// Advancing and bounding seek
 	inc ecx
 	mod ecx, 0xE
@@ -68,7 +70,7 @@
 
 //
 //	consumeKey
-//	args:
+//	return:
 // - eax => Status (1 = Pressed, 0 = Released)
 // - edx => Scancode (0 = No Key Press)
 //
@@ -81,8 +83,10 @@
 	mov edx, 0
 	
 	// Analyzing bottom
-	mov ecx, [key_seek]
-	mov ebx, [key_bottom]
+	mov ecx, 0
+	mov cl, [key_seek]
+	mov ebx, 0
+	mov bl, [key_bottom]
 	cmp ecx, ebx
 	jr.eq @end
 	
