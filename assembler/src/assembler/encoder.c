@@ -1,4 +1,5 @@
 #include "encoder.h"
+#include "logger.h"
 
 
 //
@@ -7,7 +8,11 @@
 
 void encOut8(u8 data) {
 	if (asm_info.phase_two){
+		logDevInfo("ED: 0x%.2X [0x%x]{0x%x}\n", (u32)data, asm_info.ps, asm_info.bs);
 		asm_info.bin[asm_info.bs] = data;
+	}
+	else {
+		logDevInfo("ED: [0x%x]{0x%x}\n", asm_info.ps, asm_info.bs);
 	}
 	asm_info.bs++;
 	asm_info.ps++;
@@ -17,47 +22,29 @@ void encOut8(u8 data) {
 }
 
 void encOut16(u16 data) {
-	if (asm_info.phase_two){
-		asm_info.bin[asm_info.bs] = (data)&0xFF;
-		asm_info.bin[asm_info.bs+1] = (data>>8)&0xFF;
-	}
-	asm_info.bs += 2;
-	asm_info.ps += 2;
-	if (asm_info.bs>asm_info.bin_size){
-		asm_info.bin_size = asm_info.bs;
-	}
+	logDevInfo("ED16\n");
+	encOut8((data)&0xFF);
+	encOut8((data>>8)&0xFF);
 }
 
 void encOut32(u32 data) {
-	if (asm_info.phase_two){
-		asm_info.bin[asm_info.bs] = (data)&0xFF;
-		asm_info.bin[asm_info.bs+1] = (data>>8)&0xFF;
-		asm_info.bin[asm_info.bs+2] = (data>>16)&0xFF;
-		asm_info.bin[asm_info.bs+3] = (data>>24)&0xFF;
-	}
-	asm_info.bs += 4;
-	asm_info.ps += 4;
-	if (asm_info.bs>asm_info.bin_size){
-		asm_info.bin_size = asm_info.bs;
-	}
+	logDevInfo("ED32\n");
+	encOut8((data)&0xFF);
+	encOut8((data>>8)&0xFF);
+	encOut8((data>>16)&0xFF);
+	encOut8((data>>24)&0xFF);
 }
 
 void encOut64(u64 data) {
-	if (asm_info.phase_two){
-		asm_info.bin[asm_info.bs] = (data)&0xFF;
-		asm_info.bin[asm_info.bs+1] = (data>>8)&0xFF;
-		asm_info.bin[asm_info.bs+2] = (data>>16)&0xFF;
-		asm_info.bin[asm_info.bs+3] = (data>>24)&0xFF;
-		asm_info.bin[asm_info.bs+4] = (data>>32)&0xFF;
-		asm_info.bin[asm_info.bs+5] = (data>>40)&0xFF;
-		asm_info.bin[asm_info.bs+6] = (data>>48)&0xFF;
-		asm_info.bin[asm_info.bs+7] = (data>>56)&0xFF;
-	}
-	asm_info.bs += 8;
-	asm_info.ps += 8;
-	if (asm_info.bs>asm_info.bin_size){
-		asm_info.bin_size = asm_info.bs;
-	}
+	logDevInfo("ED64\n");
+	encOut8((data)&0xFF);
+	encOut8((data>>8)&0xFF);
+	encOut8((data>>16)&0xFF);
+	encOut8((data>>24)&0xFF);
+	encOut8((data>>32)&0xFF);
+	encOut8((data>>40)&0xFF);
+	encOut8((data>>48)&0xFF);
+	encOut8((data>>56)&0xFF);
 }
 
 void encInstruction(InstrEncode *enc, Value *args, int sufix) {

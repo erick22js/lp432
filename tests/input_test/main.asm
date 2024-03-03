@@ -38,11 +38,6 @@ hello_text: .text "Hello World!\0"
 	// Drawing text on screen
 	mov eax, hello_text
 	ba drawText
-	
-	ja sysLoop
-.endscope
-
-.scope sysLoop
 	// Rendering Text on Screen
 	ba getDisplayWidth
 	mov eex, eax
@@ -50,6 +45,8 @@ hello_text: .text "Hello World!\0"
 	div eex, eax
 	mov ecx, 0
 	mov ex0, 16
+	
+	// Draw all characters
 	lines:
 		dec ex0
 		mov ex1, 16
@@ -79,35 +76,9 @@ hello_text: .text "Hello World!\0"
 			jr.nez ex1, @char
 		jr.nez ex0, @lines
 	endlines:
-	pull_key:
-		ba consumeKey
-		jr.eqz edx, @end_pull_key
-		
-		ba printHexadecimal
-		// Calculating buffer address
-		// Base buffer address
-		mov ebx, char_vector
-		// Line Offset
-		mov ex0, eex
-		mul ex0, 4
-		mov ex1, edx
-		rsh ex1, 4
-		mul ex0, ex1
-		add ebx, ex0
-		// Character Offset
-		mov ex0, edx
-		and ex0, 0xF
-		mul ex0, 4
-		add ebx, ex0
-		
-		// Ploting Background
-		mov el, 0xF0
-		jr.eqz eax, @not_press
-			mov el, 0x0F
-		not_press:
-		mov [ebx, 3], el
-		
-		jr @pull_key
-	end_pull_key:
+	ja sysLoop
+.endscope
+
+.scope sysLoop
 	ja sysLoop
 .endscope

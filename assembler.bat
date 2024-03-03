@@ -1,4 +1,4 @@
-set dir=tests/input_test
+set dir=tests/os
 
 "Debug/assembler.exe" ^
 	%dir%/main.asm ^

@@ -7,6 +7,7 @@
 //
 
 void tkPrint(Token *tk) {
+	return;
 	switch (tk->type){
 		case TOKEN_NO: {
 			logDevInfo("TK: -no token- [%d]\n", tk->position);

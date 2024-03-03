@@ -239,7 +239,7 @@ Error expOperand(Value *out) {
 							// TODO: Error => Expected immediate expression
 							errThrow(ERROR_EXPECTED_IMMEDIATE);
 						}
-						out->mem.mode = nv.type==TYPE_IMM8||nv.type==TYPE_IMMS8? ADRM_IDXI8: nv.type==TYPE_IMM16||nv.type==TYPE_IMMS16? ADRM_IDXI16: nv.type==TYPE_IMM32||nv.type==TYPE_IMMS32? ADRM_IDXI32: nv.val.lit<0x100? ADRM_IDXI8: nv.val.lit<0x10000? ADRM_IDXI16: ADRM_IDXI32;
+						out->mem.mode = nv.type==TYPE_IMM8||nv.type==TYPE_IMMS8? ADRM_IDXI8: nv.type==TYPE_IMM16||nv.type==TYPE_IMMS16? ADRM_IDXI16: ADRM_IDXI32;
 						out->mem.nv = (u32)nv.val.lit;
 					}
 					else if (tkIsSymbol(tk, '.')){
@@ -283,7 +283,7 @@ Error expOperand(Value *out) {
 								// TODO: Error => Expected immediate expression
 								errThrow(ERROR_EXPECTED_IMMEDIATE);
 							}
-							out->mem.mode = nv.type==TYPE_IMM8||nv.type==TYPE_IMMS8? ADRM_STC8: nv.type==TYPE_IMM16||nv.type==TYPE_IMMS16? ADRM_STC16: nv.type==TYPE_IMM32||nv.type==TYPE_IMMS32? ADRM_STC32: nv.val.lit<0x100? ADRM_STC8: nv.val.lit<0x10000? ADRM_STC16: ADRM_STC32;
+							out->mem.mode = nv.type==TYPE_IMM8||nv.type==TYPE_IMMS8? ADRM_STC8: nv.type==TYPE_IMM16||nv.type==TYPE_IMMS16? ADRM_STC16: ADRM_STC32;
 							out->mem.nv = (u32)nv.val.lit;
 						}
 					}
@@ -302,7 +302,7 @@ Error expOperand(Value *out) {
 						// TODO: Error => Expected immediate expression
 						errThrow(ERROR_EXPECTED_IMMEDIATE);
 					}
-					out->mem.mode = nv.type==TYPE_IMM8||nv.type==TYPE_IMMS8? ADRM_IDX8: nv.type==TYPE_IMM16||nv.type==TYPE_IMMS16? ADRM_IDX16: nv.type==TYPE_IMM32||nv.type==TYPE_IMMS32? ADRM_IDX32: nv.val.lit<0x100? ADRM_IDX8: nv.val.lit<0x10000? ADRM_IDX16: ADRM_IDX32;
+					out->mem.mode = nv.type==TYPE_IMM8||nv.type==TYPE_IMMS8? ADRM_IDX8: nv.type==TYPE_IMM16||nv.type==TYPE_IMMS16? ADRM_IDX16: ADRM_IDX32;
 					out->mem.nv = (u32)nv.val.lit;
 				}
 			}
@@ -321,7 +321,7 @@ Error expOperand(Value *out) {
 				// TODO: Error => Expected immediate expression
 				errThrow(ERROR_EXPECTED_IMMEDIATE);
 			}
-			out->mem.mode = nv.type==TYPE_IMM8||nv.type==TYPE_IMMS8? ADRM_ABS8: nv.type==TYPE_IMM16||nv.type==TYPE_IMMS16? ADRM_ABS16: nv.type==TYPE_IMM32||nv.type==TYPE_IMMS32? ADRM_ABS32: nv.val.lit<0x100? ADRM_ABS8: nv.val.lit<0x10000? ADRM_ABS16: ADRM_ABS32;
+			out->mem.mode = nv.type==TYPE_IMM8||nv.type==TYPE_IMMS8? ADRM_ABS8: nv.type==TYPE_IMM16||nv.type==TYPE_IMMS16? ADRM_ABS16: ADRM_ABS32;
 			out->mem.nv = (u32)nv.val.lit;
 		}
 		

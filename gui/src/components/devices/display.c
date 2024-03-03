@@ -120,7 +120,7 @@ void dsStep(Device* self, uint32 cycles){
 			uint32 pix_tile1 = vga_font[chr1*FONT_WIDTH*FONT_HEIGHT + off_y*FONT_WIDTH + off_x],
 				pix_tile2 = vga_font[chr2*FONT_WIDTH*FONT_HEIGHT + off_y*FONT_WIDTH + off_x];
 
-			((uint32*)(CTRL_BUFFER))[y*REG_WIDTH + x] = pix_tile1? color_fore: color_back;
+			((uint32*)(CTRL_BUFFER))[y*REG_WIDTH + x] = pix_tile1|pix_tile2? color_fore: color_back;
 		}
 		CTRL_X_POS += PIXELS_PER_TICK;
 		if (CTRL_X_POS >= REG_WIDTH){

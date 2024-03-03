@@ -21,6 +21,10 @@
 	psh edx
 	psh ecx
 	psh eax
+	psh eex
+	psh ex0
+	psh ex1
+	psh ex2
 	
 	// Gathering the extenal device
 	mov ebx, 0
@@ -33,77 +37,50 @@
 	lsh ebx, 8
 	add ebx, 8
 	in edx, bx
-	// Loading seek and addresses
 	mov ebx, edx
-	mov cl, [key_seek]
-	mov eax, ecx
-	lsh eax, 2
-	add eax, key_buffer
-	// Outputing Scancode
-	and edx, 0x1FF
-	mov [eax], dl
-	// Outputing Key State
-	rsh ebx, 11
-	inc eax
-	mov [eax], bl
-	// Advancing and bounding seek
-	inc ecx
-	mod ecx, 0xE
-	mov [key_seek], cl
+	and edx, 0x1FF ; Keycode
+	rsh ebx, 11 ; Keystate
 	
-	// Wrapping bottom
-	mov eax, [key_bottom]
-	cmp eax, ecx
-	jr.ne @end
-	inc eax
-	mod eax, 0xE
-	mov [key_bottom], eax
+	ba printHexadecimal
+	
+	// Retrieving characters size
+	ba getDisplayWidth
+	mov eex, eax
+	ba getDisplayCharWidth
+	div eex, eax
+	
+	// Calculating buffer address
+	// Base buffer address
+	mov ex2, char_vector
+	// Line Offset
+	mov ex0, eex
+	mul ex0, 4
+	mov ex1, edx
+	rsh ex1, 4
+	mul ex0, ex1
+	add ex2, ex0
+	// Character Offset
+	mov ex0, edx
+	and ex0, 0xF
+	mul ex0, 4
+	add ex2, ex0
+	
+	// Ploting Background
+	mov el, 0xF0
+	jr.eqz ebx, @not_press
+		mov el, 0x0F
+	not_press:
+	mov [ex2, 3], el
 	
 	// End of function
 	end:
+	pop ex2
+	pop ex1
+	pop ex0
+	pop eex
 	pop eax
 	pop ecx
 	pop edx
-	pop ebx
-	ret
-.endscope
-
-//
-//	consumeKey
-//	return:
-// - eax => Status (1 = Pressed, 0 = Released)
-// - edx => Scancode (0 = No Key Press)
-//
-.scope consumeKey
-	// Saving old procedure values
-	psh ebx
-	psh ecx
-	
-	mov eax, 0
-	mov edx, 0
-	
-	// Analyzing bottom
-	mov ecx, 0
-	mov cl, [key_seek]
-	mov ebx, 0
-	mov bl, [key_bottom]
-	cmp ecx, ebx
-	jr.eq @end
-	
-	// Retrieving Key
-	mov ecx, ebx
-	lsh ecx, 2
-	mov dl, [ecx, key_buffer]
-	mov al, [ecx, key_buffer+1]
-	
-	// Updating Bottom
-	inc ebx
-	mod ebx, 0xE
-	mov [key_bottom], ebx
-	
-	// End of function
-	end:
-	pop ecx
 	pop ebx
 	ret
 .endscope

@@ -1,0 +1,24 @@
+====================================================
+
+	LUIS MEMORY MAPPING
+
+0x00001000 .. 0x0000103F => Interruption Vector
+0x00001040               => Device Serial
+0x00001041               => Device Display
+0x00001042               => Device Keyboard
+0x00001043               => Device Disk
+
+0x00001080 .. 0x0000109F => Keyboard Data
+0x000010A0 .. 0x000010BF => Display Data
+0x000010C0 .. 0x000010DF => Disk Data
+0x000010E0 .. 0x000010FF => Serial Data
+0x00001100 .. 0x000018FF => List Devices Mapped by port
+0x00001900 .. 0x000019FF => Console Data
+0x00001A00 .. 0x00001DFF => Buffer for console
+
+0x00002000 .. 0x00002D20 => Display Character Buffer
+
+0x00007E00 .. 0x00007EFF => Kernel Stack
+0x00007F00 .. 0x00007FFF => System Stack
+0x00008000 .. 0x00010000 => OS Code
+

@@ -68,6 +68,7 @@ Error psrParse(bool phase_two) {
 				tkrFetch(&tk)
 			);
 			if (tkIsSymbol(tk, ':')){
+				logDevInfo("SYM: Declaring label with name \"%s\" with value 0x%X\n", name, asm_info.ps);
 				// Ignore on second phase
 				if (asm_info.phase_two) {
 					continue;
@@ -77,7 +78,6 @@ Error psrParse(bool phase_two) {
 					err_offset = off_name;
 					errThrow(ERROR_SYMBOL_ALREADY_DEFINED);
 				}
-				logDevInfo("SYM: Declaring label with name \"%s\" with value 0x%X\n", name, asm_info.ps);
 				labelStore(name, asm_info.ps);
 				continue;
 			}
@@ -387,9 +387,7 @@ Error psrParse(bool phase_two) {
 				}
 				char* name = tk.value.str;
 				
-				if (!asm_info.phase_two){
-					logDevInfo("SYM: Declaring const with name \"%s\"\n", name);
-				}
+				logDevInfo("SYM: Declaring const with name \"%s\"\n", name);
 				asm_info.static_exp = true;
 				Value val = {0};
 				errTryCatch(
@@ -414,13 +412,13 @@ Error psrParse(bool phase_two) {
 				);
 				if (tk.type == TOKEN_NAME){
 					char* name = tk.value.str;
+					logDevInfo("SYM: Declaring label with name \"%s\" with value 0x%X\n", name, asm_info.ps);
 					if (!asm_info.phase_two) {
 						if (symvHasInCurrentScope(name)){
 							// TODO: Error => Symbol with given name is already declarated
 							err_offset = off_cmd;
 							errThrow(ERROR_SYMBOL_ALREADY_DEFINED);
 						}
-						logDevInfo("SYM: Declaring label with name \"%s\" with value 0x%X\n", name, asm_info.ps);
 						labelStore(name, asm_info.ps);
 					}
 				}
