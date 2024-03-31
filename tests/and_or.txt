@@ -1,0 +1,20 @@
+
+AND: // v1>5 && v2<10
+	cmp v1, 5
+	jle not_do
+	cmp v2, 10
+	jge not_do
+	do: // Doing
+		jmp end_if
+	not_do: // Not Doing
+	end_if:
+
+OR: // v1<5 || v2>10
+	cmp v1, 5
+	jlt do
+	cmp v2, 10
+	jgt do
+	not_do: // Not Doing
+		jmp end_if
+	do: // Doing
+	end_if:

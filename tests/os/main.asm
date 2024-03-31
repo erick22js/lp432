@@ -38,6 +38,27 @@ hello_text: .text "HELLO LUIS OS!\0"
 	// Starting console
 	ba cslInit
 	
+	// Setup File System
+	ba fsSetup
+	// Format Disk partition
+	loop_disk:
+		ba fsBusy
+		jr.nez eax, @loop_disk
+	ba fsFormat
+	// Allocate clusters
+	loop_disk2:
+		ba fsBusy
+		jr.nez eax, @loop_disk2
+	mov ebx, 0x4000
+	mov ecx, 3
+	ba _fsClusterAllocate
+	mov ebx, 0x4010
+	mov ecx, 20
+	ba _fsClusterAllocate
+	mov ebx, 0x4010
+	mov ecx, 7
+	ba _fsClusterFree
+	
 	// Putting character to console
 	mov ess, hello_text
 	mov eax, 0
@@ -56,5 +77,3 @@ hello_text: .text "HELLO LUIS OS!\0"
 .scope sysLoop
 	ja sysLoop
 .endscope
-
-fedido:

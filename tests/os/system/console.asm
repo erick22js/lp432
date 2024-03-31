@@ -53,16 +53,13 @@
 	// Cleaning the console
 	mov ecx, 0
 	clean:
-		
 		mov eax, 0
 		mov ebx, ecx
 		mul ebx, 4
-		mov [ebx, char_vector], eax ; Instrução fedida
-		
+		mov [ebx, char_vector], eax
 		inc ecx
 		cmp ecx, efx
 		jr.eq @clean
-	
 	
 	// End of function
 	end:

@@ -5,6 +5,7 @@
 //
 //	MEMORY SYMBOLS
 //
+.const disk_event_callback 0x10C0 ; Callback function embeder
 
 //
 //	CODE TEXT
@@ -16,9 +17,16 @@
 .scope intrDiskDevice
 	// Saving old procedure values
 	psh edx
+	psh ebx
+	
+	// Processing Callback
+	mov ebx, [disk_event_callback]
+	jr.eqz ebx, @end
+	ba ebx
 	
 	// End of function
 	end:
+	pop ebx
 	pop edx
 	ret
 .endscope
@@ -92,6 +100,32 @@
 	end:
 	pop ebx
 	pop edx
+	ret
+.endscope
+
+//
+//	diskGetStorageLength
+//	return:
+//	- eax => Length of mass storage in disk in bytes
+//
+.scope diskGetStorageLength
+	// Saving old procedure values
+	psh ebx
+	mov eax, 0
+	
+	// Gathering the extenal device
+	mov ebx, 0
+	mov bl, [device_disk]
+	jr.eqz ebx, @end
+	
+	// Inputing the data
+	lsh ebx, 8
+	add bx, 8
+	in eax, bx
+	
+	// End of function
+	end:
+	pop ebx
 	ret
 .endscope
 

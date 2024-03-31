@@ -3,6 +3,7 @@
 
 .include "interruption.asm"
 .include "console.asm"
+.include "filesystem.asm"
 
 
 //

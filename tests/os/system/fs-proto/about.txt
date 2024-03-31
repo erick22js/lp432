@@ -1,0 +1,94 @@
+
+	Rules
+* File clusters are 8192 bytes long or 8KiB
+
+	Limitations
+* The max size of file or folder name: 30 characters
+* The max count of files for folder: 254 files/folders
+* The max file size: 33292288 bytes or 31.75MiB
+* The max filesystem storage: 536870912 or 512MiB
+
+	File/Folder Entry Structure
+- 0..3 => File Info
+	* 0 = Folder
+	* 1 = File
+- 4..5 => File Size / Children Count
+- 6..7 => Parent
+- 8..11 => Create Datetime
+- 12..15 => Modify Datetime
+- 16..23 => *Reserved*
+- 24..63 => OS Custom Data
+- 64..8191 => Reference Data
+
+	File Reference Data
+	| 8128 bytes of fullfill content of File itself
+	| 4064 16bit pointers to Clusters references
+
+	Folder Reference Data
+	| 254 30 charaters name and 16bit pointer to entry
+
+
+	Partition Structure
+	Cluster
+	# 0 => FileSystem Program (8KiB Program)
+	# 1 => Clusters Bitmap Marks
+	# 2 => Clusters Counter and Ops Logger
+	# 3 => FileSystem Entry (main folder)
+	# 4..65535 => Free to use Clusters
+
+
+===============================================================
+
+Obs: Cluster value is a zero based index
+
+System mapping
+#0 = 0x00010000..0x00011FFF => Bitmap Marks
+#1 = 0x00012000..0x00013FFF => Clusters Counter and Ops Logger
+
+
+## FILE SYSTEM GENERAL FUNCTIONS
+
+## fsSetup() -> int
+## Setup File System and initializes every buffer or functionality
+
+## fsFormat() -> int
+## Format the disk partition with the file system format
+
+## fsBusy() -> int
+## Return File System is doing any busy operation
+
+
+## CLUSTER FUNCTIONS
+
+## _fsClusterLoad(cluster:int, buffer:ptr) -> int
+## Request to disk to load a cluster to memory to a buffer holder
+
+## _fsClusterSave(cluster:int, buffer:ptr) -> int
+## Request to disk to save a cluster from memory in a buffer holder 
+
+## _fsClusterAllocate(list:ptr, count:int) -> int
+## Alocates a list of clusters, modifying map in memory
+
+## _fsClusterFree(list:ptr, count:int) -> int
+## Frees every cluster in a list of clusters, modifying map in memory
+
+
+## FILESYSTEM OPERATIONS
+
+## fsDirOpenEntry() -> int
+## Load entry folder to temp entry, return 1 if requestion did
+
+## fsDirOpenName(name:ptr) -> int
+## Load entry child to temp entry, return 1 if requestion did
+
+## fsFileOpenEntry(cluster:int) -> int
+## Load entry to temp entry, return 1 if requestion did
+
+## fsFileResize(clusters:int) -> int
+## Resize the current file entry with clusters insertion or remotion, return 1 if requestion did
+
+##
+##
+
+
+

@@ -20,5 +20,6 @@
 
 0x00007E00 .. 0x00007EFF => Kernel Stack
 0x00007F00 .. 0x00007FFF => System Stack
-0x00008000 .. 0x00010000 => OS Code
+0x00008000 .. 0x0000FFFF => OS Code
+0x00010000 .. 0x00018000 => File System Properties
 

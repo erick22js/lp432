@@ -5,11 +5,7 @@
 //
 //	MEMORY SYMBOLS
 //
-/*
-.const key_buffer 0x1080 ; size = 7 * (1=code, 1=state)
-.const key_seek 0x108E ; size = 1
-.const key_bottom 0x108F ; size = 1
-*/
+.const key_event_callback 0x1080 ; Callback function embeder
 
 //
 //	CODE TEXT
@@ -39,6 +35,11 @@
 	mov eax, edx
 	and edx, 0x1FF ; Key Code
 	rsh eax, 11 ; Key State
+	
+	// Processing Callback
+	mov ebx, [key_event_callback]
+	jr.eqz ebx, @end
+	ba ebx
 	
 	// End of function
 	end:

@@ -16,7 +16,7 @@
 	Symbols Definition
 */
 
-#define TICKS_DELAY 128
+#define TICKS_DELAY 64
 
 #define CTRL_STATE self->api_data[0]
 #define CTRL_CYCLES self->api_data[1]
@@ -103,7 +103,9 @@ void dskStep(Device* self, uint32 cycles){
 			REG_LENGTH--;
 		}
 		if (REG_DISK_SEEK>=REG_DISK_SIZE || !REG_LENGTH){
-			CTRL_STATE = 8;
+			if (devRequestCpuInterruption(self)){
+				CTRL_STATE = 0;
+			}
 		}
 	}
 	// WRITE STATE
@@ -115,16 +117,11 @@ void dskStep(Device* self, uint32 cycles){
 			REG_LENGTH--;
 		}
 		if (REG_DISK_SEEK>=REG_DISK_SIZE || !REG_LENGTH){
-			CTRL_STATE = 8;
-			fflush(CTRL_IMAGE);
+			if (devRequestCpuInterruption(self)){
+				CTRL_STATE = 0;
+				fflush(CTRL_IMAGE);
+			}
 		}
-	}
-	// DONE STATE
-	else if (CTRL_STATE==8){
-		if (devRequestCpuInterruption(self)){
-			CTRL_STATE = 0;
-		}
-		return;
 	}
 }
 
@@ -156,7 +153,7 @@ void dskSetup(Device *self, char* image, uint32 isize) {
 		}
 	}
 	fseek(file, 0, SEEK_END);
-	uint32 img_size = ftell(file);
+	uint32 img_size = ftell(file)-1;
 	fseek(file, 0, SEEK_SET);
 
 	// Configure Control Properties
