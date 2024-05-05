@@ -12,17 +12,18 @@
 .const fs_cluster_marks 0x10000 // Length: 0x2000, clusters marks cluster
 .const fs_cluster_info 0x12000 // Length: 0x2000, clusters counter cluster
 
-.const fs_available 0x13000 // Word, available storage clusters in File System
-.const fs_seek 0x13004 // Word, the seek pointer to start finding empty clusters for allocation
-.const fs_state 0x13008 // Dword, state of general File System
-.const fs_dstate 0x13FFC // Half, state of Disk System
-.const fs_fsstate 0x13FFE // Half, state of File System
+.const fs_available 0x12FF0 // Word, available storage clusters in File System
+.const fs_seek 0x12FF4 // Word, the seek pointer to start finding empty clusters for allocation
+.const fs_callback 0x13000 // Dword, callback function for end of File System operation
+.const fs_reset 0x13004 // Dword, reset state after end of File System operation
+.const fs_state 0x1300C // Dword, state of general File System
 
 .const FS_STATE_NOT_BUSY 0
-.const FS_FSSTATE_SETUP 1
-.const FS_FSSTATE_FORMAT 2
-.const FS_DSTATE_READING 1
-.const FS_DSTATE_WRITING 2
+.const FS_STATE_SETUP 1
+.const FS_STATE_FORMAT 2
+.const FS_STATE_LOAD_BUFFER 3
+.const FS_STATE_SAVE_BUFFER 4
+.const FS_STATE_SAVE_MAIN 5
 
 
 //
@@ -34,8 +35,17 @@
 //
 .scope _fsInterruptionEvent
 	psh eax
-	mov eax, FS_STATE_NOT_BUSY
+	
+	// Reset of state
+	mov eax, [fs_reset]
 	mov [fs_state], eax
+	
+	// Callback for state
+	mov eax, [fs_callback]
+	jr.eqz eax, @end
+	ba eax
+	
+	end:
 	pop eax
 	ret
 .endscope
@@ -124,6 +134,12 @@
 			}
 		}
 	*/
+	
+	// Update available clusters counter
+	mov eax, [fs_available]
+	sub eax, ecx
+	mov [fs_available], eax
+	
 	//register __asm("ebx") u16* base;
 	//register __asm("ecx") int count;
 	//register __asm("eax") int cluster_index = fs_seek;
@@ -217,6 +233,12 @@
 			count--;
 		}
 	*/
+	
+	// Update available clusters counter
+	mov eax, [fs_available]
+	add eax, ecx
+	mov [fs_available], eax
+	
 	//register __asm("ebx") u16* base;
 	//register __asm("ecx") int count;
 	//while (count > 0){
@@ -267,13 +289,13 @@
 	// Setup configurations
 	mov eax, _fsInterruptionEvent
 	mov [disk_event_callback], eax
-	mov ax, FS_FSSTATE_SETUP
-	mov [fs_fsstate], ax
+	mov eax, FS_STATE_SETUP
+	mov [fs_state], eax
 	
 	// Reading base clusters
 	mov ess, 0
 	mov esd, fs_cluster_marks
-	mov ecx, 0x4000
+	mov ecx, 0x3000
 	ba diskReadFrom
 	
 	// End of function
@@ -292,11 +314,18 @@
 	// Skipping on busy state
 	mov eax, [fs_state]
 	jr.nez eax, @end
+	mov eax, FS_STATE_FORMAT
+	mov [fs_state], eax
 	
 	// Gathering size of mass storage of disk
 	ba diskGetStorageLength
 	mov edx, eax
 	rsh edx, 13
+	
+	// Update available clusters counter
+	mov eax, edx
+	sub eax, 3
+	mov [fs_available], eax
 	
 	// Reseting clusters info
 	mov ecx, 0x10000
@@ -334,13 +363,11 @@
 		// Saving up the bit change
 		mov [ebx], al
 		jr.nez ecx, @bloop
-	mov ax, FS_FSSTATE_FORMAT
-	mov [fs_fsstate], ax
 	
 	// Writing base clusters
 	mov ess, fs_cluster_marks
 	mov esd, 0
-	mov ecx, 0x4000
+	mov ecx, 0x3000
 	ba diskWriteTo
 	
 	// End of function
@@ -356,6 +383,154 @@
 //
 .scope fsBusy
 	mov eax, [fs_state]
+	ret
+.endscope
+
+//
+//	fsOpenFirstEntry
+//	args:
+//	- esd => Pointer to buffer for main filesystem entry
+//	return:
+//	- edx => 0 if done, otherwise is error
+//
+.scope fsOpenFirstEntry
+	// Saving old procedure values
+	_saveCtx
+	
+	// Skipping on busy state
+	mov eax, [fs_state]
+	mov edx, 1
+	jr.nez eax, @end
+	
+	// Setup File System state controller
+	mov eax, FS_STATE_LOAD_BUFFER
+	mov [fs_state], eax
+	mov eax, 0
+	mov [fs_callback], eax
+	mov eax, FS_STATE_NOT_BUSY
+	mov [fs_reset], eax
+	
+	// Writing base clusters
+	mov ess, 0x4000
+	mov ecx, 0x2000
+	ba diskReadFrom
+	
+	// End of function
+	mov edx, 0
+	end:
+	_restoreCtx
+	ret
+.endscope
+
+//
+//	fsOpenEntry
+//	args:
+//	- esd => Pointer to buffer for main filesystem entry
+//	- ebx => Cluster index
+//	return:
+//	- edx => 0 if done, otherwise is error
+//
+.scope fsOpenEntry
+	// Saving old procedure values
+	_saveCtx
+	
+	// Skipping on busy state
+	mov eax, [fs_state]
+	mov edx, 1
+	jr.nez eax, @end
+	
+	// Setup File System state controller
+	mov eax, FS_STATE_LOAD_BUFFER
+	mov [fs_state], eax
+	mov eax, 0
+	mov [fs_callback], eax
+	mov eax, FS_STATE_NOT_BUSY
+	mov [fs_reset], eax
+	
+	// Writing base clusters
+	mov ess, ebx
+	lsh ess, 13
+	mov ecx, 0x2000
+	ba diskReadFrom
+	
+	// End of function
+	mov edx, 0
+	end:
+	_restoreCtx
+	ret
+.endscope
+
+//
+//	fsDirOpenChild
+//	args:
+//	- esd => Pointer to child entry buffer
+//	- ebx => Pointer to directory entry buffer
+//	- ehx => Pointer to child name identifier
+//	return:
+//	- edx => 0 if done, otherwise is error
+//
+.scope fsDirOpenChild
+	// Saving old procedure values
+	_saveCtx
+	
+	// Skipping on busy state
+	mov eax, [fs_state]
+	mov edx, 1
+	jr.nez eax, @end
+	
+	// Setup File System state controller
+	mov eax, FS_STATE_LOAD_BUFFER
+	mov [fs_state], eax
+	mov eax, 0
+	mov [fs_callback], eax
+	mov eax, FS_STATE_NOT_BUSY
+	mov [fs_reset], eax
+	
+	// Search for entry
+	mov ecx, [ebx, 0x4]:Half
+	mov egx, 0x40
+	find_loop:
+		// TODO
+		mov ex0, 0 ; Char in entry
+		mov ex1, 0 ; Char in compare
+		mov eex, 0 ; Index
+		
+		cmp_loop:
+			/*mov efx, 0
+			mov ex0, [ebx, egx, eex]:Byte
+			mov ex1, [ehx, egx, eex]:Byte
+			cmp ex0, ex1
+			jr.ne @end_cmp_loop
+			mov efx, 1
+			jr.eqz ex0, @end_cmp_loop
+			
+			inc eex
+			cmp eex, 29
+			jr.lt @cmp_loop*/
+			// TODO
+		end_cmp_loop:
+		
+		// Name does match
+		jr.eqz efx, @name_not_match
+			
+		name_not_match:
+		
+		// Follow loop
+		add egx, 0x20
+		dec ecx
+		jr.nez ecx, @find_loop
+	end_find_loop:
+	
+	// Writing base clusters
+	mov ess, ebx
+	lsh ess, 13
+	mov ecx, 0x2000
+	ba diskReadFrom
+	
+	// End of function
+	mov edx, 0
+	end:
+	_restoreCtx
 	ret
 .endscope
 

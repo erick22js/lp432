@@ -120,21 +120,58 @@
 
 .scope intrActSoftwareInterruption
 	psh eax
+	psh ebx
+	psh ecx
+	psh edx
+	psh eex
+	psh efx
+	psh egx
+	psh ehx
+	psh ex0
+	psh ex1
+	psh ex2
+	psh ex3
+	psh efp
+	psh ess
+	psh esd
+	
 	mov eax, 0x8000000E
 	halt
+	
+	pop esd
+	pop ess
+	pop efp
+	pop ex3
+	pop ex2
+	pop ex1
+	pop ex0
+	pop ehx
+	pop egx
+	pop efx
+	pop eex
+	pop edx
+	pop ecx
+	pop ebx
 	pop eax
 	iret
 .endscope
 
 .scope intrActHardwareInterruption
 	psh eax
-	psh edx
-	psh ecx
 	psh ebx
+	psh ecx
+	psh edx
 	psh eex
 	psh efx
 	psh egx
+	psh ehx
 	psh ex0
+	psh ex1
+	psh ex2
+	psh ex3
+	psh efp
+	psh ess
+	psh esd
 	
 	// Load the hardware port
 	mvfir edx, ir0
@@ -197,13 +234,20 @@
 	not_display:
 	mov [ecx], ex0
 	
+	pop esd
+	pop ess
+	pop efp
+	pop ex3
+	pop ex2
+	pop ex1
 	pop ex0
+	pop ehx
 	pop egx
 	pop efx
 	pop eex
-	pop ebx
-	pop ecx
 	pop edx
+	pop ecx
+	pop ebx
 	pop eax
 	iret
 	
@@ -217,13 +261,20 @@
 		ba ebx
 		
 		no_operation:
+		pop esd
+		pop ess
+		pop efp
+		pop ex3
+		pop ex2
+		pop ex1
 		pop ex0
+		pop ehx
 		pop egx
 		pop efx
 		pop eex
-		pop ebx
-		pop ecx
 		pop edx
+		pop ecx
+		pop ebx
 		pop eax
 		iret
 .endscope

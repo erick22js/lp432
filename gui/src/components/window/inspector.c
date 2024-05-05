@@ -123,6 +123,10 @@ Element over_panel, over_text, over_value, caret;
 char timer_buffer[127];
 Element timer_label;
 
+char runtime_buffer[32];
+Element runtime_label;
+Uint32 last_time;
+
 uint32 _sp_frame_index = 0;
 bool _sp_running = false;
 
@@ -554,6 +558,7 @@ void spHOnKey(Uint32 key, Uint32 input, _Bool ctrl, _Bool alt, _Bool shift, _Boo
 			spUpdate();
 		}
 		else {
+			last_time = SDL_GetTicks();
 			g_cpu.halted = false;
 		}
 	}
@@ -894,6 +899,13 @@ void spInit() {
 	guiSetElementVisible(caret, 0);
 	guiSetElementActive(caret, 0);
 
+	runtime_label = guiCreateLabel(runtime_buffer, 10, 33);
+	sprintf_s(runtime_buffer, sizeof(runtime_buffer), "Runtime 00:00:00.000");
+	guiSetElementTextColor(runtime_label, COLOR_BLACK);
+	guiSetElementFontSize(runtime_label, 1);
+	guiSetElementVisible(runtime_label, 1);
+	guiSetElementActive(runtime_label, 0);
+
 	guiSetOnMouseScroll(spHOnMouseScroll);
 	guiSetOnKeyDown(spHOnKey);
 
@@ -912,6 +924,11 @@ int spHandle() {
 		guiSetElementVisible(over_panel, true);
 		guiSetElementActive(over_panel, true);
 
+		Uint32 cur_time = SDL_GetTicks()-last_time;
+		sprintf_s(runtime_buffer, sizeof(runtime_buffer), "Runtime %.2d:%.2d:%.2d.%.3d",
+			((cur_time/(1000*60*60))%24), ((cur_time/(1000*60))%60), ((cur_time/1000)%60), (cur_time%1000));
+		guiSetElementTextColor(runtime_label, COLOR_WHITE);
+
 		while (_sp_frame_index == g_display.api_data[15]){
 			vmStep();
 			// Break the emulator execution on cpu halt
@@ -929,6 +946,8 @@ int spHandle() {
 		mntrUnlisten(&monitor);
 		guiSetElementVisible(over_panel, _sp_input_active);
 		guiSetElementActive(over_panel, _sp_input_active);
+
+		guiSetElementTextColor(runtime_label, COLOR_BLACK);
 	}
 
 	return guiProcess();

@@ -17,6 +17,7 @@
 	Symbols Definition
 */
 
+#define CYCLES_PER_TICK 64
 #define PIXELS_PER_TICK 32
 
 #define CTRL_STATE self->api_data[0]
@@ -25,6 +26,7 @@
 #define CTRL_Y_POS self->api_data[3]
 #define CTRL_MONITOR ((Monitor*)self->api_refs[0])
 #define CTRL_BUFFER (self->api_refs[1])
+#define CTRL_PALETTE ((uint32*)self->api_refs[2])
 
 #define STATUS_TYPE self->regs[0]
 #define STATUS_TYPEH self->regs[1]
@@ -63,10 +65,10 @@ void dsWrite(Device* self, uint8 reg, uint8 data){
 void dsStep(Device* self, uint32 cycles){
 	// CYCLE SYNC
 	CTRL_CYCLES += cycles;
-	if (CTRL_CYCLES < PIXELS_PER_TICK){
+	if (CTRL_CYCLES < CYCLES_PER_TICK){
 		return;
 	}
-	CTRL_CYCLES -= PIXELS_PER_TICK;
+	CTRL_CYCLES -= CYCLES_PER_TICK;
 
 
 	// INIT STATE
@@ -101,7 +103,13 @@ void dsStep(Device* self, uint32 cycles){
 			uint32 x = CTRL_X_POS+i, y = CTRL_Y_POS;
 			uint32 data_adr = REG_DATA_BASE + ((x/FONT_WIDTH) + (y/FONT_HEIGHT)*(REG_WIDTH/FONT_WIDTH))*4;
 			uint32 data = devBusRead32(self, data_adr);
-
+			/*
+			uint8 chr1 = data&0xFF, chr2 = (data>>8)&0xFF;
+			uint8 cdata_fore = (data>>16)&0xFF;
+			uint32 color_fore = CTRL_PALETTE[cdata_fore];
+			uint8 cdata_back = (data>>24)&0xFF;
+			uint32 color_back = CTRL_PALETTE[cdata_back];
+			*/
 			uint8 chr1 = data&0xFF, chr2 = (data>>8)&0xFF;
 			uint8 cdata_fore = (data>>16)&0xFF;
 			uint8 pitchu_fore =  ((cdata_fore&0x80)?0x42:0);
@@ -187,6 +195,17 @@ void dsSetup(Device *self, Monitor *mntr) {
 	// Configure Monitor
 	mntr->bind_data[0] = (void*)self;
 	mntr->enable_display = 0;
+
+	// Configure default Pallete
+	CTRL_PALETTE = malloc(256*sizeof(uint32));
+	for (int data = 0; data<256; data++){
+		uint8 pitchu =  ((data&0x80)?0x42:0);
+		uint8 pitchd =  ((data&0x40)?0x11:0);
+		uint32 color =	((data&0x20)?0x000088|(pitchd):0)    |((data&0x10)?0x000024|(pitchu):0)|
+						((data&0x08)?0x008800|(pitchd<<8):0) |((data&0x04)?0x002400|(pitchu<<8):0)|
+						((data&0x02)?0x880000|(pitchd<<16):0)|((data&0x01)?0x240000|(pitchu<<16):0);
+		CTRL_PALETTE[data] = color;
+	}
 }
 
 void dsDestroy(Device *dev) {

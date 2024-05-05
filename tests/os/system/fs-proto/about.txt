@@ -75,20 +75,32 @@ System mapping
 
 ## FILESYSTEM OPERATIONS
 
-## fsDirOpenEntry() -> int
-## Load entry folder to temp entry, return 1 if requestion did
+## fsOpenFirstEntry(buffer:ptr) -> int
+## Load entry folder to buffer entry, return 1 if requestion did
 
-## fsDirOpenName(name:ptr) -> int
-## Load entry child to temp entry, return 1 if requestion did
+## fsOpenEntry(buffer:ptr, cluster:int) -> int
+## Load entry by cluster index to buffer entry, return 1 if requestion did
 
-## fsFileOpenEntry(cluster:int) -> int
-## Load entry to temp entry, return 1 if requestion did
+## fsDirOpenChild(cbuffer:ptr, dbuffer:ptr, name:ptr) -> int
+## Load entry child from directory buffer entry to child buffer entry, return 1 if requestion did
 
-## fsFileResize(clusters:int) -> int
-## Resize the current file entry with clusters insertion or remotion, return 1 if requestion did
+## fsDirCreateChild(buffer:ptr, info:int, name:ptr) -> int
+## Create entry child in directory buffer entry, return 1 if requestion did
 
-##
-##
+## fsDirRemoveChild(buffer:ptr, name:ptr) -> int
+## Remove entry child in directory buffer entry, return 1 if requestion did
+
+## fsDirRenameChild(buffer:ptr, old_name:ptr, new_name:ptr) -> int
+## Rename entry child in directory buffer entry, return 1 if requestion did
+
+## fsFileResize(buffer:ptr, clusters:int) -> int
+## Resize the current file in entry buffer with clusters insertion or remotion, return 1 if requestion did
+
+## fsFileLoadBuffer(cbuffer:ptr, fbuffer:ptr, index:int) -> int
+## Load from file entry with cluster index to cluster buffer, return 1 if requestion did
+
+## fsFileSaveBuffer(fbuffer:ptr, cbuffer:ptr, index:int) -> int
+## Save cluster buffer with cluster index to file entry buffer, return 1 if requestion did
 
 
 
